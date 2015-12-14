@@ -1,0 +1,17 @@
+{% extends "panel.html" %}
+{% block body %}
+
+    <form method="post" action="">
+        {% for field in form %}
+            <div class="form-group" id="{{field.id}}fg">
+
+                {{ field(id=field.id, placeholder=field.label.text,class="form-control") }}
+            </div>
+        {% endfor %}
+        <p>
+            <button class="btn btn-success" type="submit">Изменить</button>
+
+        </p>
+    </form>
+
+{% endblock %}

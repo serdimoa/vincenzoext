@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+        <link href="{{ url_for('bower.static', filename='bootstrap/dist/css/bootstrap.css') }}">
+
+    <script>
+        var hello = {"category":"value22"};
+{#        $.ajax({#}
+{#            url: '/category',             // указываем URL и#}
+{#            type:"POST",#}
+{#            contentType:"application/json; charset=utf-8",#}
+{#            dataType:"json",#}
+{#            data:JSON.stringify(hello)#}
+{#        }).complete(function(data){#}
+{#            console.log(data.responseText);#}
+{#        });#}
+{#                $.ajax({#}
+{#            url: '/categoryjson',             // указываем URL и#}
+{#            type:"GET",#}
+{#            contentType:"application/json; charset=utf-8",#}
+{#            dataType:"json"#}
+{#        }).complete(function(data){#}
+{#            console.log(data.responseText);#}
+{#        });#}
+    </script>
+</head>
+<body>
+
+<script src="{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}"></script>
+<script src="{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.js') }}"></script>
+<script  src="{{ url_for('static', filename='main.js') }}"></script>
+
+</body>
+
+</html>

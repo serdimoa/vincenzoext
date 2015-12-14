@@ -1,0 +1,17 @@
+{% extends "panel.html" %}
+{% block body %}
+
+    <form method="post" action="">
+        {% for field in form %}
+            <div class="form-group" id="{{field.id}}fg">
+
+                {{ field(id=field.id, placeholder=field.label.text,class="form-control") }}
+            </div>
+        {% endfor %}
+        <p>
+            <input class="btn btn-success" value="Добавить" type="submit">
+
+        </p>
+    </form>
+
+{% endblock %}

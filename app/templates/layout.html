@@ -1,0 +1,25 @@
+<!doctype html>
+<head>
+    <title>Tweepee</title>
+    <link href="{{ url_for('bower.static', filename='bootstrap/dist/css/bootstrap.css') }}"/>
+</head>
+<body>
+<div class=page>
+  <h1><a href="{{ url_for('index') }}">Tweepee</a></h1>
+  <div class=metanav>
+  {% if not session.logged_in %}
+    <a href="{{ url_for('admin') }}">log in</a>
+  {% else %}
+    <a href="{{ url_for('logout') }}">log out</a>
+  {% endif %}
+  </div>
+  {% for message in get_flashed_messages() %}
+    <div class=flash>{{ message }}</div>
+  {% endfor %}
+  {% block body %}{% endblock %}
+
+</div>
+
+    <script src="{{ url_for('bower.static', filename='jquery/dist/jquery.js') }}"></script>
+    <script src="{{ url_for('bower.static', filename='bootstrap/dist/js/bootstrap.js') }}"></script>
+</body>

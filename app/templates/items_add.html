@@ -1,0 +1,67 @@
+{% extends "panel.html" %}
+{% block body %}
+<form action="" method="post" enctype=multipart/form-data>
+
+
+    <div class="form-group">
+    {{ form.item_name(class="form-control", placeholder=form.item_name.label.text) }}
+    </div>
+
+    <div class="form-group">
+    {{ form.item_component(class="form-control", placeholder=form.item_component.label.text) }}
+    </div>
+
+    <div class="form-group">
+    {{ form.category_id(class="form-control", placeholder=form.category_id.label.text) }}
+    </div>
+
+    <div class="form-group">
+    {{ form.price(class="form-control", placeholder=form.price.label.text) }}
+    </div>
+
+    <div class="form-group">
+    {{ form.weight(class="form-control", placeholder=form.weight.label.text) }}
+    </div>
+
+
+    <div class="form-group">
+    {{ form.img(class="form-control") }}
+    </div>
+
+    <input class="btn btn-success" value="Добавить" type="submit">
+
+</form>
+
+
+{#    <form method="post" action="" enctype="multipart/form-data">#}
+{#        <div class="form-group">#}
+{#            <input type="text" class="form-control" name="item_name" id="item_name">#}
+{#        </div>#}
+{#        <div class="form-group">#}
+{#            <input type="text" class="form-control" name="item_component" id="item_component">#}
+{#        </div>#}
+{#        <div class="form-group">#}
+{#            <select class="form-control" name="category" id="category">#}
+{#                {% for item in category %}#}
+{#                    <option value="{{ item.id }}">{{ item.category_name }}</option>#}
+{#                {% endfor %}#}
+{##}
+{#            </select>#}
+{#        </div>#}
+{#        <div class="form-group">#}
+{#            <input class="form-control" type="text" name="weight" id="weight">#}
+{#        </div>#}
+{#        <div class="form-group">#}
+{#            <input class="form-control" type="text" name="price" id="price">#}
+{#        </div>#}
+{#        <div class="form-group">#}
+{#            <input class="form-control" type="file" name="img" id="img">#}
+{#        </div>#}
+{##}
+{#        <p>#}
+{#            <button class="btn btn-success" type="submit">Добавить</button>#}
+{##}
+{#        </p>#}
+{#    </form>#}
+
+{% endblock %}

@@ -1,0 +1,397 @@
+{% extends "base.html" %} {% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/pixelfabric-clothes/style.css')}}" />
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<script src="{{ url_for('static', filename='modernizer.custom.js') }}"></script>
+<!-- GOOGLE FONTS -->
+<link href='https://fonts.googleapis.com/css?family=Exo+2:400,100,200,300,500,700,600,800&subset=latin,cyrillic' rel='stylesheet' type='text/css'> {% endblock %} {% block navigation %}
+<ul id="menu">
+   <li>
+       <a href="#"><img src="{{ url_for('static', filename='img/Sir2.png') }}" alt=""></a>
+   </li>
+    <li><a href="#">Главная</a></li>
+    <li><a href="#">О нас</a></li>
+    <li><a href="#">Отзывы</a></li>
+    <li><a href="#">Корзина</a></li>
+    <li><a href="#!">Мой Vincenzo</a>
+        <ul class="aboutProfile">
+            <li>Дмитрий </li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="fa fa-cog"></i> Настроить</a></li>
+            <li><a href="#"><i class="fa fa-star-o"></i> Избранное</a></li>
+            <li><a href="#"><i class="fa fa-sign-out"></i> Выход</a></li>
+        </ul>
+
+    </li>
+</ul>
+{% endblock %} {% block slider %}
+<div id="sequence" class="seq">
+    <div class="seq-screen">
+        <ul class="seq-canvas">
+            <li class="seq-in">
+                <div class="seq-title">
+                    <h2 data-seq>День в Италии</h2>
+                    <h3 data-seq>145<small><i class="fa fa-rub"></i></small>
+                        <fieldset class="seq-nav" aria-controls="sequence" aria-label="Slider buttons">
+                            <button type="button" class="seq-prev" aria-label="Previous"><</button>
+                            <button type="button" class="seq-next" aria-label="Next"> > </button>
+                        </fieldset>
+                    </h3>
+                </div>
+                <div class="seq-model">
+                    <img data-seq class="img-responsive" src="{{ url_for('static', filename='img/21.png') }}" alt="A female model with long curly brown hair wears a gray sweater, brown shorts, bright yellow socks, and black high heel shoes. She raises one leg, and tilts her head to the side" />
+                </div>
+            </li>
+            <li class="">
+                <div class="seq-title">
+                    <h2 data-seq>День в Италии</h2>
+                    <h3 data-seq>145<small><i class="fa fa-rub"></i></small>
+                        <fieldset class="seq-nav" aria-controls="sequence" aria-label="Slider buttons">
+                            <button type="button" class="seq-prev" aria-label="Previous"><</button>
+                            <button type="button" class="seq-next" aria-label="Next"> > </button>
+                        </fieldset>
+                    </h3>
+                </div>
+                <div class="seq-model">
+                    <img data-seq class="img-responsive" src="{{ url_for('static', filename='img/21.png') }}" alt="A female model with long curly brown hair wears a gray sweater, brown shorts, bright yellow socks, and black high heel shoes. She raises one leg, and tilts her head to the side" />
+                </div>
+            </li>
+            <li class="">
+                <div class="seq-title">
+                    <h2 data-seq>День в Италии</h2>
+                    <h3 data-seq>145<small><i class="fa fa-rub"></i></small>
+                        <fieldset class="seq-nav" aria-controls="sequence" aria-label="Slider buttons">
+                            <button type="button" class="seq-prev" aria-label="Previous"><</button>
+                            <button type="button" class="seq-next" aria-label="Next"> > </button>
+                        </fieldset>
+                    </h3>
+                </div>
+                <div class="seq-model">
+                    <img data-seq class="img-responsive" src="{{ url_for('static', filename='img/21.png') }}" alt="A female model with long curly brown hair wears a gray sweater, brown shorts, bright yellow socks, and black high heel shoes. She raises one leg, and tilts her head to the side" />
+                </div>
+            </li>
+
+        </ul>
+    </div>
+
+</div>
+{% endblock %} {% block body %}
+<div class="row" id="allCatalog" style="  position: relative;">
+    <div id="bar" class="bar col-md-2">
+        <div class="filter">
+        <button class="action filter__item filter__item--selected" data-filter="*">Все</button>
+        <br>
+            {% for field in type %}
+                <button class="action filter__item" data-filter=".{{field.alias}}"><i class="icon icon--{{field.alias}}"></i><span class="action__text">{{field.category_name}}</span></button>
+                <br>
+            {% endfor %}
+
+
+
+
+
+            <!-- <button class="action filter__item" data-filter=".shirts"><i class="icon icon--shirt"></i><span class="action__text">Ролы</span></button>
+            <br>
+            <button class="action filter__item" data-filter=".dresses"><i class="icon icon--dress"></i><span class="action__text">Суши</span></button>
+            <br>
+            <button class="action filter__item" data-filter=".trousers"><i class="icon icon--trousers"></i><span class="action__text">Салаты</span></button>
+            <br>
+            <button class="action filter__item" data-filter=".shoes"><i class="icon icon--shoe"></i><span class="action__text">Панини</span></button>
+            <br>
+            <button class="action filter__item" data-filter=".jackets"><i class="icon icon--jacket"></i><span class="action__text">Супы</span></button>
+            <br>
+            <button class="action filter__item" data-filter=".jackets"><i class="icon icon--jacket"></i><span class="action__text">Лазанья</span></button>
+            <br>
+            <button class="action filter__item" data-filter=".shirts"><i class="icon icon--shirt"></i><span class="action__text">Паста</span></button>
+            <br>
+            <button class="action filter__item" data-filter=".dresses"><i class="icon icon--dress"></i><span class="action__text">Блины</span></button>
+            <br>
+            <button class="action filter__item" data-filter=".trousers"><i class="icon icon--trousers"></i><span class="action__text">Десерты</span></button>
+            <br>
+            <button class="action filter__item" data-filter=".shoes"><i class="icon icon--shoe"></i><span class="action__text">Коктейли</span></button>
+            <br>
+            <button class="action filter__item" data-filter=".shoes"><i class="icon icon--shoe"></i><span class="action__text">Смузи</span></button> -->
+        </div>
+        <button class="cart">
+            <i class="cart__icon fa fa-shopping-cart"></i>
+            <span class="text-hidden">Shopping cart</span>
+            <span class="cart__count">0</span>
+        </button>
+    </div>
+    <!-- Main view -->
+    <div class="view col-md-10 ">
+        <!-- Grid -->
+        <section class="grid grid--loading">
+            <!-- Loader -->
+            <img class="grid__loader" src="{{ url_for('static',filename='img/grid.svg') }}" width="60" alt="Loader image" />
+            <!-- Grid sizer for a fluid Isotope (Masonry) layout -->
+            <div class="grid__sizer"></div>
+            <!-- Grid items -->
+
+            <div class="grid__item shirts">
+                <div class="slider">
+                    <div class="slider__item"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" alt="Dummy" /></div>
+                </div>
+                <div class="meta">
+                    <span class="meta__title">Бешамель со свининой</span>
+                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
+                </div>
+                <div class="actions">
+                    <button class="col-md-8 action action--button action--buy" value="1"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                </div>
+            </div>
+            {% for item in items %}
+                <div class="grid__item {{ ['grid__item--size-a',' '] |random }} {{item.category.alias }}">
+                <div class="slider">
+                    <div class="slider__item"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" alt="Dummy" /></div>
+                </div>
+                <div class="meta">
+                    <span class="meta__title">{{item.item_name}}</span>
+                    <span class="meta__price">{{ item.price }}<i class="fa fa-rub"></i></span>
+                </div>
+                <div class="actions">
+                    <button class="col-md-8 action action--button action--buy" value="1"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="grid__item grid__item--size-a shirts">
+                <div class="slider">
+                    <div class="slider__item"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" alt="Dummy" /></div>
+                </div>
+                <div class="meta">
+                    <span class="meta__title">Бешамель со свининой</span>
+                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
+                </div>
+                <div class="actions">
+                    <button class="col-md-8 action action--button action--buy" value="4"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                </div>
+            </div>
+            <div class="grid__item grid__item--size-a jackets">
+                <div class="slider">
+                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A4187.jpg') }}" alt="Dummy" /></div>
+                </div>
+                <div class="meta">
+                    <span class="meta__title">Бешамель со свининой</span>
+                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
+                </div>
+                <div class="actions">
+                    <button class="col-md-8 action action--button action--buy"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                </div>
+            </div>
+            <div class="grid__item shoes">
+                <div class="slider">
+                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A3407.jpg') }}" alt="Dummy" /></div>
+                </div>
+                <div class="meta">
+                    <span class="meta__title">Бешамель со свининой</span>
+                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
+                </div>
+                <div class="actions">
+                    <button class="col-md-8 action action--button action--buy" value="2"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                </div>
+            </div>
+            <div class="grid__item grid__item--size-a jackets">
+                <div class="slider">
+                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A3299.jpg') }}" alt="Dummy" /></div>
+                </div>
+                <div class="meta">
+                    <span class="meta__title">Бешамель со свининой</span>
+                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
+                </div>
+                <div class="actions">
+                    <button class="col-md-8 action action--button action--buy"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                </div>
+            </div>
+            <div class="grid__item dresses">
+                <div class="slider">
+                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A4187.jpg') }}" alt="Dummy" /></div>
+                </div>
+                <div class="meta">
+                    <span class="meta__title">Бешамель со свининой</span>
+                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
+                </div>
+                <div class="actions">
+                    <button class="col-md-8 action action--button action--buy" value="3"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                </div>
+            </div>
+            <div class="grid__item trousers">
+                <div class="slider">
+                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A4187.jpg') }}" alt="Dummy" /></div>
+                </div>
+                <div class="meta">
+                    <span class="meta__title">Бешамель со свининой</span>
+                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
+                </div>
+                <div class="actions">
+                    <button class="col-md-8 action action--button action--buy"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                </div>
+            </div>
+
+            <div class="grid__item shirts">
+                <div class="slider">
+                    <div class="slider__item"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" alt="Dummy" /></div>
+                </div>
+                <div class="meta">
+                    <span class="meta__title">Бешамель со свининой</span>
+                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
+                </div>
+                <div class="actions">
+                    <button class="col-md-8 action action--button action--buy" value="1"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                </div>
+            </div>
+            <div class="grid__item  shirts">
+                <div class="slider">
+                    <div class="slider__item"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" alt="Dummy" /></div>
+                </div>
+                <div class="meta">
+                    <span class="meta__title">Бешамель со свининой</span>
+                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
+                </div>
+                <div class="actions">
+                    <button class="col-md-8 action action--button action--buy" value="4"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                </div>
+            </div>
+            <div class="grid__item dresses">
+                <div class="slider">
+                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A4187.jpg') }}" alt="Dummy" /></div>
+                </div>
+                <div class="meta">
+                    <span class="meta__title">Бешамель со свининой</span>
+                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
+                </div>
+                <div class="actions">
+                    <button class="col-md-8 action action--button action--buy" value="3"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                </div>
+            </div>
+            <div class="grid__item trousers">
+                <div class="slider">
+                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A3299.jpg') }}" alt="Dummy" /></div>
+                </div>
+                <div class="meta">
+                    <span class="meta__title">Бешамель со свининой</span>
+                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
+                </div>
+                <div class="actions">
+                    <button class="col-md-8 action action--button action--buy"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                </div>
+            </div>
+            <div class="grid__item jackets">
+                <div class="slider">
+                    <div class="slider__item"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" alt="Dummy" /></div>
+                </div>
+                <div class="meta">
+                    <span class="meta__title">Бешамель со свининой</span>
+                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
+                </div>
+                <div class="actions">
+                    <button class="col-md-8 action action--button action--buy"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                </div>
+            </div>
+
+        </section>
+        <!-- /grid-->
+    </div>
+</div>
+<div class="popUp">
+    <div class="row">
+        <div class="col-md-10"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" class="img-responsive" alt="">
+        </div>
+        <div class="col-md-2 aboutProduct">
+            <div class="row">
+                <h2>Цезарь с курицей</h2>
+                <h3>Состав:</h3>
+                <ul>
+                    <li>соус Цезарь</li>
+                    <li>салат</li>
+                    <li>куриное филе</li>
+                    <li>сыр Пармезан</li>
+                    <li>томаты черри</li>
+                    <li>хрустящие крутоны</li>
+                </ul>
+                <p>Вес:255гр.</p>
+                <p class="price">255<i class="fa fa-rub"></i></p>
+                <button class="action action--button action--buy "><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                <a href="#0" class="closebtn"><span class="og-close"></span></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="checkOut">
+    <div class="row">
+        <div class="container">
+        <h2>Ваш заказ</h2>
+            <div class="table-responsive">
+                <table class="table" id="tableOrder">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Наименование</th>
+                            <th class="col-md-2">Количество</th>
+                            <th class="col-md-1">Цена</th>
+                            <th class="col-md-1"></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="1">
+                            <th scope="row">1</th>
+                            <td>
+                                <h3>Бешамель со свининой</h3>
+                                <small>Свинина,лавровый лист, горошек, тесто</small></td>
+                            <td class="col-md-2">
+
+                                <input type="number" value="1" min="1" max="999" class="form-control" aria-label="Text input with multiple buttons">
+
+                            </td>
+                            <td><span class="cena">155руб.</span></td>
+                            <td>
+                                <a href="#0" class="delete"><i class="fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>
+                                <h3>Бешамель со свининой</h3>
+                                <small>Свинина,лавровый лист, горошек, тесто</small></td>
+                            <td class="col-md-2">
+
+                                <input type="number" value="1" min="1" max="999" class="form-control" aria-label="Text input with multiple buttons">
+
+                            </td>
+                            <td><span class="cena">155руб.</span></td>
+                            <td>
+                                <a href="#0" class="delete"><i class="fa fa-times"></i></a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr>
+                <div class="col-md-6 col-md-offset-6 text-right">
+                    <h2>Всего:</h2>
+                    <p class="full">370<small><i class="fa fa-rub"></i></small></p>
+                    <p><button type="button" id="orderNow" class="btn btn-lg btn-success">ЗАКАЗАТЬ</button></p>
+                </div>
+
+            </div>
+        <a href="#0" class="closezakazbtn"><span class="og-close"></span></a>
+
+        </div>
+    </div>
+</div>
+{% endblock %} {% block footer %} {% endblock %} {% block script %}
+
+<script type="text/javascript">$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+{% endblock %}

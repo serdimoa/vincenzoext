@@ -1,0 +1,78 @@
+from app import db
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True)
+    email = db.Column(db.String(120), unique=True)
+    phone = db.Column(db.Integer, unique=True)
+
+    def __init__(self, username, email, phone):
+        self.username = username
+        self.email = email
+        self.phone = phone
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    category_name = db.Column(db.String(50))
+    alias = db.Column(db.String(50))
+
+    def __init__(self, category_name, alias):
+        self.category_name = category_name
+        self.alias = alias
+
+    def __repr__(self):
+        return '<Category %r>' % self.category_name
+
+    def __unicode__(self):
+        return self.category_name
+
+
+class Items(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    item_name = db.Column(db.String(50), unique=True)
+    item_component = db.Column(db.String(50))
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    weight = db.Column(db.String(50))
+    price = db.Column(db.String(50), default=0)
+    img = db.Column(db.String(50))
+
+    def __unicode__(self):
+        return self.item_name
+
+    def __init__(self, item_name, item_component, category_id, weight, price, img):
+        self.item_name = item_name
+        self.item_component = item_component
+        self.category_id = category_id
+        self.weight = weight
+        self.price = price
+        self.img = img
+
+    def __repr__(self):
+        return '<Item %r>' % self.item_name
+
+
+class Like(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    likes = db.Column(db.String(50))
+    items_id = db.Column(db.Integer, db.ForeignKey('items.id'))
+
+    def __unicode__(self):
+        return self.likes
+
+    def __init__(self, likes):
+        self.likes = likes
+
+    def __repr__(self):
+        return '<Category %r>' % self.likes
+
+
+class Admin(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    admin_name = db.Column(db.String(50))
+    admin_password = db.Column(db.String(50))

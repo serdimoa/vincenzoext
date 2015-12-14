@@ -1,0 +1,17 @@
+/**
+ * Created by serdimoa on 14.12.15.
+ */
+
+//= ../bower_components/imagesloaded/imagesloaded.pkgd.min.js
+//= ../bower_components/waypoints/lib/noframework.waypoints.js
+//= ../bower_components/jquery.cookie/jquery.cookie.js
+//= ../bower_components/hammerjs/hammer.js
+//= ../bower_components/sequencejs/src/sequence.js
+//= ../bower_components/flickity/dist/flickity.pkgd.js
+//= ../bower_components/isotope/dist/isotope.pkgd.js
+//= ../bower_components/slicknav/dist/jquery.slicknav.js
+//= ../bower_components/datatables/media/js/jquery.dataTables.js
+//= ../bower_components/select2/dist/js/select2.js
+//= ../bower_components/select2/dist/js/i18n/ru.js
+
+//= parts/main.js
