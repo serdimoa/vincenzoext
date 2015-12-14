@@ -45,7 +45,13 @@ def before_request():
 @app.route('/')
 def index():
     select_category = Category.query.all()
-    all_items = Items.query.all()
+    # all_items = Items.query.all()
+    # all_items = db.session.query(Items).select_from(join(User, Address)).filter(
+    # Address.email_address=='xavier@yahoo.com').all()
+    # j = join(Items, Category,
+    #          Items.category_id == Category.query.filter_by(id = Items.category_id).first() )
+    # stmt = select([Items]).select_from(j)
+    all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
     return render_template("page.html", type=select_category, items=all_items, title="Vincenzo")
 
 

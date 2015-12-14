@@ -75,7 +75,7 @@
 
 </div>
 {% endblock %} {% block body %}
-<div class="row" id="allCatalog" style="  position: relative;">
+<div class="row" id="allCatalog" style="position: relative;">
     <div id="bar" class="bar col-md-2">
         <div class="filter">
         <button class="action filter__item filter__item--selected" data-filter="*">Все</button>
@@ -127,27 +127,14 @@
             <div class="grid__sizer"></div>
             <!-- Grid items -->
 
-            <div class="grid__item shirts">
-                <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" alt="Dummy" /></div>
-                </div>
-                <div class="meta">
-                    <span class="meta__title">Бешамель со свининой</span>
-                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
-                </div>
-                <div class="actions">
-                    <button class="col-md-8 action action--button action--buy" value="1"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
-                </div>
-            </div>
             {% for item in items %}
-                <div class="grid__item {{ ['grid__item--size-a',' '] |random }} {{item.category.alias }}">
+                <div class="grid__item {{ ['grid__item--size-a',' '] |random }} {{ item[1].alias }}">
                 <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" alt="Dummy" /></div>
+                    <div class="slider__item"><img src="{{ url_for('static',filename='upload/'+item[0].img) }}" alt="Dummy" /></div>
                 </div>
                 <div class="meta">
-                    <span class="meta__title">{{item.item_name}}</span>
-                    <span class="meta__price">{{ item.price }}<i class="fa fa-rub"></i></span>
+                    <span class="meta__title">{{item[0].item_name}}</span>
+                    <span class="meta__price">{{ item[0].price }}<i class="fa fa-rub"></i></span>
                 </div>
                 <div class="actions">
                     <button class="col-md-8 action action--button action--buy" value="1"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
@@ -155,151 +142,6 @@
                 </div>
             </div>
             {% endfor %}
-
-            <div class="grid__item grid__item--size-a shirts">
-                <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" alt="Dummy" /></div>
-                </div>
-                <div class="meta">
-                    <span class="meta__title">Бешамель со свининой</span>
-                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
-                </div>
-                <div class="actions">
-                    <button class="col-md-8 action action--button action--buy" value="4"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
-                </div>
-            </div>
-            <div class="grid__item grid__item--size-a jackets">
-                <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A4187.jpg') }}" alt="Dummy" /></div>
-                </div>
-                <div class="meta">
-                    <span class="meta__title">Бешамель со свининой</span>
-                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
-                </div>
-                <div class="actions">
-                    <button class="col-md-8 action action--button action--buy"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
-                </div>
-            </div>
-            <div class="grid__item shoes">
-                <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A3407.jpg') }}" alt="Dummy" /></div>
-                </div>
-                <div class="meta">
-                    <span class="meta__title">Бешамель со свининой</span>
-                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
-                </div>
-                <div class="actions">
-                    <button class="col-md-8 action action--button action--buy" value="2"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
-                </div>
-            </div>
-            <div class="grid__item grid__item--size-a jackets">
-                <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A3299.jpg') }}" alt="Dummy" /></div>
-                </div>
-                <div class="meta">
-                    <span class="meta__title">Бешамель со свининой</span>
-                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
-                </div>
-                <div class="actions">
-                    <button class="col-md-8 action action--button action--buy"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
-                </div>
-            </div>
-            <div class="grid__item dresses">
-                <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A4187.jpg') }}" alt="Dummy" /></div>
-                </div>
-                <div class="meta">
-                    <span class="meta__title">Бешамель со свининой</span>
-                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
-                </div>
-                <div class="actions">
-                    <button class="col-md-8 action action--button action--buy" value="3"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
-                </div>
-            </div>
-            <div class="grid__item trousers">
-                <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A4187.jpg') }}" alt="Dummy" /></div>
-                </div>
-                <div class="meta">
-                    <span class="meta__title">Бешамель со свининой</span>
-                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
-                </div>
-                <div class="actions">
-                    <button class="col-md-8 action action--button action--buy"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
-                </div>
-            </div>
-
-            <div class="grid__item shirts">
-                <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" alt="Dummy" /></div>
-                </div>
-                <div class="meta">
-                    <span class="meta__title">Бешамель со свининой</span>
-                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
-                </div>
-                <div class="actions">
-                    <button class="col-md-8 action action--button action--buy" value="1"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
-                </div>
-            </div>
-            <div class="grid__item  shirts">
-                <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" alt="Dummy" /></div>
-                </div>
-                <div class="meta">
-                    <span class="meta__title">Бешамель со свининой</span>
-                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
-                </div>
-                <div class="actions">
-                    <button class="col-md-8 action action--button action--buy" value="4"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
-                </div>
-            </div>
-            <div class="grid__item dresses">
-                <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A4187.jpg') }}" alt="Dummy" /></div>
-                </div>
-                <div class="meta">
-                    <span class="meta__title">Бешамель со свининой</span>
-                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
-                </div>
-                <div class="actions">
-                    <button class="col-md-8 action action--button action--buy" value="3"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
-                </div>
-            </div>
-            <div class="grid__item trousers">
-                <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='img/SF9A3299.jpg') }}" alt="Dummy" /></div>
-                </div>
-                <div class="meta">
-                    <span class="meta__title">Бешамель со свининой</span>
-                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
-                </div>
-                <div class="actions">
-                    <button class="col-md-8 action action--button action--buy"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
-                </div>
-            </div>
-            <div class="grid__item jackets">
-                <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" alt="Dummy" /></div>
-                </div>
-                <div class="meta">
-                    <span class="meta__title">Бешамель со свининой</span>
-                    <span class="meta__price">255<i class="fa fa-rub"></i></span>
-                </div>
-                <div class="actions">
-                    <button class="col-md-8 action action--button action--buy"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
-                </div>
-            </div>
 
         </section>
         <!-- /grid-->
