@@ -24,6 +24,7 @@
     </li>
 </ul>
 {% endblock %} {% block slider %}
+    <div class="preloader"></div>
 <div id="sequence" class="seq">
     <div class="seq-screen">
         <ul class="seq-canvas">
@@ -130,7 +131,7 @@
             {% for item in items %}
                 <div class="grid__item {{ item[1].alias }}">
                 <div class="slider">
-                    <div class="slider__item"><img src="{{ url_for('static',filename='upload/'+item[0].img) }}" alt="Dummy" /></div>
+                    <div data-id-item="{{ item[0].id }}" class="slider__item"><img src="{{ url_for('static',filename='upload/'+item[0].img) }}" alt="Dummy" /></div>
                 </div>
                 <div class="meta">
                     <span class="meta__title">{{item[0].item_name}}</span>
@@ -149,13 +150,13 @@
 </div>
 <div class="popUp">
     <div class="row">
-        <div class="col-md-10"><img src="{{ url_for('static',filename='img/italiyday.jpg') }}" class="img-responsive" alt="">
+        <div class="col-md-10"><img src="" id="one_img" class="img-responsive" alt="">
         </div>
         <div class="col-md-2 aboutProduct">
             <div class="row">
-                <h2>Цезарь с курицей</h2>
+                <h2 id="one_name"></h2>
                 <h3>Состав:</h3>
-                <ul>
+                <ul id="one_array">
                     <li>соус Цезарь</li>
                     <li>салат</li>
                     <li>куриное филе</li>
@@ -163,8 +164,9 @@
                     <li>томаты черри</li>
                     <li>хрустящие крутоны</li>
                 </ul>
-                <p>Вес:255гр.</p>
-                <p class="price">255<i class="fa fa-rub"></i></p>
+                <p>Вес/Объем:<span id="one_weight"></span>
+                    </p>
+                <p id="one_price" class="price">255<i class="fa fa-rub"></i></p>
                 <button class="action action--button action--buy "><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
                 <a href="#0" class="closebtn"><span class="og-close"></span></a>
             </div>

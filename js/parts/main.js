@@ -95,7 +95,38 @@ $('#restorePass').click(function(event) {
 });
 
 $('.slider__item').click(function(event) {
+    $(".preloader").show();
     $('.popUp').addClass('isUp');
+     $.ajax({
+         type: 'POST',
+         // Provide correct Content-Type, so that Flask will know how to process it.
+         contentType: 'application/json',
+         // Encode your data as JSON.
+         // This is the type of data you're expecting back from the server.
+         dataType: 'json',
+         url: '/get_one_item/'+$(this).attr("data-id-item"),
+         success: function (e) {
+             console.log(e);
+             $("#one_img").attr(
+                 {"src" : 'static/upload/' + e.result.imgs }
+             );
+             arrays_one = (e.result.components).split(",");
+             $("#one_array").empty();
+             $.each(arrays_one, function(i) {
+                var li = $('<li/>')
+                    .text(arrays_one[i])
+                    .appendTo($("#one_array"));
+            });
+             $("#one_name").text(e.result.name);
+             $(".preloader").hide();
+
+             //for (var item_resp in e.response) {
+             //
+             //}
+
+         }
+     });
+
 
 });
 $('.closebtn').click(function(event) {

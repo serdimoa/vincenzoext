@@ -14,7 +14,7 @@ class ItemForm(Form):
     item_name = StringField(u"Наименование")
     item_component = StringField(u"Компоненты")
     category_id = SelectField(u"Категория", coerce=int)
-    weight = IntegerField(u"Вес")
+    weight = StringField(u"Вес/Объем")
     price = IntegerField(u"Цена")
     img = FileField(u"Изображение")
 

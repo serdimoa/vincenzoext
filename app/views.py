@@ -130,6 +130,19 @@ def order():
     return render_template("order.html")
 
 
+@app.route('/get_one_item/<int:item_id>', methods=['GET','POST'])
+def get_one_item(item_id):
+    select_item = Items.query.filter_by(id=item_id).first()
+    return jsonify(result=dict(id=select_item.id,
+                               name=select_item.item_name,
+                               imgs=select_item.img,
+                               components=select_item.item_component,
+                               weight=select_item.weight,
+                               price=select_item.price
+                               )
+                   )
+
+
 @app.route('/panel/item_add',  methods=['GET', 'POST'])
 def item_add():
     form = ItemForm()
