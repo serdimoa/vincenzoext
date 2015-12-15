@@ -1,8 +1,11 @@
 # coding=utf-8
 from __future__ import unicode_literals
 import os
-from flask import render_template, flash, redirect, session, url_for, request, g
+import ast
+import json
+from flask import render_template, flash, redirect, session, url_for, request, g, jsonify, make_response, Response
 from flask.ext.login import login_user, logout_user, current_user, login_required
+from sqlalchemy import sql, select
 from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
 from forms import LoginForm, CategoryForm, ItemForm
@@ -45,12 +48,6 @@ def before_request():
 @app.route('/')
 def index():
     select_category = Category.query.all()
-    # all_items = Items.query.all()
-    # all_items = db.session.query(Items).select_from(join(User, Address)).filter(
-    # Address.email_address=='xavier@yahoo.com').all()
-    # j = join(Items, Category,
-    #          Items.category_id == Category.query.filter_by(id = Items.category_id).first() )
-    # stmt = select([Items]).select_from(j)
     all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
     return render_template("page.html", type=select_category, items=all_items, title="Vincenzo")
 
@@ -65,6 +62,24 @@ def get_category():
     return render_template("category.html", category=select_category)
 
 
+@app.route('/get_order', methods=['GET', 'POST'])
+def get_order():
+    order_detail = request.data
+    order_convert = ast.literal_eval(order_detail)
+    order_convert = map(int, order_convert)
+    keys = ['id', 'item_name', 'item_component', 'price', 'weight']
+
+    orders = db.session.execute(
+        select(
+            [Items.id, Items.item_name, Items.item_component, Items.price, Items.weight],
+            Items.id.in_(order_convert)
+            )
+        ).fetchall()
+    response_order = [dict(zip(keys, row)) for row in orders]
+
+    return jsonify(response=response_order)
+
+
 @app.route('/panel/category/category_add', methods=['GET', 'POST'])
 def category_add():
     form = CategoryForm()
@@ -73,7 +88,7 @@ def category_add():
                                  alias=form.alias.data)
         db.session.add(category_data)
         db.session.commit()
-        flash(u'Категория добавлена')
+        flash(u'Категория добавлена',"success")
         return redirect(url_for('get_category'))
     return render_template('category_add.html', form=form)
 
@@ -87,7 +102,7 @@ def delete_category(category_id):
     category = Category.query.get(category_id)
     Category.query.filter_by(id=category_id).delete()
     db.session.commit()
-    flash("Удалена категория - " + category.category_name)
+    flash("Удалена категория - " + category.category_name,"success")
 
     return redirect(url_for("get_category"))
 
@@ -104,7 +119,7 @@ def update_category(category_id):
         category.category_name = form.category_name.data
         category.alias = form.category_name.data
         db.session.commit()
-        flash(u"Категория переименована на " + category.category_name)
+        flash(u"Категория переименована на " + category.category_name, "info")
         return redirect(url_for("get_category"))
 
     return render_template("category_edit.html", form=form)
@@ -133,7 +148,8 @@ def item_add():
         db.session.add(item_data)
         db.session.commit()
         form.img.data.save(basedir + "/static/upload/" + form.item_name.data + filename)
-        return redirect(url_for("get_category"))
+        flash("Добавлен новый товар", "success")
+        return redirect(url_for("items"))
 
     return render_template('items_add.html', form=form)
 
@@ -166,17 +182,25 @@ def item_edit(item_id):
             item.img = img
             db.session.commit()
 
-        flash(u"Изменено")
+        flash(u"Изменено", "info")
         return redirect(url_for("items"))
 
     return render_template('items_edit.html', form=form, img=img)
 
 
+@app.route('/panel/item_delete/<int:item_id>',  methods=['GET', 'POST'])
+def item_delete(item_id):
+    item = Items.query.get(item_id)
+    Items.query.filter_by(id=item_id).delete()
+    db.session.commit()
+    flash("Удален - " + item.item_name, "success")
+    return redirect(url_for("items"))
+
+
 @app.route('/panel/items',  methods=['GET', 'POST'])
 def items():
-    all_items = Items.select(model.Items, model.Category).join(model.Category)
-    select_items = Items.query.all()
-    return render_template("items.html", items=select_items)
+    all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
+    return render_template("items.html", items=all_items)
 
 
 @app.route('/login', methods=['GET', 'POST'])

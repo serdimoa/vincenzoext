@@ -1,6 +1,7 @@
 /**
  * Created by serdimoa on 05.11.15.
  */
+//= ../bower_components/datatables/media/js/jquery.dataTables.js
 
 function translit(){
 // Символ, на который будут заменяться все спецсимволы
@@ -65,7 +66,13 @@ $(window).load(function () {
     $(".delete_item").click(function () {
         var is_delete = confirm("Точно удалить?");
         if (is_delete == true) {
-            window.location.href = "/delete_item/" + parseInt(this.name)
+            window.location.href = "/panel/item_delete/" + parseInt(this.name)
         }
     })
+});
+
+$('#dts').DataTable({
+    "language":{
+        "url":"https://cdn.datatables.net/plug-ins/1.10.10/i18n/Russian.json"
+    }
 });

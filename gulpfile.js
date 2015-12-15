@@ -57,6 +57,7 @@ gulp.task('js:build', function () {
 
 gulp.task('js_admin:build', function () {
     gulp.src(path.src.js_admin) //Найдем наш main файл
+        .pipe(rigger()) //Прогоним через rigger
         .pipe(sourcemaps.init()) //Инициализируем sourcemap
         .pipe(uglify()) //Сожмем наш js
         .pipe(sourcemaps.write()) //Пропишем карты

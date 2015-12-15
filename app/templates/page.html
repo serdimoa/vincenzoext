@@ -137,8 +137,8 @@
                     <span class="meta__price">{{ item[0].price }}<i class="fa fa-rub"></i></span>
                 </div>
                 <div class="actions">
-                    <button class="col-md-8 action action--button action--buy" value="1"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                    <button class="col-md-8 action action--button action--buy" value="{{ item[0].id }}"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button class="col-md-4 action action--button action--like" value="{{ item[0].id }}"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
                 </div>
             </div>
             {% endfor %}
@@ -179,7 +179,6 @@
                 <table class="table" id="tableOrder">
                     <thead>
                         <tr>
-                            <th>#</th>
                             <th>Наименование</th>
                             <th class="col-md-2">Количество</th>
                             <th class="col-md-1">Цена</th>
@@ -188,36 +187,36 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr id="1">
-                            <th scope="row">1</th>
-                            <td>
-                                <h3>Бешамель со свининой</h3>
-                                <small>Свинина,лавровый лист, горошек, тесто</small></td>
-                            <td class="col-md-2">
-
-                                <input type="number" value="1" min="1" max="999" class="form-control" aria-label="Text input with multiple buttons">
-
-                            </td>
-                            <td><span class="cena">155руб.</span></td>
-                            <td>
-                                <a href="#0" class="delete"><i class="fa fa-times"></i></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>
-                                <h3>Бешамель со свининой</h3>
-                                <small>Свинина,лавровый лист, горошек, тесто</small></td>
-                            <td class="col-md-2">
-
-                                <input type="number" value="1" min="1" max="999" class="form-control" aria-label="Text input with multiple buttons">
-
-                            </td>
-                            <td><span class="cena">155руб.</span></td>
-                            <td>
-                                <a href="#0" class="delete"><i class="fa fa-times"></i></a>
-                            </td>
-                        </tr>
+{#                        <tr id="1">#}
+{#                            <th scope="row">1</th>#}
+{#                            <td>#}
+{#                                <h3>Бешамель со свининой</h3>#}
+{#                                <small>Свинина,лавровый лист, горошек, тесто</small></td>#}
+{#                            <td class="col-md-2">#}
+{##}
+{#                                <input type="number" value="1" min="1" max="999" class="form-control" aria-label="Text input with multiple buttons">#}
+{##}
+{#                            </td>#}
+{#                            <td><span class="cena">155руб.</span></td>#}
+{#                            <td>#}
+{#                                <a href="#0" class="delete"><i class="fa fa-times"></i></a>#}
+{#                            </td>#}
+{#                        </tr>#}
+{#                        <tr>#}
+{#                            <th scope="row">1</th>#}
+{#                            <td>#}
+{#                                <h3>Бешамель со свининой</h3>#}
+{#                                <small>Свинина,лавровый лист, горошек, тесто</small></td>#}
+{#                            <td class="col-md-2">#}
+{##}
+{#                                <input type="number" value="1" min="1" max="999" class="form-control" aria-label="Text input with multiple buttons">#}
+{##}
+{#                            </td>#}
+{#                            <td><span class="cena">155руб.</span></td>#}
+{#                            <td>#}
+{#                                <a href="#0" class="delete"><i class="fa fa-times"></i></a>#}
+{#                            </td>#}
+{#                        </tr>#}
                     </tbody>
                 </table>
                 <hr>

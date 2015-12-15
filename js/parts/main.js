@@ -11,6 +11,19 @@ function unique(arr) {
 
   return Object.keys(obj); // или собрать ключи перебором для IE8-
 }
+
+//Удаление из масива значение
+function removeA(arr) {
+    var what, a = arguments, L = a.length, ax;
+    while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax= arr.indexOf(what)) !== -1) {
+            arr.splice(ax, 1);
+        }
+    }
+    return arr;
+}
+
 $(document).keyup(function(e) {
     if (e.keyCode == 27) { // escape key maps to keycode `27`
         $('.popUp').removeClass('isUp');
@@ -18,7 +31,7 @@ $(document).keyup(function(e) {
     }
 });
 if (!$.cookie('order')) {
-        $.cookie('order', '{"values":[1,2]}');
+        $.cookie('order', '{"values":[]}');
         var oldValueUniqueLength = unique($.parseJSON($.cookie('order')).values).length;
 }
 else{
@@ -38,13 +51,17 @@ jQuery(document).ready(function() {
         mySequence = sequence(sequenceElement, options);
 
     console.log(oldValueUniqueLength);
-    $('#tableOrder').on( 'click', 'tr', function () {
+    $('#tableOrder').on( 'click', '.delete', function (e) {
+        console.log(this.id);
         var colIdx = dataTable.row(this).index();
+        dataTable.row(colIdx).remove().draw( false );
+        arr = unique($.parseJSON($.cookie('order')).values);
+        cleanArray = removeA(arr, this.id);
+        $.removeCookie('order');
+        $.cookie('order', '{"values":['+cleanArray+']}');
 
-        // dataTable.row(colIdx).remove().draw( false );
 
-        console.log($(this).attr("id"));
-//
+
     });
     // $('.delete').click( function (event) {
     //     // var colIdx = dataTable.cell(this).index().column;
@@ -87,6 +104,7 @@ $('.closebtn').click(function(event) {
 });
 
 $('.cart').click(function(event) {
+    dataTable.clear().draw();
     $.ajax({
         type: 'POST',
     // Provide correct Content-Type, so that Flask will know how to process it.
@@ -95,9 +113,17 @@ $('.cart').click(function(event) {
         data: JSON.stringify(unique($.parseJSON($.cookie('order')).values)),
     // This is the type of data you're expecting back from the server.
         dataType: 'json',
-        url: '/getOrder',
+        url: '/get_order',
         success: function (e) {
-            console.log(e);
+            for (var item_resp in e.response){
+                dataTable.row.add([
+                    "<h3>"+ e.response[item_resp].item_name+"</h3><small>"+e.response[item_resp].item_component+"</small>",
+                    "<input type='number' value='1' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                    "<span class='cena'>"+e.response[item_resp].item_name+"<i class='fa fa-rub'></i></span>",
+                    "<a href='#0' id='"+e.response[item_resp].id+"' class='delete'><i class='fa fa-times'></i></a>"]
+                ).draw( false );
+            }
+
         }
     });
 
@@ -260,18 +286,17 @@ $(function() {
     }
 
     function addToCart() {
-        console.log(this.value);
         var cookieToJSON = $.parseJSON($.cookie('order'));
         cookieToJSON.values.push(parseInt(this.value));
         var valueUnique = unique(cookieToJSON.values);
         if(valueUnique.length>oldValueUniqueLength){
-            classie.add(cart, 'cart--animate');
-            setTimeout(function() {
-                cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
-            }, 200);
-            onEndAnimation(cartItems, function() {
-                classie.remove(cart, 'cart--animate');
-            });
+            //classie.add(cart, 'cart--animate');
+            //setTimeout(function() {
+            //    cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
+            //}, 200);
+            //onEndAnimation(cartItems, function() {
+            //    classie.remove(cart, 'cart--animate');
+            //});
             oldValueUniqueLength=valueUnique.length;
             console.log("Новая уникальная длинна больше, чем старая")
         }
