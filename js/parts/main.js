@@ -119,7 +119,7 @@ $('.cart').click(function(event) {
                 dataTable.row.add([
                     "<h3>"+ e.response[item_resp].item_name+"</h3><small>"+e.response[item_resp].item_component+"</small>",
                     "<input type='number' value='1' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
-                    "<span class='cena'>"+e.response[item_resp].item_name+"<i class='fa fa-rub'></i></span>",
+                    "<span class='cena'>"+e.response[item_resp].price+" <i class='fa fa-rub'></i></span>",
                     "<a href='#0' id='"+e.response[item_resp].id+"' class='delete'><i class='fa fa-times'></i></a>"]
                 ).draw( false );
             }

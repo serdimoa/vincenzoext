@@ -128,7 +128,7 @@
             <!-- Grid items -->
 
             {% for item in items %}
-                <div class="grid__item {{ ['grid__item--size-a',' '] |random }} {{ item[1].alias }}">
+                <div class="grid__item {{ item[1].alias }}">
                 <div class="slider">
                     <div class="slider__item"><img src="{{ url_for('static',filename='upload/'+item[0].img) }}" alt="Dummy" /></div>
                 </div>
