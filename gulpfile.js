@@ -36,10 +36,10 @@ var path = {
         fonts:'fonts/**/*.*'
     },
     watch: { //Тут мы укажем, за изменением каких файлов мы хотим наблюдать
-        js: 'js/main.js',
-        js_admin: 'js/admin.js',
-        style: 'css/main.scss',
-        style_admin: 'css/admin.scss',
+        js: 'js/**/*.*',
+        js_admin: 'js/**/*.*',
+        style: 'css/**/*.*',
+        style_admin: 'css/**/*.*',
         img: 'img/**/*.*',
         fonts:'fonts/**/*.*'
     },

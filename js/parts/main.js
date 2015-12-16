@@ -1,6 +1,15 @@
 /**
  * Created by serdimoa on 02.11.15.
  */
+var summ;
+function calculateSumm(){
+    summ = 0;
+     $(".checkOut input[type=number]").each( function() {
+        summ += parseInt($(this).val() * $(this).attr("data-price"));
+     });
+    console.log("summa = "+summ);
+    return summ;
+}
 function unique(arr) {
   var obj = {};
 
@@ -11,6 +20,21 @@ function unique(arr) {
 
   return Object.keys(obj); // или собрать ключи перебором для IE8-
 }
+$(".checkOut input[type=number]").keypress(function(event){
+ event= event || window.event;
+
+ if (event.charCode && (event.charCode < 48 || event.charCode > 57)) {// проверка на event.charCode - чтобы пользователь мог нажать backspace, enter, стрелочку назад...
+
+     return false;
+ }
+
+     $(".full span").text(calculateSumm())
+
+
+});
+
+
+
 
 //Удаление из масива значение
 function removeA(arr) {
@@ -30,6 +54,14 @@ $(document).keyup(function(e) {
 
     }
 });
+
+$(".aboutProduct .action--buy").click(function () {
+    var cookieToJSON = $.parseJSON($.cookie('order'));
+        cookieToJSON.values.push(parseInt(this.value));
+    $.cookie('order',JSON.stringify(cookieToJSON));
+
+});
+
 if (!$.cookie('order')) {
         $.cookie('order', '{"values":[]}');
         var oldValueUniqueLength = unique($.parseJSON($.cookie('order')).values).length;
@@ -58,6 +90,7 @@ jQuery(document).ready(function() {
         arr = unique($.parseJSON($.cookie('order')).values);
         cleanArray = removeA(arr, this.id);
         $.removeCookie('order');
+        $('.full span').text(calculateSumm());
         $.cookie('order', '{"values":['+cleanArray+']}');
 
 
@@ -110,6 +143,7 @@ $('.slider__item').click(function(event) {
              $("#one_img").attr(
                  {"src" : 'static/upload/' + e.result.imgs }
              );
+             $(".aboutProduct .action--buy").attr({"value":e.result.id});
              arrays_one = (e.result.components).split(",");
              $("#one_array").empty();
              $.each(arrays_one, function(i) {
@@ -117,6 +151,7 @@ $('.slider__item').click(function(event) {
                     .text(arrays_one[i])
                     .appendTo($("#one_array"));
             });
+             $("#one_weight").text(e.result.weight);
              $("#one_name").text(e.result.name);
              $(".preloader").hide();
 
@@ -146,17 +181,24 @@ $('.cart').click(function(event) {
         dataType: 'json',
         url: '/get_order',
         success: function (e) {
+            summ=0;
             for (var item_resp in e.response){
                 dataTable.row.add([
                     "<h3>"+ e.response[item_resp].item_name+"</h3><small>"+e.response[item_resp].item_component+"</small>",
-                    "<input type='number' value='1' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                    "<input type='number' value='1' data-price='"+e.response[item_resp].price+"' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
                     "<span class='cena'>"+e.response[item_resp].price+" <i class='fa fa-rub'></i></span>",
                     "<a href='#0' id='"+e.response[item_resp].id+"' class='delete'><i class='fa fa-times'></i></a>"]
                 ).draw( false );
+                    summ += parseInt(e.response[item_resp].price);
+                    $(".full span").text(summ);
             }
 
+            $(".checkOut input[type=number]").change(function () {
+                $(".full span").text(calculateSumm())
+            });
         }
     });
+
 
     $('.checkOut').addClass('isUp');
 });
@@ -256,7 +298,11 @@ $(function() {
             // initFlickity();
             initIsotope();
             initEvents();
+            $("#select_delivery").nifty("show")
+
             classie.remove(grid, 'grid--loading');
+            $(".preloader").hide();
+
         });
     }
 
@@ -306,7 +352,7 @@ $(function() {
 
         // window resize / recalculate sizes for both flickity and isotope/masonry layouts
         window.addEventListener('resize', throttle(function(ev) {
-            recalcFlickities()
+            recalcFlickities();
             iso.layout();
         }, 50));
 
@@ -321,13 +367,6 @@ $(function() {
         cookieToJSON.values.push(parseInt(this.value));
         var valueUnique = unique(cookieToJSON.values);
         if(valueUnique.length>oldValueUniqueLength){
-            //classie.add(cart, 'cart--animate');
-            //setTimeout(function() {
-            //    cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
-            //}, 200);
-            //onEndAnimation(cartItems, function() {
-            //    classie.remove(cart, 'cart--animate');
-            //});
             oldValueUniqueLength=valueUnique.length;
             console.log("Новая уникальная длинна больше, чем старая")
         }

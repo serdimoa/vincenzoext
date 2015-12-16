@@ -13,5 +13,6 @@
 //= ../bower_components/datatables/media/js/jquery.dataTables.js
 //= ../bower_components/select2/dist/js/select2.js
 //= ../bower_components/select2/dist/js/i18n/ru.js
+//= ../bower_components/nifty-modal/lib/nifty.js
 
 //= parts/main.js

@@ -28,6 +28,8 @@
     "waypoints": "~4.0.0",
     "jquery.cookie": "~1.4.1",
     "select2": "~4.0.1",
-    "datatables": "~1.10.10"
+    "datatables": "~1.10.10",
+    "nifty-modal": "*",
+    "iCheck": "icheck#~1.0.2"
   }
 }
