@@ -2,6 +2,8 @@
  * Created by serdimoa on 02.11.15.
  */
 var summ;
+
+
 function calculateSumm(){
     summ = 0;
      $(".checkOut input[type=number]").each( function() {
@@ -64,10 +66,10 @@ $(".aboutProduct .action--buy").click(function () {
 
 if (!$.cookie('order')) {
         $.cookie('order', '{"values":[]}');
-        var oldValueUniqueLength = unique($.parseJSON($.cookie('order')).values).length;
+        var oldValueUniqueLength = $.parseJSON($.cookie('order')).values.length;
 }
 else{
-    var oldValueUniqueLength = unique($.parseJSON($.cookie('order')).values).length;
+    var oldValueUniqueLength = $.parseJSON($.cookie('order')).values.length;
 }
 var dataTable = $('#tableOrder').DataTable();
 
@@ -87,7 +89,7 @@ jQuery(document).ready(function() {
         console.log(this.id);
         var colIdx = dataTable.row(this).index();
         dataTable.row(colIdx).remove().draw( false );
-        arr = unique($.parseJSON($.cookie('order')).values);
+        arr = $.parseJSON($.cookie('order')).values;
         cleanArray = removeA(arr, this.id);
         $.removeCookie('order');
         $('.full span').text(calculateSumm());
@@ -176,22 +178,22 @@ $('.cart').click(function(event) {
     // Provide correct Content-Type, so that Flask will know how to process it.
         contentType: 'application/json',
     // Encode your data as JSON.
-        data: JSON.stringify(unique($.parseJSON($.cookie('order')).values)),
+        data: JSON.stringify($.parseJSON($.cookie('order')).values),
     // This is the type of data you're expecting back from the server.
         dataType: 'json',
         url: '/get_order',
         success: function (e) {
             summ=0;
-            for (var item_resp in e.response){
-                dataTable.row.add([
-                    "<h3>"+ e.response[item_resp].item_name+"</h3><small>"+e.response[item_resp].item_component+"</small>",
-                    "<input type='number' value='1' data-price='"+e.response[item_resp].price+"' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
-                    "<span class='cena'>"+e.response[item_resp].price+" <i class='fa fa-rub'></i></span>",
-                    "<a href='#0' id='"+e.response[item_resp].id+"' class='delete'><i class='fa fa-times'></i></a>"]
-                ).draw( false );
-                    summ += parseInt(e.response[item_resp].price);
-                    $(".full span").text(summ);
-            }
+            //for (var item_resp in e.response){
+            //    dataTable.row.add([
+            //        "<h3>"+ e.response[item_resp].item_name+"</h3><small>"+e.response[item_resp].item_component+"</small>",
+            //        "<input type='number' value='1' data-price='"+e.response[item_resp].price+"' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+            //        "<span class='cena'>"+e.response[item_resp].price+" <i class='fa fa-rub'></i></span>",
+            //        "<a href='#0' id='"+e.response[item_resp].id+"' class='delete'><i class='fa fa-times'></i></a>"]
+            //    ).draw( false );
+            //        summ += parseInt(e.response[item_resp].price);
+            //        $(".full span").text(summ);
+
 
             $(".checkOut input[type=number]").change(function () {
                 $(".full span").text(calculateSumm())
@@ -363,21 +365,11 @@ $(function() {
     }
 
     function addToCart() {
-        var cookieToJSON = $.parseJSON($.cookie('order'));
-        cookieToJSON.values.push(parseInt(this.value));
-        var valueUnique = unique(cookieToJSON.values);
-        if(valueUnique.length>oldValueUniqueLength){
-            oldValueUniqueLength=valueUnique.length;
-            console.log("Новая уникальная длинна больше, чем старая")
-        }
-        else if(valueUnique.length<oldValueUniqueLength){
-            console.log("Новая уникальная длинна меньше, чем старая")
 
-        }
-        else{
+       console.log($(this).attr("data-items"));
 
-        }
-        $.cookie('order',JSON.stringify(cookieToJSON));
+
+        //$.cookie('order',JSON.stringify(cookieToJSON));
 
         // classie.add(cart, 'cart--animate');
 
@@ -395,3 +387,4 @@ $(function() {
     init();
 
 })(window);
+
