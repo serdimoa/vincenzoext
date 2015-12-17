@@ -15,4 +15,5 @@
 //= ../bower_components/select2/dist/js/i18n/ru.js
 //= ../bower_components/nifty-modal/lib/nifty.js
 
+
 //= parts/main.js

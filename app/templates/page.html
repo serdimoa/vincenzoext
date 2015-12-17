@@ -143,13 +143,14 @@
                 </div>
                 <div class="actions">
                     <button class="col-md-8 action action--button action--buy"
-
-                            data-items="{
-                                            'item_name':'{{ item[0].item_name }}',
-                                            'item_price':'{{ item[0].price }}',
-                                            'item_components':'{{ item[0].item_component }}',
-                                            'item_weight':'{{ item[0].weight }}'
-                                       }"
+                            data-items='{
+                                            "item_id":"{{ item[0].id }}",
+                                            "item_name":"{{ item[0].item_name }}",
+                                            "item_price":"{{ item[0].price }}",
+                                            "item_component":"{{ item[0].item_component }}",
+                                            "item_weight":"{{ item[0].weight }}",
+                                            "item_category":"{{ item[1].category_name }}"
+                                       }'
                             value="{{ item[0].id }}"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
                     <button class="col-md-4 action action--button action--like" value="{{ item[0].id }}"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
                 </div>
@@ -189,6 +190,7 @@
                     <thead>
                         <tr>
                             <th>Наименование</th>
+                            <th></th>
                             <th class="col-md-2">Количество</th>
                             <th class="col-md-1">Цена</th>
                             <th class="col-md-1"></th>
