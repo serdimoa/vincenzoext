@@ -2046,3 +2046,31 @@ html,
     box-shadow: none;
 }
 }
+
+div.fancy-select{
+    margin-top: 10px;
+    line-height: 1;
+    options{
+      padding-left: 0;
+    }
+}
+
+div.fancy-select div.trigger{
+  color: #333;
+  background: #DDDDDD;
+}
+
+div.fancy-select div.trigger.open{
+  background: #333;
+  color: #fff;
+}
+div.fancy-select ul.options.open{
+  padding: 0;
+}
+div.fancy-select ul.options{
+  background: #DDDDDD;
+  color: #333;
+  li{
+    color: #333;
+  }
+}

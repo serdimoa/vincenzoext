@@ -374,7 +374,7 @@ $(function() {
         if(data_items['item_category']=="Вторая"){// todo: set name
             dataTable.row.add([
                 "<h3>"+ data_items['item_name']+"</h3><small>"+data_items['item_component']+"</small>",
-                "<select class='basic'><option value=''>Select something…</option>  <option>Lorem</option>  <option>Ipsum</option>  <option>Dolor</option>  <option>Sit</option>  <option>Amet</option></select>",
+                "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option></select>",
                 "<input type='number' value='1' data-price='"+data_items['item_price']+"' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
                 "<span class='cena'>"+data_items['item_price']+" <i class='fa fa-rub'></i></span>",
                 "<a href='#0' id='"+data_items['item_id']+"' class='delete'><i class='fa fa-times'></i></a>"
