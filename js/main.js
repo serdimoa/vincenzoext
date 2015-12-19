@@ -16,4 +16,5 @@
 //= ../bower_components/nifty-modal/lib/nifty.js
 
 
+//= parts/iosOverlay.js
 //= parts/main.js

@@ -391,15 +391,18 @@ $(function() {
                 "<a href='#0' id='"+data_items['item_id']+"' class='delete'><i class='fa fa-times'></i></a>"
             ]).draw( false );
         }
+        iosOverlay({
+		text: "Добавлено!",
+		duration: 2e3,
+		icon: "static/img/check.png"
+	    });
 
 
-        //$.cookie('order',JSON.stringify(cookieToJSON));
-
-        // classie.add(cart, 'cart--animate');
-
-        // onEndAnimation(cartItems, function() {
-        //     classie.remove(cart, 'cart--animate');
-        // });
+        classie.add(cart, 'cart--animate');
+		setTimeout(function() {cartItems.innerHTML = Number(cartItems.innerHTML) + 1;}, 200);
+		onEndAnimation(cartItems, function() {
+			classie.remove(cart, 'cart--animate');
+		});
     }
 
     function recalcFlickities() {
