@@ -3,6 +3,10 @@
  */
 var summ;
 
+function fnGetSelected( oTableLocal )
+{
+    return oTableLocal.$('tr.row_selected');
+}
 
 function calculateSumm(){
     summ = 0;
@@ -99,10 +103,14 @@ jQuery(document).ready(function() {
 
     tableOrder.on('click', '.button-add-sous', function (e) {
         var colIdx = dataTable.row(this).index();
+        var anSelected = fnGetSelected( dataTable );
         var data=[];
+        $(anSelected).find('td').each(function(){data.push($(this).text());});
+        dataTable.fnAddData( data );
+        } );
         dataTable.row.add(dataTable.row(colIdx).data()).draw(false);
         $('.basic').fancySelect();
-
+        console.log(this.id);
         //console.log(dataTable.row(colIdx).data( false ));
         //dataTable.row.add();
         //$(anSelected).find('td').each(function(){data.push($(this).html());});
