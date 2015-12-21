@@ -84,8 +84,8 @@ jQuery(document).ready(function() {
         },
         mySequence = sequence(sequenceElement, options);
 
-    console.log(oldValueUniqueLength);
-    $('#tableOrder').on( 'click', '.delete', function (e) {
+    var tableOrder =  $('#tableOrder');
+   tableOrder.on( 'click', '.delete', function (e) {
         console.log(this.id);
         var colIdx = dataTable.row(this).index();
         dataTable.row(colIdx).remove().draw( false );
@@ -95,8 +95,19 @@ jQuery(document).ready(function() {
         $('.full span').text(calculateSumm());
         $.cookie('order', '{"values":['+cleanArray+']}');
 
+    });
 
+    tableOrder.on('click', '.button-add-sous', function (e) {
+        var colIdx = dataTable.row(this).index();
+        var data=[];
+        dataTable.row.add(dataTable.row(colIdx).data()).draw(false);
+        $('.basic').fancySelect();
 
+        //console.log(dataTable.row(colIdx).data( false ));
+        //dataTable.row.add();
+        //$(anSelected).find('td').each(function(){data.push($(this).html());});
+        //dataTable.row(colIdx).remove().draw( false );
+        //dataTable.fnAddData()
     });
     // $('.delete').click( function (event) {
     //     // var colIdx = dataTable.cell(this).index().column;
@@ -374,7 +385,8 @@ $(function() {
         if(data_items['item_category']=="Вторая"){// todo: set name
             dataTable.row.add([
                 "<h3>"+ data_items['item_name']+"</h3><small>"+data_items['item_component']+"</small>",
-                "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option></select>",
+                "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
+                "<a href='#' id='add"+data_items['item_id']+"' class='button-add-sous'>другой соус</a>",
                 "<input type='number' value='1' data-price='"+data_items['item_price']+"' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
                 "<span class='cena'>"+data_items['item_price']+" <i class='fa fa-rub'></i></span>",
                 "<a href='#0' id='"+data_items['item_id']+"' class='delete'><i class='fa fa-times'></i></a>"
@@ -385,7 +397,7 @@ $(function() {
         else{
              dataTable.row.add([
                 "<h3>"+ data_items['item_name']+"</h3><small>"+data_items['item_component']+"</small>",
-                " ",
+                " ", " ",
                 "<input type='number' value='1' data-price='"+data_items['item_price']+"' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
                 "<span class='cena'>"+data_items['item_price']+" <i class='fa fa-rub'></i></span>",
                 "<a href='#0' id='"+data_items['item_id']+"' class='delete'><i class='fa fa-times'></i></a>"
