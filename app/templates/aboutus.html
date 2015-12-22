@@ -1,0 +1,66 @@
+{% extends "base.html" %} {% block head %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/pixelfabric-clothes/style.css')}}" />
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+<script src="{{ url_for('static', filename='modernizer.custom.js') }}"></script>
+<!-- GOOGLE FONTS -->
+<link href='https://fonts.googleapis.com/css?family=Exo+2:400,100,200,300,500,700,600,800&subset=latin,cyrillic' rel='stylesheet' type='text/css'> {% endblock %} {% block navigation %}
+<div class="container">
+<div class="row">
+<ul id="menu" class="aboutus">
+   <li>
+       <a href="#"><img src="{{ url_for('static', filename='img/Sir2.png') }}"  class="img-responsive" alt=""></a>
+   </li>
+    <li><a href="#">Главная</a></li>
+    <li><a href="#">О нас</a></li>
+    <li><a href="#">Отзывы</a></li>
+    <li><a href="#">Корзина</a></li>
+    <li><a href="#!">Мой Vincenzo</a>
+        <ul class="aboutProfile">
+            <li>Дмитрий </li>
+            <li class="divider"></li>
+            <li><a href="#"><i class="fa fa-cog"></i> Настроить</a></li>
+            <li><a href="#"><i class="fa fa-star-o"></i> Избранное</a></li>
+            <li><a href="#"><i class="fa fa-sign-out"></i> Выход</a></li>
+        </ul>
+
+    </li>
+</ul>
+</div>
+</div>
+{% endblock %}
+{% block body %}
+    <div class="container-fluid header-post">
+    <div class="row">
+        <div class="container content">
+            <h1>ssss</h1>
+            <p>Синьор Винченцо прибыл к нам из провинции
+Падуя (Padova), находящейся в глубинке Италиии,
+и стремительно развивает сеть кафе-ресторанов
+”Sir. Vincenzo” в России уже на протяжении 3-х лет. </p>
+<p>
+Теперь и нам, дорогие Вартовчане, предоставилась
+возможность отведать восхитительные блюда всеми
+любимой итальянской кухни в новом формате.</p>
+<p> А также,
+в нашем меню появились европейская и японская кухня. </p>
+<p>
+Мы рады представить Вам подборку интересных блюд
+по демократичным ценам. В уютной атмосфере, под
+расслабляющую музыку, Вы будете чувствовать
+себя    как    дома!</p>
+<div class="col-md-6">
+
+<script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
+
+<!-- VK Widget -->
+<div id="vk_groups"></div>
+<script type="text/javascript">
+VK.Widgets.Group("vk_groups", {mode: 2, wide: 1, width: "auto", height: "400"}, 47269953);
+</script></div>
+
+<div class="col-md-6"></div>
+<iframe src="http://www.intagme.com/in/?u=c2lyX3ZpbmNlbnpvfGlufDE1MHwzfDN8fHllc3w1fHVuZGVmaW5lZHxubw==" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:auto; height: 400px" ></iframe>
+        </div>
+    </div>
+    </div>
+{% endblock %}
