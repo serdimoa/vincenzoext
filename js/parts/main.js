@@ -2,10 +2,30 @@
  * Created by serdimoa on 02.11.15.
  */
 var summ;
+var tableOrder = $('#tableOrder tbody');
 
+tableOrder.on( 'mouseenter', 'tr', function () {
+    if ($(this).hasClass('selected')) {
+        $(this).removeClass('selected');
+    }
+    else {
+        dataTable.$('tr.selected').removeClass('selected');
+        $(this).addClass('selected');
+    }
+});
+
+tableOrder.on( 'mouseleave', 'tr', function () {
+    if ($(this).hasClass('selected')) {
+        $(this).removeClass('selected');
+    }
+    else {
+        dataTable.$('tr.selected').removeClass('selected');
+        $(this).addClass('selected');
+    }
+});
 function fnGetSelected( oTableLocal )
 {
-    return oTableLocal.$('tr.row_selected');
+    return oTableLocal.$('tr.selected');
 }
 
 function calculateSumm(){
@@ -75,7 +95,16 @@ if (!$.cookie('order')) {
 else{
     var oldValueUniqueLength = $.parseJSON($.cookie('order')).values.length;
 }
-var dataTable = $('#tableOrder').DataTable();
+var dataTable = $('#tableOrder').DataTable({
+    "pageLength": 5,
+    "pagingType": "full_numbers",
+    "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false,
+                "searchable": false
+            }]
+});
 
 
 jQuery(document).ready(function() {
@@ -89,39 +118,12 @@ jQuery(document).ready(function() {
         mySequence = sequence(sequenceElement, options);
 
     var tableOrder =  $('#tableOrder');
-   tableOrder.on( 'click', '.delete', function (e) {
-        console.log(this.id);
-        var colIdx = dataTable.row(this).index();
-        dataTable.row(colIdx).remove().draw( false );
-        arr = $.parseJSON($.cookie('order')).values;
-        cleanArray = removeA(arr, this.id);
-        $.removeCookie('order');
+    tableOrder.on( 'click', '.delete', function (e) {
+        dataTable.row('.selected').remove().draw( false );
+
         $('.full span').text(calculateSumm());
-        $.cookie('order', '{"values":['+cleanArray+']}');
 
     });
-
-    tableOrder.on('click', '.button-add-sous', function (e) {
-        var colIdx = dataTable.row(this).index();
-        var anSelected = fnGetSelected( dataTable );
-        var data=[];
-        $(anSelected).find('td').each(function(){data.push($(this).text());});
-        dataTable.fnAddData( data );
-        } );
-        dataTable.row.add(dataTable.row(colIdx).data()).draw(false);
-        $('.basic').fancySelect();
-        console.log(this.id);
-        //console.log(dataTable.row(colIdx).data( false ));
-        //dataTable.row.add();
-        //$(anSelected).find('td').each(function(){data.push($(this).html());});
-        //dataTable.row(colIdx).remove().draw( false );
-        //dataTable.fnAddData()
-    });
-    // $('.delete').click( function (event) {
-    //     // var colIdx = dataTable.cell(this).index().column;
-    //     dataTable.row(colIdx).remove().draw( false );
-    // } );
-    $('#menu').slicknav();
 
 
 }); //ready
@@ -392,9 +394,9 @@ $(function() {
         var data_items = jQuery.parseJSON($(this).attr("data-items"));
         if(data_items['item_category']=="Вторая"){// todo: set name
             dataTable.row.add([
+                data_items['item_id'],
                 "<h3>"+ data_items['item_name']+"</h3><small>"+data_items['item_component']+"</small>",
                 "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
-                "<a href='#' id='add"+data_items['item_id']+"' class='button-add-sous'>другой соус</a>",
                 "<input type='number' value='1' data-price='"+data_items['item_price']+"' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
                 "<span class='cena'>"+data_items['item_price']+" <i class='fa fa-rub'></i></span>",
                 "<a href='#0' id='"+data_items['item_id']+"' class='delete'><i class='fa fa-times'></i></a>"
@@ -404,12 +406,14 @@ $(function() {
         }
         else{
              dataTable.row.add([
+                 data_items['item_id'],
                 "<h3>"+ data_items['item_name']+"</h3><small>"+data_items['item_component']+"</small>",
-                " ", " ",
+                " ",
                 "<input type='number' value='1' data-price='"+data_items['item_price']+"' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
                 "<span class='cena'>"+data_items['item_price']+" <i class='fa fa-rub'></i></span>",
                 "<a href='#0' id='"+data_items['item_id']+"' class='delete'><i class='fa fa-times'></i></a>"
             ]).draw( false );
+
         }
         iosOverlay({
 		text: "Добавлено!",
