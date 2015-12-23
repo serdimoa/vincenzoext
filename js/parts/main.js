@@ -8,7 +8,7 @@ var cartItems = cart.querySelector('.cart__count');
 var summ;
 var tableOrder = $('#tableOrder tbody');
 var delivery = $.cookie('delivery');
-tableOrder.on('mouseenter', 'tr', function() {
+tableOrder.on('mouseenter', 'tr', function () {
     if ($(this).hasClass('selected')) {
         $(this).removeClass('selected');
     } else {
@@ -17,19 +17,25 @@ tableOrder.on('mouseenter', 'tr', function() {
     }
 });
 
-
-
-
-$('input:radio[name=group1],input:radio[name=group2]').change(function() {
+$('input:radio[name=group2]').change(function () {
     $.cookie('delivery', this.value, {
         expires: 7
     });
     $('.full span').text(calculateSumm());
-
-
 });
 
-tableOrder.on('mouseleave', 'tr', function() {
+$('input:radio[name=group1]').change(function () {
+    $.cookie('delivery', this.value, {
+        expires: 7
+    });
+
+    $("#select_delivery").nifty("hide");
+    $("input:radio[name=group2][value='" + $.cookie('delivery') + "']").prop({"checked": true});
+
+    $('.full span').text(calculateSumm());
+});
+
+tableOrder.on('mouseleave', 'tr', function () {
     if ($(this).hasClass('selected')) {
         $(this).removeClass('selected');
     } else {
@@ -42,15 +48,16 @@ function fnGetSelected(oTableLocal) {
     return oTableLocal.$('tr.selected');
 }
 
+
 function calculateSumm() {
     summ = 0;
-    $(".checkOut input[type=number]").each(function() {
+    $(".checkOut input[type=number]").each(function () {
         summ += parseInt($(this).val() * $(this).attr("data-price"));
     });
-    if (summ!=0) {
+    if (summ != 0) {
 
-        if ($.cookie('delivery')=="no_delivery") {
-            summ = summ - summ*10/100;
+        if ($.cookie('delivery') == "no_delivery") {
+            summ = summ - summ * 10 / 100;
 
         }
     }
@@ -69,7 +76,7 @@ function unique(arr) {
 
     return Object.keys(obj); // или собрать ключи перебором для IE8-
 }
-$(".checkOut input[type=number]").keypress(function(event) {
+$(".checkOut input[type=number]").keypress(function (event) {
     event = event || window.event;
 
     if (event.charCode && (event.charCode < 48 || event.charCode > 57)) { // проверка на event.charCode - чтобы пользователь мог нажать backspace, enter, стрелочку назад...
@@ -81,9 +88,6 @@ $(".checkOut input[type=number]").keypress(function(event) {
 
 
 });
-
-
-
 
 
 //Удаление из масива значение
@@ -100,26 +104,15 @@ function removeA(arr) {
     return arr;
 }
 
-$(document).keyup(function(e) {
+$(document).keyup(function (e) {
     if (e.keyCode == 27) { // escape key maps to keycode `27`
         $('.popUp').removeClass('isUp');
 
     }
 });
 
-$(".aboutProduct .action--buy").click(function() {
-    var cookieToJSON = $.parseJSON($.cookie('order'));
-    cookieToJSON.values.push(parseInt(this.value));
-    $.cookie('order', JSON.stringify(cookieToJSON));
 
-});
 
-if (!$.cookie('order')) {
-    $.cookie('order', '{"values":[]}');
-    var oldValueUniqueLength = $.parseJSON($.cookie('order')).values.length;
-} else {
-    var oldValueUniqueLength = $.parseJSON($.cookie('order')).values.length;
-}
 var dataTable = $('#tableOrder').DataTable({
     "columnDefs": [{
         "targets": [0],
@@ -131,8 +124,50 @@ var dataTable = $('#tableOrder').DataTable({
     }
 });
 
+$(".one--buy").click(function () {
+    var data_items = jQuery.parseJSON($(this).attr("data-items"));
+    if (data_items['item_category'] == "Вторая") { // todo: set name
+        dataTable.row.add([
+            data_items['item_id'],
+            "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
+            "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
+            "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+            "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
+            "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
+        ]).draw(false);
+        $('.basic').fancySelect();
+        $(".checkOut input[type=number]").on("change", function (e) {
+            $('.full span').text(calculateSumm());
 
-jQuery(document).ready(function() {
+        });
+        $('.full span').text(calculateSumm());
+
+
+    } else {
+        dataTable.row.add([
+            data_items['item_id'],
+            "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
+            " ",
+            "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+            "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
+            "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
+        ]).draw(false);
+        $(".checkOut input[type=number]").on("change", function (e) {
+            $('.full span').text(calculateSumm());
+
+        });
+        $('.full span').text(calculateSumm());
+    }
+    cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
+
+    iosOverlay({
+        text: "Добавлено!",
+        duration: 2e3,
+        icon: "static/img/check.png"
+    });
+});
+
+jQuery(document).ready(function () {
     var sequenceElement = document.getElementById("sequence"),
         options = {
             animateCanvas: !1,
@@ -143,7 +178,7 @@ jQuery(document).ready(function() {
         mySequence = sequence(sequenceElement, options);
 
     var tableOrder = $('#tableOrder');
-    tableOrder.on('click', '.delete', function(e) {
+    tableOrder.on('click', '.delete', function (e) {
         dataTable.row('.selected').remove().draw(false);
         cartItems.innerHTML = Number(cartItems.innerHTML) - 1;
 
@@ -154,7 +189,7 @@ jQuery(document).ready(function() {
 
 }); //ready
 
-$('#orderNow').click(function(event) {
+$('#orderNow').click(function (event) {
     window.location.href = "/order";
 });
 var data = [{
@@ -167,7 +202,7 @@ var data = [{
     id: 3,
     text: 'г.Лангепас'
 }];
-$('#restorePass').click(function(event) {
+$('#restorePass').click(function (event) {
     if ($("#auchPhone").val() == "") {
         $(".wrongPhone").show();
     } else {
@@ -182,10 +217,11 @@ $('#restorePass').click(function(event) {
             data: data
         });
 
-    };
+    }
+    ;
 });
 
-$('.slider__item').click(function(event) {
+$('.slider__item').click(function (event) {
     $(".preloader").show();
     $('.popUp').addClass('isUp');
     $.ajax({
@@ -196,17 +232,28 @@ $('.slider__item').click(function(event) {
         // This is the type of data you're expecting back from the server.
         dataType: 'json',
         url: '/get_one_item/' + $(this).attr("data-id-item"),
-        success: function(e) {
-            console.log(e);
+        success: function (e) {
             $("#one_img").attr({
                 "src": 'static/upload/' + e.result.imgs
             });
+            var item_result = {
+                item_id: e.result.item_id,
+                item_name: e.result.name,
+                item_price: e.result.price,
+                item_component: e.result.components,
+                item_weight: e.result.weight,
+                item_category: e.result.category
+            };
+
+
             $(".aboutProduct .action--buy").attr({
-                "value": e.result.id
+                "value": e.result.id,
+                "data-items":  JSON.stringify(item_result)
             });
+
             arrays_one = (e.result.components).split(",");
             $("#one_array").empty();
-            $.each(arrays_one, function(i) {
+            $.each(arrays_one, function (i) {
                 var li = $('<li/>')
                     .text(arrays_one[i])
                     .appendTo($("#one_array"));
@@ -224,12 +271,12 @@ $('.slider__item').click(function(event) {
 
 
 });
-$('.closebtn').click(function(event) {
+$('.closebtn').click(function (event) {
     $('.popUp').removeClass('isUp');
 
 });
 
-$('.cart, .showCart').click(function(event) {
+$('.cart, .showCart').click(function (event) {
     //dataTable.clear().draw();
     //$.ajax({
     //    type: 'POST',
@@ -264,21 +311,21 @@ $('.cart, .showCart').click(function(event) {
     $('.checkOut').addClass('isUp');
 });
 
-$('.closezakazbtn').click(function(event) {
+$('.closezakazbtn').click(function (event) {
     $('.checkOut').removeClass('isUp');
 
 });
 /**
  Product Page
-**/
+ **/
 //Function for fixin sidebar
-$(function() {
+$(function () {
     var sidebar = $('#bar');
     var bodywithsidebar = $(".view");
     var cart = $(".cart");
     var top = sidebar.offset().top - parseFloat(sidebar.css('margin-top'));
 
-    $(window).scroll(function(event) {
+    $(window).scroll(function (event) {
         var y = $(this).scrollTop();
         if (y >= top) {
             sidebar.addClass('fixed');
@@ -293,7 +340,7 @@ $(function() {
 });
 
 
-(function(window) {
+(function (window) {
 
     'use strict';
 
@@ -307,8 +354,8 @@ $(function() {
             'animation': 'animationend'
         },
         animEndEventName = animEndEventNames[Modernizr.prefixed('animation')],
-        onEndAnimation = function(el, callback) {
-            var onEndCallbackFn = function(ev) {
+        onEndAnimation = function (el, callback) {
+            var onEndCallbackFn = function (ev) {
                 if (support.animations) {
                     if (ev.target != this) return;
                     this.removeEventListener(animEndEventName, onEndCallbackFn);
@@ -328,10 +375,10 @@ $(function() {
     function throttle(fn, delay) {
         var allowSample = true;
 
-        return function(e) {
+        return function (e) {
             if (allowSample) {
                 allowSample = false;
-                setTimeout(function() {
+                setTimeout(function () {
                     allowSample = true;
                 }, delay);
                 fn(e);
@@ -341,36 +388,39 @@ $(function() {
 
     // sliders - flickity
     var sliders = [].slice.call(document.querySelectorAll('.slider')),
-        // array where the flickity instances are going to be stored
+    // array where the flickity instances are going to be stored
         flkties = [],
-        // grid element
+    // grid element
         grid = document.querySelector('.grid'),
-        // isotope instance
+    // isotope instance
         iso,
-        // filter ctrls
+    // filter ctrls
         filterCtrls = [].slice.call(document.querySelectorAll('.filter > button')),
-        // cart
+    // cart
         cart = document.querySelector('.cart'),
         cartItems = cart.querySelector('.cart__count');
 
     function init() {
         // preload images
-        imagesLoaded(grid, function() {
+        imagesLoaded(grid, function () {
             barWidth();
             // initFlickity();
             initIsotope();
             initEvents();
-            delivery();
+            delivery_func();
             classie.remove(grid, 'grid--loading');
             $(".preloader").hide();
+            console.log(delivery);
+
 
         });
     }
 
-    function barWidth() {}
+    function barWidth() {
+    }
 
     function initFlickity() {
-        sliders.forEach(function(slider) {
+        sliders.forEach(function (slider) {
             var flkty = new Flickity(slider, {
                 prevNextButtons: false,
                 wrapAround: true,
@@ -398,19 +448,19 @@ $(function() {
         });
     }
 
-    function delivery() {
-        if (delivery == "") {
+    function delivery_func() {
+        if (delivery === undefined) {
             $("#select_delivery").nifty("show");
 
         } else {
-            $("input:radio[name=group2][value='"+$.cookie('delivery')+"']").prop({"checked":true});
+            $("input:radio[name=group2][value='" + $.cookie('delivery') + "']").prop({"checked": true});
         }
 
     }
 
     function initEvents() {
-        filterCtrls.forEach(function(filterCtrl) {
-            filterCtrl.addEventListener('click', function() {
+        filterCtrls.forEach(function (filterCtrl) {
+            filterCtrl.addEventListener('click', function () {
                 classie.remove(filterCtrl.parentNode.querySelector('.filter__item--selected'), 'filter__item--selected');
                 classie.add(filterCtrl, 'filter__item--selected');
                 iso.arrange({
@@ -422,19 +472,18 @@ $(function() {
         });
 
         // window resize / recalculate sizes for both flickity and isotope/masonry layouts
-        window.addEventListener('resize', throttle(function(ev) {
+        window.addEventListener('resize', throttle(function (ev) {
             recalcFlickities();
             iso.layout();
         }, 50));
 
         // add to cart
-        [].slice.call(grid.querySelectorAll('.grid__item')).forEach(function(item) {
-            item.querySelector('.action--buy').addEventListener('click', addToCart);
+        [].slice.call(grid.querySelectorAll('.grid__item')).forEach(function (item) {
+            item.querySelector('.items-buy').addEventListener('click', addToCart);
         });
     }
 
     function addToCart() {
-
 
 
         console.log(jQuery.parseJSON($(this).attr("data-items")));
@@ -449,7 +498,7 @@ $(function() {
                 "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
             ]).draw(false);
             $('.basic').fancySelect();
-            $(".checkOut input[type=number]").on("change", function(e) {
+            $(".checkOut input[type=number]").on("change", function (e) {
                 $('.full span').text(calculateSumm());
 
             });
@@ -465,7 +514,7 @@ $(function() {
                 "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
                 "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
             ]).draw(false);
-            $(".checkOut input[type=number]").on("change", function(e) {
+            $(".checkOut input[type=number]").on("change", function (e) {
                 $('.full span').text(calculateSumm());
 
             });
@@ -481,10 +530,10 @@ $(function() {
 
 
         classie.add(cart, 'cart--animate');
-        setTimeout(function() {
+        setTimeout(function () {
             cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
         }, 200);
-        onEndAnimation(cartItems, function() {
+        onEndAnimation(cartItems, function () {
             classie.remove(cart, 'cart--animate');
         });
     }

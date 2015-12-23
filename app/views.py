@@ -132,13 +132,16 @@ def order():
 
 @app.route('/get_one_item/<int:item_id>', methods=['GET','POST'])
 def get_one_item(item_id):
-    select_item = Items.query.filter_by(id=item_id).first()
-    return jsonify(result=dict(id=select_item.id,
-                               name=select_item.item_name,
-                               imgs=select_item.img,
-                               components=select_item.item_component,
-                               weight=select_item.weight,
-                               price=select_item.price
+    select_item = db.session.query(Items, Category).filter_by(id=item_id).\
+        join(Category, Items.category_id == Category.id).first()
+    # select_item = Items.query.
+    return jsonify(result=dict(item_id=select_item[0].id,
+                               name=select_item[0].item_name,
+                               imgs=select_item[0].img,
+                               components=select_item[0].item_component,
+                               weight=select_item[0].weight,
+                               price=select_item[0].price,
+                               category=select_item[1].category_name
                                )
                    )
 
