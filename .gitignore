@@ -1,6 +1,7 @@
 *.pyc
 *.pyo
 search.db
-venv/*
-bower_components/*
+/venv
+/node_modules
+/bower_components
 

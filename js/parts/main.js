@@ -1,73 +1,99 @@
 /**
  * Created by serdimoa on 02.11.15.
  */
+var cart = window.document.querySelector('.cart');
+
+var cartItems = cart.querySelector('.cart__count');
+
 var summ;
 var tableOrder = $('#tableOrder tbody');
-
-tableOrder.on( 'mouseenter', 'tr', function () {
+var delivery = $.cookie('delivery');
+tableOrder.on('mouseenter', 'tr', function() {
     if ($(this).hasClass('selected')) {
         $(this).removeClass('selected');
-    }
-    else {
+    } else {
         dataTable.$('tr.selected').removeClass('selected');
         $(this).addClass('selected');
     }
 });
 
-tableOrder.on( 'mouseleave', 'tr', function () {
+
+
+
+$('input:radio[name=group1],input:radio[name=group2]').change(function() {
+    $.cookie('delivery', this.value, {
+        expires: 7
+    });
+    $('.full span').text(calculateSumm());
+
+
+});
+
+tableOrder.on('mouseleave', 'tr', function() {
     if ($(this).hasClass('selected')) {
         $(this).removeClass('selected');
-    }
-    else {
+    } else {
         dataTable.$('tr.selected').removeClass('selected');
         $(this).addClass('selected');
     }
 });
-function fnGetSelected( oTableLocal )
-{
+
+function fnGetSelected(oTableLocal) {
     return oTableLocal.$('tr.selected');
 }
 
-function calculateSumm(){
+function calculateSumm() {
     summ = 0;
-     $(".checkOut input[type=number]").each( function() {
+    $(".checkOut input[type=number]").each(function() {
         summ += parseInt($(this).val() * $(this).attr("data-price"));
-     });
-    console.log("summa = "+summ);
+    });
+    if (summ!=0) {
+
+        if ($.cookie('delivery')=="no_delivery") {
+            summ = summ - summ*10/100;
+
+        }
+    }
+    console.log("summa = " + summ);
     return summ;
+
 }
+
 function unique(arr) {
-  var obj = {};
+    var obj = {};
 
-  for (var i = 0; i < arr.length; i++) {
-    var str = arr[i];
-    obj[str] = true; // запомнить строку в виде свойства объекта
-  }
+    for (var i = 0; i < arr.length; i++) {
+        var str = arr[i];
+        obj[str] = true; // запомнить строку в виде свойства объекта
+    }
 
-  return Object.keys(obj); // или собрать ключи перебором для IE8-
+    return Object.keys(obj); // или собрать ключи перебором для IE8-
 }
-$(".checkOut input[type=number]").keypress(function(event){
- event= event || window.event;
+$(".checkOut input[type=number]").keypress(function(event) {
+    event = event || window.event;
 
- if (event.charCode && (event.charCode < 48 || event.charCode > 57)) {// проверка на event.charCode - чтобы пользователь мог нажать backspace, enter, стрелочку назад...
+    if (event.charCode && (event.charCode < 48 || event.charCode > 57)) { // проверка на event.charCode - чтобы пользователь мог нажать backspace, enter, стрелочку назад...
 
-     return false;
- }
+        return false;
+    }
 
-     $(".full span").text(calculateSumm())
+    $('.full span').text(calculateSumm());
 
 
 });
+
 
 
 
 
 //Удаление из масива значение
 function removeA(arr) {
-    var what, a = arguments, L = a.length, ax;
+    var what, a = arguments,
+        L = a.length,
+        ax;
     while (L > 1 && arr.length) {
         what = a[--L];
-        while ((ax= arr.indexOf(what)) !== -1) {
+        while ((ax = arr.indexOf(what)) !== -1) {
             arr.splice(ax, 1);
         }
     }
@@ -81,29 +107,28 @@ $(document).keyup(function(e) {
     }
 });
 
-$(".aboutProduct .action--buy").click(function () {
+$(".aboutProduct .action--buy").click(function() {
     var cookieToJSON = $.parseJSON($.cookie('order'));
-        cookieToJSON.values.push(parseInt(this.value));
-    $.cookie('order',JSON.stringify(cookieToJSON));
+    cookieToJSON.values.push(parseInt(this.value));
+    $.cookie('order', JSON.stringify(cookieToJSON));
 
 });
 
 if (!$.cookie('order')) {
-        $.cookie('order', '{"values":[]}');
-        var oldValueUniqueLength = $.parseJSON($.cookie('order')).values.length;
-}
-else{
+    $.cookie('order', '{"values":[]}');
+    var oldValueUniqueLength = $.parseJSON($.cookie('order')).values.length;
+} else {
     var oldValueUniqueLength = $.parseJSON($.cookie('order')).values.length;
 }
 var dataTable = $('#tableOrder').DataTable({
-    "pageLength": 5,
-    "pagingType": "full_numbers",
-    "columnDefs": [
-            {
-                "targets": [ 0 ],
-                "visible": false,
-                "searchable": false
-            }]
+    "columnDefs": [{
+        "targets": [0],
+        "visible": false,
+        "searchable": false
+    }],
+    "language": {
+        "emptyTable": "Корзина пуста"
+    }
 });
 
 
@@ -117,9 +142,10 @@ jQuery(document).ready(function() {
         },
         mySequence = sequence(sequenceElement, options);
 
-    var tableOrder =  $('#tableOrder');
-    tableOrder.on( 'click', '.delete', function (e) {
-        dataTable.row('.selected').remove().draw( false );
+    var tableOrder = $('#tableOrder');
+    tableOrder.on('click', '.delete', function(e) {
+        dataTable.row('.selected').remove().draw(false);
+        cartItems.innerHTML = Number(cartItems.innerHTML) - 1;
 
         $('.full span').text(calculateSumm());
 
@@ -128,14 +154,23 @@ jQuery(document).ready(function() {
 
 }); //ready
 
-$('#orderNow').click(function (event) {
+$('#orderNow').click(function(event) {
     window.location.href = "/order";
 });
-var data = [{ id: 1, text: 'г.Нижневартовск' }, { id: 2, text: 'г.Мегион' }, { id: 3, text: 'г.Лангепас' }];
+var data = [{
+    id: 1,
+    text: 'г.Нижневартовск'
+}, {
+    id: 2,
+    text: 'г.Мегион'
+}, {
+    id: 3,
+    text: 'г.Лангепас'
+}];
 $('#restorePass').click(function(event) {
-    if ($("#auchPhone").val()=="") {
+    if ($("#auchPhone").val() == "") {
         $(".wrongPhone").show();
-    } else{
+    } else {
         $(".orderModal").modal('hide');
         $(".auchUsers").empty();
         $("#sendAuchNone").attr({
@@ -144,7 +179,7 @@ $('#restorePass').click(function(event) {
         $(".userIsAuch").show();
         $("#adressAuch").select2({
             placeholder: "Выберите ваш адрес",
-            data:data
+            data: data
         });
 
     };
@@ -153,37 +188,39 @@ $('#restorePass').click(function(event) {
 $('.slider__item').click(function(event) {
     $(".preloader").show();
     $('.popUp').addClass('isUp');
-     $.ajax({
-         type: 'POST',
-         // Provide correct Content-Type, so that Flask will know how to process it.
-         contentType: 'application/json',
-         // Encode your data as JSON.
-         // This is the type of data you're expecting back from the server.
-         dataType: 'json',
-         url: '/get_one_item/'+$(this).attr("data-id-item"),
-         success: function (e) {
-             console.log(e);
-             $("#one_img").attr(
-                 {"src" : 'static/upload/' + e.result.imgs }
-             );
-             $(".aboutProduct .action--buy").attr({"value":e.result.id});
-             arrays_one = (e.result.components).split(",");
-             $("#one_array").empty();
-             $.each(arrays_one, function(i) {
+    $.ajax({
+        type: 'POST',
+        // Provide correct Content-Type, so that Flask will know how to process it.
+        contentType: 'application/json',
+        // Encode your data as JSON.
+        // This is the type of data you're expecting back from the server.
+        dataType: 'json',
+        url: '/get_one_item/' + $(this).attr("data-id-item"),
+        success: function(e) {
+            console.log(e);
+            $("#one_img").attr({
+                "src": 'static/upload/' + e.result.imgs
+            });
+            $(".aboutProduct .action--buy").attr({
+                "value": e.result.id
+            });
+            arrays_one = (e.result.components).split(",");
+            $("#one_array").empty();
+            $.each(arrays_one, function(i) {
                 var li = $('<li/>')
                     .text(arrays_one[i])
                     .appendTo($("#one_array"));
             });
-             $("#one_weight").text(e.result.weight);
-             $("#one_name").text(e.result.name);
-             $(".preloader").hide();
+            $("#one_weight").text(e.result.weight);
+            $("#one_name").text(e.result.name);
+            $(".preloader").hide();
 
-             //for (var item_resp in e.response) {
-             //
-             //}
+            //for (var item_resp in e.response) {
+            //
+            //}
 
-         }
-     });
+        }
+    });
 
 
 });
@@ -192,7 +229,7 @@ $('.closebtn').click(function(event) {
 
 });
 
-$('.cart').click(function(event) {
+$('.cart, .showCart').click(function(event) {
     //dataTable.clear().draw();
     //$.ajax({
     //    type: 'POST',
@@ -222,6 +259,7 @@ $('.cart').click(function(event) {
     //    }
     //});
 
+    $('.full span').text(calculateSumm());
 
     $('.checkOut').addClass('isUp');
 });
@@ -322,8 +360,7 @@ $(function() {
             // initFlickity();
             initIsotope();
             initEvents();
-            $("#select_delivery").nifty("show");
-
+            delivery();
             classie.remove(grid, 'grid--loading');
             $(".preloader").hide();
 
@@ -361,6 +398,16 @@ $(function() {
         });
     }
 
+    function delivery() {
+        if (delivery == "") {
+            $("#select_delivery").nifty("show");
+
+        } else {
+            $("input:radio[name=group2][value='"+$.cookie('delivery')+"']").prop({"checked":true});
+        }
+
+    }
+
     function initEvents() {
         filterCtrls.forEach(function(filterCtrl) {
             filterCtrl.addEventListener('click', function() {
@@ -390,43 +437,56 @@ $(function() {
 
 
 
-       console.log(jQuery.parseJSON($(this).attr("data-items")));
+        console.log(jQuery.parseJSON($(this).attr("data-items")));
         var data_items = jQuery.parseJSON($(this).attr("data-items"));
-        if(data_items['item_category']=="Вторая"){// todo: set name
+        if (data_items['item_category'] == "Вторая") { // todo: set name
             dataTable.row.add([
                 data_items['item_id'],
-                "<h3>"+ data_items['item_name']+"</h3><small>"+data_items['item_component']+"</small>",
+                "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
                 "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
-                "<input type='number' value='1' data-price='"+data_items['item_price']+"' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
-                "<span class='cena'>"+data_items['item_price']+" <i class='fa fa-rub'></i></span>",
-                "<a href='#0' id='"+data_items['item_id']+"' class='delete'><i class='fa fa-times'></i></a>"
-            ]).draw( false );
+                "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
+                "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
+            ]).draw(false);
             $('.basic').fancySelect();
+            $(".checkOut input[type=number]").on("change", function(e) {
+                $('.full span').text(calculateSumm());
 
-        }
-        else{
-             dataTable.row.add([
-                 data_items['item_id'],
-                "<h3>"+ data_items['item_name']+"</h3><small>"+data_items['item_component']+"</small>",
+            });
+            $('.full span').text(calculateSumm());
+
+
+        } else {
+            dataTable.row.add([
+                data_items['item_id'],
+                "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
                 " ",
-                "<input type='number' value='1' data-price='"+data_items['item_price']+"' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
-                "<span class='cena'>"+data_items['item_price']+" <i class='fa fa-rub'></i></span>",
-                "<a href='#0' id='"+data_items['item_id']+"' class='delete'><i class='fa fa-times'></i></a>"
-            ]).draw( false );
+                "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
+                "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
+            ]).draw(false);
+            $(".checkOut input[type=number]").on("change", function(e) {
+                $('.full span').text(calculateSumm());
+
+            });
+            $('.full span').text(calculateSumm());
+
 
         }
         iosOverlay({
-		text: "Добавлено!",
-		duration: 2e3,
-		icon: "static/img/check.png"
-	    });
+            text: "Добавлено!",
+            duration: 2e3,
+            icon: "static/img/check.png"
+        });
 
 
         classie.add(cart, 'cart--animate');
-		setTimeout(function() {cartItems.innerHTML = Number(cartItems.innerHTML) + 1;}, 200);
-		onEndAnimation(cartItems, function() {
-			classie.remove(cart, 'cart--animate');
-		});
+        setTimeout(function() {
+            cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
+        }, 200);
+        onEndAnimation(cartItems, function() {
+            classie.remove(cart, 'cart--animate');
+        });
     }
 
     function recalcFlickities() {
@@ -438,5 +498,3 @@ $(function() {
     init();
 
 })(window);
-
-

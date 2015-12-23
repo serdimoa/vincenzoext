@@ -143,6 +143,11 @@ def get_one_item(item_id):
                    )
 
 
+@app.route('/aboutus',methods=['GET','POST'])
+def about_us():
+    return render_template("aboutus.html", title="О нас")
+
+
 @app.route('/panel/item_add',  methods=['GET', 'POST'])
 def item_add():
     form = ItemForm()

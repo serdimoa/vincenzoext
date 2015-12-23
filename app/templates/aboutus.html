@@ -5,62 +5,112 @@
 <!-- GOOGLE FONTS -->
 <link href='https://fonts.googleapis.com/css?family=Exo+2:400,100,200,300,500,700,600,800&subset=latin,cyrillic' rel='stylesheet' type='text/css'> {% endblock %} {% block navigation %}
 <div class="container">
-<div class="row">
-<ul id="menu" class="aboutus">
-   <li>
-       <a href="#"><img src="{{ url_for('static', filename='img/Sir2.png') }}"  class="img-responsive" alt=""></a>
-   </li>
-    <li><a href="#">Главная</a></li>
-    <li><a href="#">О нас</a></li>
-    <li><a href="#">Отзывы</a></li>
-    <li><a href="#">Корзина</a></li>
-    <li><a href="#!">Мой Vincenzo</a>
-        <ul class="aboutProfile">
-            <li>Дмитрий </li>
-            <li class="divider"></li>
-            <li><a href="#"><i class="fa fa-cog"></i> Настроить</a></li>
-            <li><a href="#"><i class="fa fa-star-o"></i> Избранное</a></li>
-            <li><a href="#"><i class="fa fa-sign-out"></i> Выход</a></li>
-        </ul>
-
-    </li>
-</ul>
-</div>
-</div>
-{% endblock %}
-{% block body %}
-    <div class="container-fluid header-post">
     <div class="row">
-        <div class="container content">
-            <h1>ssss</h1>
-            <p>Синьор Винченцо прибыл к нам из провинции
-Падуя (Padova), находящейся в глубинке Италиии,
-и стремительно развивает сеть кафе-ресторанов
-”Sir. Vincenzo” в России уже на протяжении 3-х лет. </p>
-<p>
-Теперь и нам, дорогие Вартовчане, предоставилась
-возможность отведать восхитительные блюда всеми
-любимой итальянской кухни в новом формате.</p>
-<p> А также,
-в нашем меню появились европейская и японская кухня. </p>
-<p>
-Мы рады представить Вам подборку интересных блюд
-по демократичным ценам. В уютной атмосфере, под
-расслабляющую музыку, Вы будете чувствовать
-себя    как    дома!</p>
-<div class="col-md-6">
-
-<script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
-
-<!-- VK Widget -->
-<div id="vk_groups"></div>
-<script type="text/javascript">
-VK.Widgets.Group("vk_groups", {mode: 2, wide: 1, width: "auto", height: "400"}, 47269953);
-</script></div>
-
-<div class="col-md-6"></div>
-<iframe src="http://www.intagme.com/in/?u=c2lyX3ZpbmNlbnpvfGlufDE1MHwzfDN8fHllc3w1fHVuZGVmaW5lZHxubw==" allowTransparency="true" frameborder="0" scrolling="no" style="border:none; overflow:hidden; width:auto; height: 400px" ></iframe>
+        <div class="contacts-top">
+            <a class="phone-top" href="tel:253-356"><i class="fa fa-phone"></i> 253-356</a> |
+            <a href="https://vk.com/nv_pizza">Мы в <i class="fa fa-vk"></i></a> |
+            <a href="https://www.instagram.com/sir_vincenzo/">Мы в  <i class="fa fa-instagram"></i></a>
         </div>
     </div>
+    <div class="row">
+        <ul id="menu" class="aboutus">
+            <li>
+                <a href="#"><img src="{{ url_for('static', filename='img/Sir2.png') }}" class="img-responsive" alt=""></a>
+            </li>
+            <li><a href="{{ url_for('index')}}">Главная</a></li>
+            <li><a href="#">Акции</a></li>
+            <li><a href="#">Корзина</a></li>
+            <li><a href="#!">Мой Vincenzo</a>
+                <ul class="aboutProfile">
+                    <li>Дмитрий </li>
+                    <li class="divider"></li>
+                    <li><a href="#"><i class="fa fa-cog"></i> Настроить</a></li>
+                    <li><a href="#"><i class="fa fa-star-o"></i> Избранное</a></li>
+                    <li><a href="#"><i class="fa fa-sign-out"></i> Выход</a></li>
+                </ul>
+            </li>
+            <li><a href="{{ url_for('about_us')}}">О нас</a></li>
+        </ul>
     </div>
+</div>
+{% endblock %} {% block body %}
+<div class="bg"></div>
+<div class="container-fluid header-post">
+    <div class="row">
+        <div class="container content">
+            <h1>О нас</h1>
+            <p>Синьор Винченцо прибыл к нам из провинции Падуя (Padova), находящейся в глубинке Италиии, и стремительно развивает сеть кафе-ресторанов ”Sir. Vincenzo” в России уже на протяжении 3-х лет. </p>
+            <p>
+                Теперь и нам, дорогие Вартовчане, предоставилась возможность отведать восхитительные блюда всеми любимой итальянской кухни в новом формате.</p>
+            <p> А также, в нашем меню появились европейская и японская кухня. </p>
+            <p>
+                Мы рады представить Вам подборку интересных блюд по демократичным ценам. В уютной атмосфере, под расслабляющую музыку, Вы будете чувствовать себя как дома!</p>
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <br>
+                    <h2>Как нас найти?</h2>
+                    <br>
+                    <br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="countainer-fluid ">
+                    <a class="dg-widget-link" href="http://2gis.ru/nizhnevartovsk/firm/1689378141381332/center/76.56127452850343,60.94715058041352/zoom/16?utm_medium=widget-source&utm_campaign=firmsonmap&utm_source=bigMap">Посмотреть на карте Нижневартовска</a>
+                    <div class="dg-widget-link"><a href="http://2gis.ru/nizhnevartovsk/firm/1689378141381332/photos/1689378141381332/center/76.56127452850343,60.94715058041352/zoom/17?utm_medium=widget-source&utm_campaign=firmsonmap&utm_source=photos">Фотографии компании</a></div>
+                    <div class="dg-widget-link"><a href="http://2gis.ru/nizhnevartovsk/center/76.561268,60.946955/zoom/16/routeTab/rsType/bus/to/76.561268,60.946955╎Sir.Vincenzo, кафе?utm_medium=widget-source&utm_campaign=firmsonmap&utm_source=route">Найти проезд до Sir.Vincenzo, кафе</a></div>
+                    <script charset="utf-8" src="http://widgets.2gis.com/js/DGWidgetLoader.js"></script>
+                    <script charset="utf-8">
+                    new DGWidgetLoader({
+                        "width": "100%",
+                        "height": 500,
+                        "borderColor": "#a3a3a3",
+                        "pos": {
+                            "lat": 60.94715058041352,
+                            "lon": 76.56127452850343,
+                            "zoom": 16
+                        },
+                        "opt": {
+                            "city": "nizhnevartovsk"
+                        },
+                        "org": [{
+                            "id": "1689378141381332"
+                        }]
+                    });
+                    </script>
+                    <noscript style="color:#c00;font-size:16px;font-weight:bold;">Виджет карты использует JavaScript. Включите его в настройках вашего браузера.</noscript>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="col-md-6">
+                <h3>Мы ВКонтакте <a  target="_blank" href="https://vk.com/nv_pizza"><i class="fa fa-link"></i></a></h3>
+                <script type="text/javascript" src="//vk.com/js/api/openapi.js?121"></script>
+                <!-- VK Widget -->
+                <div id="vk_groups"></div>
+                <script type="text/javascript">
+                VK.Widgets.Group("vk_groups", {
+                    mode: 2,
+                    wide: 1,
+                    width: "auto",
+                    height: "450"
+                }, 47269953);
+                </script>
+            </div>
+            <div class="col-md-6">
+                <h3>Мы в Instagram <a target="_blank" href="https://www.instagram.com/sir_vincenzo/"><i class="fa fa-link"></i></a></h3>
+                <div id="instafeed"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} {% block script %}
+<script type="text/javascript">
+var feed = new Instafeed({
+    get: 'user',
+    limit: 9,
+    userId: '563190999',
+    accessToken: '323833101.1677ed0.fcc5482509e845148f0636e980328400'
+});
+feed.run();
+</script>
 {% endblock %}
