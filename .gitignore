@@ -1,6 +1,6 @@
 *.pyc
 *.pyo
 search.db
-venv
-bower_components
+venv/*
+bower_components/*
 
