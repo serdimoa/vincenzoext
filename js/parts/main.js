@@ -17,6 +17,16 @@ tableOrder.on('mouseenter', 'tr', function () {
     }
 });
 
+$('#auch-menu-btn').click(function(event) {
+    $.getJSON('/auch',{login: $('#inputPhone').val(),
+                password:$('#inputPassword').val()},
+    function(data) {
+        console.log(data.result);
+    })
+
+
+});
+
 $('input:radio[name=group2]').change(function () {
     $.cookie('delivery', this.value, {
         expires: 7
@@ -305,10 +315,17 @@ $('.cart, .showCart').click(function (event) {
     //        });
     //    }
     //});
-
+    if (calculateSumm()==0) {
+        iosOverlay({
+            text: "Корзина пуста",
+            duration: 2e3,
+            icon: "static/img/cross.png"
+        });
+    } else{
     $('.full span').text(calculateSumm());
 
     $('.checkOut').addClass('isUp');
+    };
 });
 
 $('.closezakazbtn').click(function (event) {

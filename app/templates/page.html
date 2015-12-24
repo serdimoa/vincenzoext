@@ -21,13 +21,33 @@
             <li><a href="#">Акции</a></li>
             <li><a class="showCart" href="#">Корзина</a></li>
             <li><a href="#!">Мой Vincenzo</a>
+
+                {% if  current_user.is_authenticated %}
                 <ul class="aboutProfile">
                     <li>Дмитрий </li>
                     <li class="divider"></li>
                     <li><a href="#"><i class="fa fa-cog"></i> Настроить</a></li>
                     <li><a href="#"><i class="fa fa-star-o"></i> Избранное</a></li>
-                    <li><a href="#"><i class="fa fa-sign-out"></i> Выход</a></li>
+                    <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out"></i> Выход</a></li>
                 </ul>
+                {% endif %}
+                {% if not current_user.is_authenticated %}
+                    <ul class="aboutProfile auch">
+                    <li><input type="text" class="form-control" name="inputPhone" id="inputPhone" placeholder="Телефон"></li>
+                    <li><input type="text" class="form-control" name="inputPassword" id="inputPassword" placeholder="Пароль"></li>
+                    <li class="pw-reset"><a href="#">напомнить пароль</a></li>
+                    <li><button type="button" id="auch-menu-btn" class="btn btn-success loginBtn">Войти</button></li>
+                    <li><button type="button" class="btn btn-info loginBtn">Зарегистрироватся</button></li>
+
+                    {# <li class="divider"></li>
+                    <li><a href="#"><i class="fa fa-cog"></i> Настроить</a></li>
+                    <li><a href="#"><i class="fa fa-star-o"></i> Избранное</a></li>
+                    <li><a href="#"><i class="fa fa-sign-out"></i> Выход</a></li> #}
+                </ul>
+                {% endif %}
+
+
+
             </li>
             <li><a href="{{ url_for('about_us')}}">О нас</a></li>
         </ul>

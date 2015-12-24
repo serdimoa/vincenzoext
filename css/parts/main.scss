@@ -2214,3 +2214,23 @@ div.fancy-select ul.options {
     position: fixed;
     width: 100%;
 }
+
+.loginBtn{
+    width: 100%;
+}
+.auch{
+    li{
+        margin-left:2em!important;
+        margin-right:2em!important;
+        &:first-child{
+            margin-top: 20px!important;
+        }
+        margin-top: 5px!important;
+    }
+}
+.pw-reset{
+    font-size: .5em;
+    a{
+        margin-left: 2em;
+    }
+}

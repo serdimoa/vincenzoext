@@ -11,7 +11,7 @@ app.config.from_object('config')
 db = SQLAlchemy(app)
 lm = LoginManager()
 lm.init_app(app)
-lm.login_view = 'login'
+lm.login_view = 'index'
 oid = OpenID(app, os.path.join(basedir, 'tmp'))
 toolbar = DebugToolbarExtension(app)
 app.debug = True

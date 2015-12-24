@@ -15,8 +15,11 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 @lm.user_loader
-def load_user(id):
-    return User.query.get(int(id))
+def load_user(user_id):
+    user = User.query.filter_by(id=user_id)
+    if user.count() == 1:
+        return user.one()
+    return None
 
 
 @app.before_request
@@ -223,44 +226,44 @@ def items():
     all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
     return render_template("items.html", items=all_items)
 
-
-@app.route('/login', methods=['GET', 'POST'])
-@oid.loginhandler
-def login():
-    if g.user is not None and g.user.is_authenticated():
-        return redirect(url_for('index'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        session['remember_me'] = form.remember_me.data
-        return oid.try_login(form.openid.data, ask_for=['nickname', 'email'])
-    return render_template('login.html',
-                           title='Sign In',
-                           form=form,
-                           providers=app.config['OPENID_PROVIDERS'])
-
-
-@oid.after_login
-def after_login(resp):
-    if resp.email is None or resp.email == "":
-        flash('Invalid login. Please try again.')
-        return redirect(url_for('login'))
-    user = User.query.filter_by(emai=resp.email).first()
-    if user is None:
-        nickname = resp.nickname
-        if nickname is None or nickname == "":
-            nickname = resp.email.split('@')[0]
-        user = User(username=nickname, email=resp.email)
-        db.session.add(user)
-        db.session.commit()
-    remember_me = False
-    if 'remember_me' in session:
-        remember_me = session['remember_me']
-        session.pop('remember_me', None)
-    login_user(user, remember=remember_me)
-    return redirect(request.args.get('next') or url_for('index'))
+#
+# @oid.after_login
+# def after_login(resp):
+#     if resp.email is None or resp.email == "":
+#         flash('Invalid login. Please try again.')
+#         return redirect(url_for('login'))
+#     user = User.query.filter_by(emai=resp.email).first()
+#     if user is None:
+#         nickname = resp.nickname
+#         if nickname is None or nickname == "":
+#             nickname = resp.email.split('@')[0]
+#         user = User(username=nickname, email=resp.email)
+#         db.session.add(user)
+#         db.session.commit()
+#     remember_me = False
+#     if 'remember_me' in session:
+#         remember_me = session['remember_me']
+#         session.pop('remember_me', None)
+#     login_user(user, remember=remember_me)
+#     return redirect(request.args.get('next') or url_for('index'))
+#
 
 
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/auch',methods=['GET', 'POST'])
+def auch():
+    username = request.args.get('login')
+    password = request.args.get('password')
+    registered_user = User.query.filter_by(phone=username, password=password).first()
+    if registered_user is None:
+        return jsonify(result=0)
+    login_user(registered_user)
+    flash('Logged in successfully')
+    return jsonify(result=1)
+
+
