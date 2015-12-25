@@ -85,11 +85,12 @@ class Like(db.Model):
     def __unicode__(self):
         return self.likes
 
-    def __init__(self, likes):
-        self.likes = likes
+    def __init__(self, user_id, items_id):
+        self.user_id = user_id
+        self.items_id = items_id
 
     def __repr__(self):
-        return '<Category %r>' % self.likes
+        return '<like %r>' % self.likes
 
 
 class Admin(db.Model):

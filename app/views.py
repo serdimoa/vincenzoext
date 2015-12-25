@@ -11,7 +11,7 @@ from sqlalchemy import sql, select
 from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
 from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm
-from models import User, Category, Items
+from models import User, Category, Items, Like
 import mandrill
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -97,6 +97,23 @@ def category_add():
         flash(u'Категория добавлена', "success")
         return redirect(url_for('get_category'))
     return render_template('category_add.html', form=form)
+
+
+@app.route('/like_add', methods=['GET', 'POST'])
+def like_add():
+    if current_user is None:
+        return jsonify(result=0)
+    else:##todo: Доделать лайки
+        items_id = request.args.get('like')
+        have_like = Like.query.filter_by(user_id=current_user.id, items_id=items_id).first()
+        if have_like is None:
+            return jsonify(result=0)
+        else:
+            like = Like(user_id=current_user.id, items_id=items_id)
+            db.session.add(like)
+            db.session.commit()
+
+        return jsonify(result=current_user)
 
 
 @app.route('/delete_category/<int:category_id>')

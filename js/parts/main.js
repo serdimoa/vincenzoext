@@ -6,6 +6,9 @@ var cart = window.document.querySelector('.cart');
 var cartItems = cart.querySelector('.cart__count');
 
 var summ;
+
+
+
 var tableOrder = $('#tableOrder tbody');
 var delivery = $.cookie('delivery');
 tableOrder.on('mouseenter', 'tr', function () {
@@ -15,6 +18,19 @@ tableOrder.on('mouseenter', 'tr', function () {
         dataTable.$('tr.selected').removeClass('selected');
         $(this).addClass('selected');
     }
+});
+
+$(".action--like").click(function (e) {
+    $.getJSON('/like_add',{like: $(this).val()},
+        function(data) {
+            iosOverlay({
+                text: "Добавлено!",
+                duration: 2e3,
+                icon: "static/img/check.png"
+            });
+        });
+
+    console.log($(this).val());
 });
 
 $('#auch-menu-btn').click(function(event) {
@@ -470,6 +486,7 @@ $(function () {
         });
     }
 
+
     function barWidth() {
     }
 
@@ -500,6 +517,7 @@ $(function () {
             },
             transitionDuration: '0.6s'
         });
+
     }
 
     function delivery_func() {
@@ -524,7 +542,9 @@ $(function () {
                 iso.layout();
             });
         });
-
+        document.getElementById("favorite").addEventListener('click', function(){
+            iso.arrange({ filter: '*' })
+        });
         // window resize / recalculate sizes for both flickity and isotope/masonry layouts
         window.addEventListener('resize', throttle(function (ev) {
             recalcFlickities();
@@ -537,9 +557,7 @@ $(function () {
         });
     }
 
-    function favorite(){
-        addEventListener('click', addToCart)
-    }
+
 
     function addToCart() {
 

@@ -12,7 +12,7 @@
             <a href="https://www.instagram.com/sir_vincenzo/">Мы в  <i class="fa fa-instagram"></i></a>
         </div>
     </div>
-    < class="row">
+    <div class="row">
         <ul id="menu">
             <li>
                 <a href="#"><img src="{{ url_for('static', filename='img/Sir2.png') }}" class="img-responsive" alt=""></a>
@@ -28,7 +28,7 @@
                     <li class="divider"></li>
                     <li><a href="#"><i class="fa fa-cog"></i> Настроить</a></li>
 {#                    <li><a href="#"><i class="fa fa-star-o"></i> Избранное</a></li>#}
-                    <li><button  data-filter="*"><i class="fa fa-star-o"></i> Избранное</button></li>
+                    <li><a href="#0" id="favorite" ><i class="fa fa-star-o"></i> Избранное</a></li>
 
                     <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out"></i> Выход</a></li>
                 </ul>
@@ -119,31 +119,13 @@
 <div class="row" id="allCatalog" style="position: relative;">
     <div id="bar" class="bar col-md-2">
         <div class="filter">
-            <button class="action filter__item filter__item--selected" data-filter="*">Все</button>
+            <button id="fulls" class="action filter__item filter__item--selected" data-filter="*">Все</button><br>
+            {% if current_user.is_authenticated %}
+                <button class="action filter__item" data-filter=".favorite"><i class="icon"></i><span class="action__text">Избранное</span></button>
+            {% endif %}
             <br> {% for field in type %}
             <button class="action filter__item" data-filter=".{{field.alias}}"><i class="icon icon--{{field.alias}}"></i><span class="action__text">{{field.category_name}}</span></button>
             <br> {% endfor %}
-            <!-- <button class="action filter__item" data-filter=".shirts"><i class="icon icon--shirt"></i><span class="action__text">Ролы</span></button>
-            <br>
-            <button class="action filter__item" data-filter=".dresses"><i class="icon icon--dress"></i><span class="action__text">Суши</span></button>
-            <br>
-            <button class="action filter__item" data-filter=".trousers"><i class="icon icon--trousers"></i><span class="action__text">Салаты</span></button>
-            <br>
-            <button class="action filter__item" data-filter=".shoes"><i class="icon icon--shoe"></i><span class="action__text">Панини</span></button>
-            <br>
-            <button class="action filter__item" data-filter=".jackets"><i class="icon icon--jacket"></i><span class="action__text">Супы</span></button>
-            <br>
-            <button class="action filter__item" data-filter=".jackets"><i class="icon icon--jacket"></i><span class="action__text">Лазанья</span></button>
-            <br>
-            <button class="action filter__item" data-filter=".shirts"><i class="icon icon--shirt"></i><span class="action__text">Паста</span></button>
-            <br>
-            <button class="action filter__item" data-filter=".dresses"><i class="icon icon--dress"></i><span class="action__text">Блины</span></button>
-            <br>
-            <button class="action filter__item" data-filter=".trousers"><i class="icon icon--trousers"></i><span class="action__text">Десерты</span></button>
-            <br>
-            <button class="action filter__item" data-filter=".shoes"><i class="icon icon--shoe"></i><span class="action__text">Коктейли</span></button>
-            <br>
-            <button class="action filter__item" data-filter=".shoes"><i class="icon icon--shoe"></i><span class="action__text">Смузи</span></button> -->
         </div>
         <button class="cart">
             <i class="cart__icon fa fa-shopping-cart"></i>
@@ -183,8 +165,6 @@
                     {% endif %}
 
                     {% if not  current_user.is_authenticated %}
-
-
                     <button class="col-md-12 action action--button action--buy items-buy" data-items='{
                                             "item_id":"{{ item[0].id }}",
                                             "item_name":"{{ item[0].item_name }}",
