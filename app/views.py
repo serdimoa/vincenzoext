@@ -1,5 +1,7 @@
 # coding=utf-8
 from __future__ import unicode_literals
+import random
+import string
 import os
 import ast
 import json
@@ -8,8 +10,9 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from sqlalchemy import sql, select
 from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
-from forms import LoginForm, CategoryForm, ItemForm
+from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm
 from models import User, Category, Items
+import mandrill
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -76,8 +79,8 @@ def get_order():
         select(
             [Items.id, Items.item_name, Items.item_component, Items.price, Items.weight],
             Items.id.in_(order_convert)
-            )
-        ).fetchall()
+        )
+    ).fetchall()
     response_order = [dict(zip(keys, row)) for row in orders]
 
     return jsonify(response=response_order)
@@ -91,7 +94,7 @@ def category_add():
                                  alias=form.alias.data)
         db.session.add(category_data)
         db.session.commit()
-        flash(u'Категория добавлена',"success")
+        flash(u'Категория добавлена', "success")
         return redirect(url_for('get_category'))
     return render_template('category_add.html', form=form)
 
@@ -105,7 +108,7 @@ def delete_category(category_id):
     category = Category.query.get(category_id)
     Category.query.filter_by(id=category_id).delete()
     db.session.commit()
-    flash("Удалена категория - " + category.category_name,"success")
+    flash("Удалена категория - " + category.category_name, "success")
 
     return redirect(url_for("get_category"))
 
@@ -133,9 +136,9 @@ def order():
     return render_template("order.html")
 
 
-@app.route('/get_one_item/<int:item_id>', methods=['GET','POST'])
+@app.route('/get_one_item/<int:item_id>', methods=['GET', 'POST'])
 def get_one_item(item_id):
-    select_item = db.session.query(Items, Category).filter_by(id=item_id).\
+    select_item = db.session.query(Items, Category).filter_by(id=item_id). \
         join(Category, Items.category_id == Category.id).first()
     # select_item = Items.query.
     return jsonify(result=dict(item_id=select_item[0].id,
@@ -146,15 +149,16 @@ def get_one_item(item_id):
                                price=select_item[0].price,
                                category=select_item[1].category_name
                                )
+
                    )
 
 
-@app.route('/aboutus',methods=['GET','POST'])
+@app.route('/aboutus', methods=['GET', 'POST'])
 def about_us():
     return render_template("aboutus.html", title="О нас")
 
 
-@app.route('/panel/item_add',  methods=['GET', 'POST'])
+@app.route('/panel/item_add', methods=['GET', 'POST'])
 def item_add():
     form = ItemForm()
     form.category_id.choices = [(c.id, c.category_name) for c in Category.query.all()]
@@ -166,7 +170,7 @@ def item_add():
             category_id=form.category_id.data,
             weight=form.weight.data,
             price=form.price.data,
-            img=form.item_name.data+filename
+            img=form.item_name.data + filename
 
         )
         db.session.add(item_data)
@@ -178,7 +182,7 @@ def item_add():
     return render_template('items_add.html', form=form)
 
 
-@app.route('/panel/item_edit/<int:item_id>',  methods=['GET', 'POST'])
+@app.route('/panel/item_edit/<int:item_id>', methods=['GET', 'POST'])
 def item_edit(item_id):
     select_item = Items.query.filter_by(id=item_id).first()
     img = select_item.img
@@ -193,7 +197,7 @@ def item_edit(item_id):
             item.category_id = form.category_id.data
             item.weight = form.weight.data
             item.price = form.price.data
-            item.img = form.item_name.data+filename
+            item.img = form.item_name.data + filename
             form.img.data.save(basedir + "/static/upload/" + form.item_name.data + filename)
             db.session.commit()
         else:
@@ -212,7 +216,7 @@ def item_edit(item_id):
     return render_template('items_edit.html', form=form, img=img)
 
 
-@app.route('/panel/item_delete/<int:item_id>',  methods=['GET', 'POST'])
+@app.route('/panel/item_delete/<int:item_id>', methods=['GET', 'POST'])
 def item_delete(item_id):
     item = Items.query.get(item_id)
     Items.query.filter_by(id=item_id).delete()
@@ -221,10 +225,11 @@ def item_delete(item_id):
     return redirect(url_for("items"))
 
 
-@app.route('/panel/items',  methods=['GET', 'POST'])
+@app.route('/panel/items', methods=['GET', 'POST'])
 def items():
     all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
     return render_template("items.html", items=all_items)
+
 
 #
 # @oid.after_login
@@ -255,7 +260,7 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/auch',methods=['GET', 'POST'])
+@app.route('/auch', methods=['GET', 'POST'])
 def auch():
     username = request.args.get('login')
     password = request.args.get('password')
@@ -267,3 +272,53 @@ def auch():
     return jsonify(result=1)
 
 
+@app.route('/pwreset', methods=['GET', 'POST'])
+def pwreset():
+    login = request.args.get('login')
+    is_user = User.query.filter_by(phone=login).first()
+    if is_user is None:
+        return jsonify(result=0)
+    try:
+        new_password = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(8)])
+        mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+        message = {
+            'auto_html': None,
+            'auto_text': None,
+            'from_email': 'sir.vincenzo.office@gmail.com',
+            'from_name': 'Востановление пароля Sir Vincenzo ',
+            'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+            'html': '<p>Ваш новый пароль: '+new_password+'</p>',
+            'subject': 'Востановление пароля с сайта Sir Vincenzo ',
+            'to': [{'email': is_user.email,
+                    'name': is_user.username,
+                    'type': 'to'}]
+        }
+        user = User.query.get(is_user.id)
+        user.password = new_password
+        db.session.commit()
+        result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+        return jsonify(result=result[0]['status'])
+
+    except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+        return jsonify(result=2)
+
+        # A mandrill error occurred: <class 'mandrill.UnknownSubaccountError'> - No subaccount exists with the id 'customer-123'
+
+
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data,
+                    email=form.email.data,
+                    password=form.password.data,
+                    phone=form.phone.data,
+                    authenticated=True)
+        db.session.add(user)
+        db.session.commit()
+        registered_user = User.query.filter_by(phone=form.phone.data, password=form.password.data).first()
+        if registered_user is None:
+            return redirect(url_for('index'))
+        login_user(registered_user)
+        return redirect(url_for('index'))
+    return render_template("registration.html", form=form)

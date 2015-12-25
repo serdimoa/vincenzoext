@@ -22,6 +22,23 @@ $('#auch-menu-btn').click(function(event) {
                 password:$('#inputPassword').val()},
     function(data) {
         console.log(data.result);
+        if(data.result==1){
+            swal({
+                title: "Ура!",
+                text: "Вход выполнен успешно!",
+                timer: 2000,
+                type: "success",
+                showConfirmButton: false },
+                function(){
+                    location.reload();
+                });
+        }else{
+            swal({
+                title: "Упс!",
+                text: "Такого пользоваеля не существует, либо пароль введен неправильно",
+                type: "error",
+                showConfirmButton: true });
+        }
     })
 
 
@@ -58,7 +75,28 @@ function fnGetSelected(oTableLocal) {
     return oTableLocal.$('tr.selected');
 }
 
+$('.pw-reset a').click(function(){
+     var login = $('#inputPhone');
+    if(login.val() !=""){
+        $.getJSON('/pwreset',{login:login.val()},
+            function(data) {
+                console.log(data);
+                if(data.result=="sent"){
+                    swal("Пароль востановлен!", "Новый пароль отправлен на вашу почту!", "success");
+                }
+                else if(data.result==0){
+                    swal("Упс!", "Такого пользователя нет!", "error");
+                }
+                else if(data.result==2){
+                    swal({   title: "Упс!",   text: "Что-то пошло не так!",   timer: 2000,   showConfirmButton: true });
+                }
+            })
+    }
+    else{
+        swal("Упс!", "Необходимо ввести телефон!", "warning");
+    }
 
+});
 function calculateSumm() {
     summ = 0;
     $(".checkOut input[type=number]").each(function () {
@@ -427,7 +465,6 @@ $(function () {
             delivery_func();
             classie.remove(grid, 'grid--loading');
             $(".preloader").hide();
-            console.log(delivery);
 
 
         });

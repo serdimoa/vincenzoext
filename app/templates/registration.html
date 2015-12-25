@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% from 'form_gen.html' import render_form %}
+{% block head %}
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='fonts/pixelfabric-clothes/style.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="{{ url_for('static', filename='modernizer.custom.js') }}"></script>
+    <!-- GOOGLE FONTS -->
+    <link href='https://fonts.googleapis.com/css?family=Exo+2:400,100,200,300,500,700,600,800&subset=latin,cyrillic'
+          rel='stylesheet' type='text/css'> {% endblock %} {% block navigation %}
+    <div class="container">
+        <div class="row">
+            <div class="contacts-top">
+                <a class="phone-top" href="tel:253-356"><i class="fa fa-phone"></i> 253-356</a> |
+                <a href="https://vk.com/nv_pizza">Мы в <i class="fa fa-vk"></i></a> |
+                <a href="https://www.instagram.com/sir_vincenzo/">Мы в <i class="fa fa-instagram"></i></a>
+            </div>
+        </div>
+        <div class="row">
+            <ul id="menu">
+                <li>
+                    <a href="#"><img src="{{ url_for('static', filename='img/Sir2.png') }}" class="img-responsive"
+                                     alt=""></a>
+                </li>
+                <li><a href="{{ url_for('index') }}">Главная</a></li>
+                <li><a href="#">Акции</a></li>
+                <li><a class="showCart" href="#">Корзина</a></li>
+                <li><a href="#!">Мой Vincenzo</a>
+
+                    {% if  current_user.is_authenticated %}
+                        <ul class="aboutProfile">
+                            <li>Привет, {{ current_user.username }}!</li>
+                            <li class="divider"></li>
+                            <li><a href="#"><i class="fa fa-cog"></i> Настроить</a></li>
+                            <li><a href="#"><i class="fa fa-star-o"></i> Избранное</a></li>
+                            <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out"></i> Выход</a></li>
+                        </ul>
+                    {% endif %}
+                    {% if not current_user.is_authenticated %}
+                        <ul class="aboutProfile auch">
+                            <li><input type="text" class="form-control" name="inputPhone" id="inputPhone"
+                                       placeholder="Телефон"></li>
+                            <li><input type="password" class="form-control" name="inputPassword" id="inputPassword"
+                                       placeholder="Пароль"></li>
+                            <li class="pw-reset"><a href="#">напомнить пароль</a></li>
+                            <li>
+                                <button type="button" id="auch-menu-btn" class="btn btn-success loginBtn">Войти</button>
+                            </li>
+                            <li>
+                                <button type="button" class="btn btn-info loginBtn"
+                                        onclick="document.location='{{ url_for('registration') }}'">Зарегистрироватся
+                                </button>
+                            </li>
+
+                            {# <li class="divider"></li>
+                    <li><a href="#"><i class="fa fa-cog"></i> Настроить</a></li>
+                    <li><a href="#"><i class="fa fa-star-o"></i> Избранное</a></li>
+                    <li><a href="#"><i class="fa fa-sign-out"></i> Выход</a></li> #}
+                        </ul>
+                    {% endif %}
+
+
+                </li>
+                <li><a href="{{ url_for('about_us') }}">О нас</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %} {% block body %}
+    <div class="bg"></div>
+    <div class="container-fluid header-post">
+        <div class="row">
+            <div class="container content" style="padding-bottom: 25px;">
+                <h1>Регистрация</h1>
+
+                <div class="col-md-6">
+                    {{ render_form(form, action_url='', action_text='Регистрация') }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

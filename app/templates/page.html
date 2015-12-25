@@ -24,7 +24,7 @@
 
                 {% if  current_user.is_authenticated %}
                 <ul class="aboutProfile">
-                    <li>Дмитрий </li>
+                    <li>Привет, {{ current_user.username }}! </li>
                     <li class="divider"></li>
                     <li><a href="#"><i class="fa fa-cog"></i> Настроить</a></li>
                     <li><a href="#"><i class="fa fa-star-o"></i> Избранное</a></li>
@@ -34,10 +34,10 @@
                 {% if not current_user.is_authenticated %}
                     <ul class="aboutProfile auch">
                     <li><input type="text" class="form-control" name="inputPhone" id="inputPhone" placeholder="Телефон"></li>
-                    <li><input type="text" class="form-control" name="inputPassword" id="inputPassword" placeholder="Пароль"></li>
+                    <li><input type="password" class="form-control" name="inputPassword" id="inputPassword" placeholder="Пароль"></li>
                     <li class="pw-reset"><a href="#">напомнить пароль</a></li>
                     <li><button type="button" id="auch-menu-btn" class="btn btn-success loginBtn">Войти</button></li>
-                    <li><button type="button" class="btn btn-info loginBtn">Зарегистрироватся</button></li>
+                    <li><button type="button" class="btn btn-info loginBtn" onclick="document.location='{{ url_for('registration') }}'">Зарегистрироватся</button></li>
 
                     {# <li class="divider"></li>
                     <li><a href="#"><i class="fa fa-cog"></i> Настроить</a></li>
@@ -168,7 +168,8 @@
                     <span class="meta__price">{{ item[0].price }}<i class="fa fa-rub"></i></span>
                 </div>
                 <div class="actions">
-                    <button class="col-md-8 action action--button action--buy items-buy" data-items='{
+                    {% if  current_user.is_authenticated %}
+                        <button class="col-md-8 action action--button action--buy items-buy" data-items='{
                                             "item_id":"{{ item[0].id }}",
                                             "item_name":"{{ item[0].item_name }}",
                                             "item_price":"{{ item[0].price }}",
@@ -177,6 +178,20 @@
                                             "item_category":"{{ item[1].category_name }}"
                                        }' value="{{ item[0].id }}"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
                     <button class="col-md-4 action action--button action--like" value="{{ item[0].id }}"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                    {% endif %}
+
+                    {% if not  current_user.is_authenticated %}
+
+
+                    <button class="col-md-12 action action--button action--buy items-buy" data-items='{
+                                            "item_id":"{{ item[0].id }}",
+                                            "item_name":"{{ item[0].item_name }}",
+                                            "item_price":"{{ item[0].price }}",
+                                            "item_component":"{{ item[0].item_component }}",
+                                            "item_weight":"{{ item[0].weight }}",
+                                            "item_category":"{{ item[1].category_name }}"
+                                       }' value="{{ item[0].id }}"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}

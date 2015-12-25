@@ -32,6 +32,7 @@
     "nifty-modal": "*",
     "iCheck": "icheck#~1.0.2",
     "fancyselect": "",
-    "instafeed.js":""
+    "instafeed.js": "",
+    "sweetalert": "~1.1.3"
   }
 }
