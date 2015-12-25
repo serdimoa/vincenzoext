@@ -12,7 +12,7 @@
             <a href="https://www.instagram.com/sir_vincenzo/">Мы в  <i class="fa fa-instagram"></i></a>
         </div>
     </div>
-    <div class="row">
+    < class="row">
         <ul id="menu">
             <li>
                 <a href="#"><img src="{{ url_for('static', filename='img/Sir2.png') }}" class="img-responsive" alt=""></a>
@@ -27,7 +27,9 @@
                     <li>Привет, {{ current_user.username }}! </li>
                     <li class="divider"></li>
                     <li><a href="#"><i class="fa fa-cog"></i> Настроить</a></li>
-                    <li><a href="#"><i class="fa fa-star-o"></i> Избранное</a></li>
+{#                    <li><a href="#"><i class="fa fa-star-o"></i> Избранное</a></li>#}
+                    <li><button  data-filter="*"><i class="fa fa-star-o"></i> Избранное</button></li>
+
                     <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out"></i> Выход</a></li>
                 </ul>
                 {% endif %}

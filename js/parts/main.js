@@ -537,6 +537,10 @@ $(function () {
         });
     }
 
+    function favorite(){
+        addEventListener('click', addToCart)
+    }
+
     function addToCart() {
 
 

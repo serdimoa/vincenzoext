@@ -123,7 +123,7 @@ def update_category(category_id):
     if form.validate_on_submit():
         category = Category.query.get(category_id)
         category.category_name = form.category_name.data
-        category.alias = form.category_name.data
+        category.alias = form.alias.data
         db.session.commit()
         flash(u"Категория переименована на " + category.category_name, "info")
         return redirect(url_for("get_category"))
