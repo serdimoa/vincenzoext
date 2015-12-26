@@ -6,7 +6,6 @@ from flask.ext.openid import OpenID
 from config import basedir
 from flask_debugtoolbar import DebugToolbarExtension
 
-
 app = Flask(__name__)
 app.config.from_object('config')
 db = SQLAlchemy(app)

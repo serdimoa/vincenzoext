@@ -11,23 +11,25 @@ from sqlalchemy import sql, select
 from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
 from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm
-from models import User, Category, Items, Like
+from models import User, Category, Items, Like, AnonymousUser
 import mandrill
+
+lm.anonymous_user = AnonymousUser
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-
-@lm.user_loader
-def load_user(user_id):
-    user = User.query.filter_by(id=user_id)
-    if user.count() == 1:
-        return user.one()
-    return None
 
 
 @app.before_request
 def before_request():
     g.user = current_user
+
+@lm.user_loader
+def user_loader(user_id):
+    user = User.query.filter_by(id=user_id)
+    if user.count() == 1:
+        return user.one()
+    return None
 
 
 # @app.route('/')
@@ -53,9 +55,19 @@ def before_request():
 
 @app.route('/')
 def index():
-    select_category = Category.query.all()
-    all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
-    return render_template("page.html", type=select_category, items=all_items, title="Vincenzo")
+    if current_user.id is None:
+        select_category = Category.query.all()
+        all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
+        return render_template("page.html", type=select_category, items=all_items, title="Vincenzo")
+    else:
+        select_category = Category.query.all()
+        all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
+        likes = Like.query.filter_by(user_id=current_user.id).all()
+        liked = []
+        for likes.items_id in likes:
+            for x in liker:
+                liked.append(x.items_id)
+        return render_template("page.html", type=select_category, items=all_items, likes=liked, title="Vincenzo")
 
 
 @app.route('/panel/category', methods=['GET', 'POST'])
@@ -103,17 +115,18 @@ def category_add():
 def like_add():
     if current_user is None:
         return jsonify(result=0)
-    else:##todo: Доделать лайки
+    else:
         items_id = request.args.get('like')
         have_like = Like.query.filter_by(user_id=current_user.id, items_id=items_id).first()
         if have_like is None:
-            return jsonify(result=0)
-        else:
             like = Like(user_id=current_user.id, items_id=items_id)
             db.session.add(like)
             db.session.commit()
-
-        return jsonify(result=current_user)
+            return jsonify(result="add")
+        else:
+            Like.query.filter_by(user_id=current_user.id, items_id=items_id).delete()
+            db.session.commit()
+            return jsonify(result="delete")
 
 
 @app.route('/delete_category/<int:category_id>')

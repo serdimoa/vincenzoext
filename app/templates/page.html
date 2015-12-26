@@ -143,7 +143,14 @@
             <div class="grid__sizer"></div>
             <!-- Grid items -->
             {% for item in items %}
-            <div class="grid__item {{ item[1].alias }}">
+            <div class="grid__item {{ item[1].alias }}
+            {% if likes!=[] %}
+                    {% if item[0].id == likes[0].items_id %}
+                    favorite
+
+                    {% endif %}
+            {% endif %}
+            ">
                 <div class="slider">
                     <div data-id-item="{{ item[0].id }}" class="slider__item"><img src="{{ url_for('static',filename='upload/'+item[0].img) }}" alt="Dummy" /></div>
                 </div>
@@ -161,7 +168,16 @@
                                             "item_weight":"{{ item[0].weight }}",
                                             "item_category":"{{ item[1].category_name }}"
                                        }' value="{{ item[0].id }}"><i class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button class="col-md-4 action action--button action--like" value="{{ item[0].id }}"><i class="fa fa-heart-o"></i><span class="text-hidden">Add to like</span></button>
+                    <button class="col-md-4 action action--button action--like" value="{{ item[0].id }}"><i class="fa
+                    {% if likes!=[] %}
+                    {% if item[0].id in likes %}
+                    fa-heart
+                    {% else %}
+                    fa-heart-o
+                    {% endif %}
+                    {% else %}
+                    fa-heart-o
+                     {% endif %}"></i><span class="text-hidden">Add to like</span></button>
                     {% endif %}
 
                     {% if not  current_user.is_authenticated %}

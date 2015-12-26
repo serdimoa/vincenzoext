@@ -21,16 +21,45 @@ tableOrder.on('mouseenter', 'tr', function () {
 });
 
 $(".action--like").click(function (e) {
+    var page=$(this);
     $.getJSON('/like_add',{like: $(this).val()},
         function(data) {
-            iosOverlay({
-                text: "Добавлено!",
-                duration: 2e3,
-                icon: "static/img/check.png"
-            });
+            if(data.result == "add"){
+                page.find("i").addClass('fa-heart');
+                page.find("i").removeClass('fa-heart-o');
+                swal({
+                    title: "Ура!",
+                    text: "Добавлено в избранное!",
+                    timer: 1500,
+                    type: "success",
+                    showConfirmButton: false }
+                );
+
+            }
+            else if(data.result == "delete"){
+                page.find("i").addClass('fa-heart-o');
+                page.find("i").removeClass('fa-heart');
+                swal({
+                    title: "Упс!",
+                    text: "Удалено из избранного!",
+                    timer: 1500,
+                    type: "error",
+                    showConfirmButton: false }
+                );
+            }
+            else if(data.result == 0){
+                swal({
+                    title: "Упс!",
+                    text: "Что-то пошло не так!",
+                    timer: 1500,
+                    type: "error",
+                    showConfirmButton: false }
+                );
+            }
+
+
         });
 
-    console.log($(this).val());
 });
 
 $('#auch-menu-btn').click(function(event) {
@@ -542,9 +571,7 @@ $(function () {
                 iso.layout();
             });
         });
-        document.getElementById("favorite").addEventListener('click', function(){
-            iso.arrange({ filter: '*' })
-        });
+
         // window resize / recalculate sizes for both flickity and isotope/masonry layouts
         window.addEventListener('resize', throttle(function (ev) {
             recalcFlickities();

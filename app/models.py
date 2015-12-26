@@ -1,5 +1,5 @@
 from app import db
-from flask.ext.login import UserMixin
+from flask.ext.login import UserMixin, AnonymousUserMixin
 
 
 class User(db.Model, UserMixin):
@@ -19,21 +19,21 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return '<User %r>' % self.username
 
-    # def is_active(self):
-    #     """True, as all users are active."""
-    #     return True
-    #
-    # def get_id(self):
-    #     """Return the email address to satisfy Flask-Login's requirements."""
-    #     return self.username
-    #
-    # def is_authenticated(self):
-    #     """Return True if the user is authenticated."""
-    #     return True
-    #
-    # def is_anonymous(self):
-    #     """False, as anonymous users aren't supported."""
-    #     return False
+        # def is_active(self):
+        #     """True, as all users are active."""
+        #     return True
+        #
+        # def get_id(self):
+        #     """Return the email address to satisfy Flask-Login's requirements."""
+        #     return self.username
+        #
+        # def is_authenticated(self):
+        #     """Return True if the user is authenticated."""
+        #     return True
+        #
+        # def is_anonymous(self):
+        #     """False, as anonymous users aren't supported."""
+        #     return False
 
 
 class Category(db.Model):
@@ -90,10 +90,14 @@ class Like(db.Model):
         self.items_id = items_id
 
     def __repr__(self):
-        return '<like %r>' % self.likes
+        return '<like %r>' % self.items_id
 
 
 class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     admin_name = db.Column(db.String(50))
     admin_password = db.Column(db.String(50))
+
+
+class AnonymousUser(AnonymousUserMixin):
+    id = None
