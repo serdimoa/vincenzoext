@@ -54,7 +54,7 @@ class Category(db.Model):
 
 class Items(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    item_name = db.Column(db.String(50), unique=True)
+    item_name = db.Column(db.String(50))
     item_component = db.Column(db.String(50))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     weight = db.Column(db.String(50))
