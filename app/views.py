@@ -64,9 +64,8 @@ def index():
         all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
         likes = Like.query.filter_by(user_id=current_user.id).all()
         liked = []
-        for likes.items_id in likes:
-            for x in liker:
-                liked.append(x.items_id)
+        for likes in likes:
+            liked.append(likes.items_id)
         return render_template("page.html", type=select_category, items=all_items, likes=liked, title="Vincenzo")
 
 
@@ -298,7 +297,6 @@ def auch():
     if registered_user is None:
         return jsonify(result=0)
     login_user(registered_user)
-    flash('Logged in successfully')
     return jsonify(result=1)
 
 

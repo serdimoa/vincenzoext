@@ -119,9 +119,9 @@
 <div class="row" id="allCatalog" style="position: relative;">
     <div id="bar" class="bar col-md-2">
         <div class="filter">
-            <button id="fulls" class="action filter__item filter__item--selected" data-filter="*">Все</button><br>
+            <button id="fulls" class="action filter__item filter__item--selected" data-filter="*">Все</button>
             {% if current_user.is_authenticated %}
-                <button class="action filter__item" data-filter=".favorite"><i class="icon"></i><span class="action__text">Избранное</span></button>
+                <br><button class="action filter__item" data-filter=".favorite"><i class="icon"></i><span class="action__text">Избранное</span></button>
             {% endif %}
             <br> {% for field in type %}
             <button class="action filter__item" data-filter=".{{field.alias}}"><i class="icon icon--{{field.alias}}"></i><span class="action__text">{{field.category_name}}</span></button>
@@ -145,7 +145,7 @@
             {% for item in items %}
             <div class="grid__item {{ item[1].alias }}
             {% if likes!=[] %}
-                    {% if item[0].id == likes[0].items_id %}
+                    {% if item[0].id in likes %}
                     favorite
 
                     {% endif %}
