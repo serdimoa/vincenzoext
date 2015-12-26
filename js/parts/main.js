@@ -154,7 +154,8 @@ function calculateSumm() {
 
         }
     }
-    console.log("summa = " + summ);
+    var data = dataTable.rows().data();
+
     return summ;
 
 }
@@ -252,7 +253,7 @@ $(".one--buy").click(function () {
         $('.full span').text(calculateSumm());
     }
     cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
-
+    console.log(data);
     iosOverlay({
         text: "Добавлено!",
         duration: 2e3,
