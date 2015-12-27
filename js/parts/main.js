@@ -28,47 +28,48 @@ function delivery_func() {
 
 function initIfhaveSession() {
     var cartValue = sessionStorage.getItem("cart");
-    var cartObj = JSON.parse(cartValue);
-    if (cartObj[0].row[0] != "Корзина пуста") {
-        cartObj.forEach(function (entry) {
-            console.log(entry.row[0]);
-            if (entry.row[1] == null) {
-                dataTable.row.add([
-                    entry.row[0],
-                    "",
-                    "<input type='number' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
-                    "<span class='cena'>" + entry.row[3] + " <i class='fa fa-rub'></i></span>",
-                    "<a href='#0' id='" + entry.row[4] + "' class='delete'><i class='fa fa-times'></i></a>"
-                ]).draw(false);
-                $(".checkOut input[type=number]").on("change", function (e) {
+    if(cartValue=!null) {
+        var cartObj = JSON.parse(cartValue);
+        if (cartObj[0].row[0] != "Корзина пуста") {
+            cartObj.forEach(function (entry) {
+                console.log(entry.row[0]);
+                if (entry.row[1] == null) {
+                    dataTable.row.add([
+                        entry.row[0],
+                        "",
+                        "<input type='number' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                        "<span class='cena'>" + entry.row[3] + " <i class='fa fa-rub'></i></span>",
+                        "<a href='#0' id='" + entry.row[4] + "' class='delete'><i class='fa fa-times'></i></a>"
+                    ]).draw(false);
+                    $(".checkOut input[type=number]").on("change", function (e) {
+                        $('.full span').text(calculateSumm());
+
+                    });
                     $('.full span').text(calculateSumm());
+                } else {
+                    dataTable.row.add([
+                        entry.row[0],
+                        "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
+                        "<input type='number' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                        "<span class='cena'>" + entry.row[3] + " <i class='fa fa-rub'></i></span>",
+                        "<a href='#0' id='" + entry.row[4] + "' class='delete'><i class='fa fa-times'></i></a>"
+                    ]).draw(false);
 
-                });
-                $('.full span').text(calculateSumm());
-            } else {
-                dataTable.row.add([
-                    entry.row[0],
-                    "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
-                    "<input type='number' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
-                    "<span class='cena'>" + entry.row[3] + " <i class='fa fa-rub'></i></span>",
-                    "<a href='#0' id='" + entry.row[4] + "' class='delete'><i class='fa fa-times'></i></a>"
-                ]).draw(false);
+                    $('.basic').fancySelect();
 
-                $('.basic').fancySelect();
+                    $('.fancified :contains(' + entry.row[1] + ')').prop("selected", true);
 
-                $('.fancified :contains(' + entry.row[1] + ')').prop("selected", true);
+                    $(".checkOut input[type=number]").on("change", function (e) {
+                        $('.full span').text(calculateSumm());
 
-                $(".checkOut input[type=number]").on("change", function (e) {
+                    });
                     $('.full span').text(calculateSumm());
+                }
 
-                });
-                $('.full span').text(calculateSumm());
-            }
-
-        });
-        $('.basic').trigger('update.fs');
+            });
+            $('.basic').trigger('update.fs');
+        }
     }
-
     //console.log(cartObj);
     //dataTable.add.row
 }
