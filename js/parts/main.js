@@ -28,7 +28,8 @@ function delivery_func() {
 
 function initIfhaveSession() {
     var cartValue = sessionStorage.getItem("cart");
-    if(cartValue=!null) {
+    console.log(cartValue);
+    if(cartValue!=null) {
         var cartObj = JSON.parse(cartValue);
         if (cartObj[0].row[0] != "Корзина пуста") {
             cartObj.forEach(function (entry) {
