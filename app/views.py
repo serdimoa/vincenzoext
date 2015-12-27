@@ -19,10 +19,10 @@ lm.anonymous_user = AnonymousUser
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
-
 @app.before_request
 def before_request():
     g.user = current_user
+
 
 @lm.user_loader
 def user_loader(user_id):
@@ -162,7 +162,13 @@ def update_category(category_id):
 
 @app.route('/order', methods=['GET', 'POST'])
 def order():
-    return render_template("order.html")
+    if request.method == 'POST':
+        return render_template("order.html")
+    else:
+        if current_user.id is None:
+            return render_template("order.html",  title="Vincenzo")
+        else:
+            return render_template("order.html", title="Vincenzo")
 
 
 @app.route('/get_one_item/<int:item_id>', methods=['GET', 'POST'])

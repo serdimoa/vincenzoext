@@ -42,7 +42,12 @@
                                             <div class="col-sm-12">
                                                  <label for="adressAuch" class="col-sm-12  text-left adressAuch"> Выберите адрес, либо напишите новый</label>
                                                 <select id="adressAuch" multiple="multiple" title="Выберите адрес"
-                                                        style="width: 100%"></select>
+                                                        style="width: 100%">
+                                                    {% for adres in adress %}
+                                                         <option>{{ adres }}</option>
+                                                    {% endfor %}
+
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group">

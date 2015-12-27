@@ -395,24 +395,6 @@ var data = [{
     id: 3,
     text: 'г.Лангепас'
 }];
-$('#restorePass').click(function (event) {
-    if ($("#auchPhone").val() == "") {
-        $(".wrongPhone").show();
-    } else {
-        $(".orderModal").modal('hide');
-        $(".auchUsers").empty();
-        $("#sendAuchNone").attr({
-            disabled: 'disabled'
-        });
-        $(".userIsAuch").show();
-        $("#adressAuch").select2({
-            placeholder: "Выберите ваш адрес",
-            data: data
-        });
-
-    }
-    ;
-});
 
 $('.slider__item').click(function (event) {
     $(".preloader").show();
