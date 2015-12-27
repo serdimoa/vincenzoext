@@ -28,7 +28,6 @@ function delivery_func() {
 
 function initIfhaveSession() {
     var cartValue = sessionStorage.getItem("cart");
-    console.log(cartValue);
     if(cartValue!=null) {
         var cartObj = JSON.parse(cartValue);
         if (cartObj[0].row[0] != "Корзина пуста") {
@@ -122,6 +121,7 @@ tableOrder.on('mouseenter', 'tr', function () {
 
 $(".action--like").click(function (e) {
     var page = $(this);
+    console.log(page);
     $.getJSON('/like_add', {like: $(this).val()},
         function (data) {
             if (data.result == "add") {
