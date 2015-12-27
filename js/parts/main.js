@@ -1,16 +1,114 @@
 /**
  * Created by serdimoa on 02.11.15.
  */
-var cart = window.document.querySelector('.cart');
+if ($('.index_page').length) {
+    var cart = window.document.querySelector('.cart');
 
-var cartItems = cart.querySelector('.cart__count');
+    var cartItems = cart.querySelector('.cart__count');
+}
+var delivery = $.cookie('delivery');
+
 
 var summ;
+var dataTable = $('#tableOrder').DataTable({
+    "language": {
+        "emptyTable": "Корзина пуста"
+    }
+});
+
+function delivery_func() {
+        if (delivery === undefined) {
+            $("#select_delivery").nifty("show");
+
+        } else {
+            $("input:radio[name=group2][value='" + $.cookie('delivery') + "']").prop({"checked": true});
+        }
+
+    }
+
+function initIfhaveSession() {
+    var cartValue = sessionStorage.getItem("cart");
+    var cartObj = JSON.parse(cartValue);
+    if (cartObj[0].row[0] != "Корзина пуста") {
+        cartObj.forEach(function (entry) {
+            console.log(entry.row[0]);
+            if (entry.row[1] == null) {
+                dataTable.row.add([
+                    entry.row[0],
+                    "",
+                    "<input type='number' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                    "<span class='cena'>" + entry.row[3] + " <i class='fa fa-rub'></i></span>",
+                    "<a href='#0' id='" + entry.row[4] + "' class='delete'><i class='fa fa-times'></i></a>"
+                ]).draw(false);
+                $(".checkOut input[type=number]").on("change", function (e) {
+                    $('.full span').text(calculateSumm());
+
+                });
+                $('.full span').text(calculateSumm());
+            } else {
+                dataTable.row.add([
+                    entry.row[0],
+                    "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
+                    "<input type='number' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                    "<span class='cena'>" + entry.row[3] + " <i class='fa fa-rub'></i></span>",
+                    "<a href='#0' id='" + entry.row[4] + "' class='delete'><i class='fa fa-times'></i></a>"
+                ]).draw(false);
+
+                $('.basic').fancySelect();
+
+                $('.fancified :contains(' + entry.row[1] + ')').prop("selected", true);
+
+                $(".checkOut input[type=number]").on("change", function (e) {
+                    $('.full span').text(calculateSumm());
+
+                });
+                $('.full span').text(calculateSumm());
+            }
+
+        });
+        $('.basic').trigger('update.fs');
+    }
+
+    //console.log(cartObj);
+    //dataTable.add.row
+}
 
 
+if ($('.userIsAuch .full_price').length) {
+    var full_price = sessionStorage.getItem("cart_price");
+    console.log(full_price);
+    $('.full_price').text(full_price);
+    initIfhaveSession();
+    delivery_func();
+    $("#adressAuch").select2({
+            maximumSelectionLength: 1,
+            tags: true,
+            data: data
+        });
+}
+$('.userIsAuch h2').click(function () {
+    $('.checkOut').addClass('isUp');
+});
 
 var tableOrder = $('#tableOrder tbody');
-var delivery = $.cookie('delivery');
+
+function dataFromTable() {
+    var TableData = new Array();
+    $('#tableOrder tr').each(function (row, tr) {
+        TableData[row] = {
+            row: [
+                $(tr).find('td:eq(0)').html(),
+                $(tr).find('td:eq(1)').find('.fancified option:selected').val(),
+                $(tr).find('td:eq(2)').find("input").val(),
+                $(tr).find('td:eq(3)').text(),
+                $(tr).find('td:eq(4)').find('a').attr('id')
+            ]
+        }
+    });
+    TableData.shift();
+    return TableData;
+}
+
 tableOrder.on('mouseenter', 'tr', function () {
     if ($(this).hasClass('selected')) {
         $(this).removeClass('selected');
@@ -21,39 +119,42 @@ tableOrder.on('mouseenter', 'tr', function () {
 });
 
 $(".action--like").click(function (e) {
-    var page=$(this);
-    $.getJSON('/like_add',{like: $(this).val()},
-        function(data) {
-            if(data.result == "add"){
+    var page = $(this);
+    $.getJSON('/like_add', {like: $(this).val()},
+        function (data) {
+            if (data.result == "add") {
                 page.find("i").addClass('fa-heart');
                 page.find("i").removeClass('fa-heart-o');
                 swal({
-                    title: "Ура!",
-                    text: "Добавлено в избранное!",
-                    timer: 1500,
-                    type: "success",
-                    showConfirmButton: false }
+                        title: "Ура!",
+                        text: "Добавлено в избранное!",
+                        timer: 1500,
+                        type: "success",
+                        showConfirmButton: false
+                    }
                 );
 
             }
-            else if(data.result == "delete"){
+            else if (data.result == "delete") {
                 page.find("i").addClass('fa-heart-o');
                 page.find("i").removeClass('fa-heart');
                 swal({
-                    title: "Упс!",
-                    text: "Удалено из избранного!",
-                    timer: 1500,
-                    type: "error",
-                    showConfirmButton: false }
+                        title: "Упс!",
+                        text: "Удалено из избранного!",
+                        timer: 1500,
+                        type: "error",
+                        showConfirmButton: false
+                    }
                 );
             }
-            else if(data.result == 0){
+            else if (data.result == 0) {
                 swal({
-                    title: "Упс!",
-                    text: "Что-то пошло не так!",
-                    timer: 1500,
-                    type: "error",
-                    showConfirmButton: false }
+                        title: "Упс!",
+                        text: "Что-то пошло не так!",
+                        timer: 1500,
+                        type: "error",
+                        showConfirmButton: false
+                    }
                 );
             }
 
@@ -62,29 +163,33 @@ $(".action--like").click(function (e) {
 
 });
 
-$('#auch-menu-btn').click(function(event) {
-    $.getJSON('/auch',{login: $('#inputPhone').val(),
-                password:$('#inputPassword').val()},
-    function(data) {
-        console.log(data.result);
-        if(data.result==1){
-            swal({
-                title: "Ура!",
-                text: "Вход выполнен успешно!",
-                timer: 2000,
-                type: "success",
-                showConfirmButton: false },
-                function(){
-                    location.reload();
+$('#auch-menu-btn').click(function (event) {
+    $.getJSON('/auch', {
+            login: $('#inputPhone').val(),
+            password: $('#inputPassword').val()
+        },
+        function (data) {
+            console.log(data.result);
+            if (data.result == 1) {
+                swal({
+                        title: "Ура!",
+                        text: "Вход выполнен успешно!",
+                        timer: 2000,
+                        type: "success",
+                        showConfirmButton: false
+                    },
+                    function () {
+                        location.reload();
+                    });
+            } else {
+                swal({
+                    title: "Упс!",
+                    text: "Такого пользоваеля не существует, либо пароль введен неправильно",
+                    type: "error",
+                    showConfirmButton: true
                 });
-        }else{
-            swal({
-                title: "Упс!",
-                text: "Такого пользоваеля не существует, либо пароль введен неправильно",
-                type: "error",
-                showConfirmButton: true });
-        }
-    })
+            }
+        })
 
 
 });
@@ -120,24 +225,24 @@ function fnGetSelected(oTableLocal) {
     return oTableLocal.$('tr.selected');
 }
 
-$('.pw-reset a').click(function(){
-     var login = $('#inputPhone');
-    if(login.val() !=""){
-        $.getJSON('/pwreset',{login:login.val()},
-            function(data) {
+$('.pw-reset a, #restorePass').click(function () {
+    var login = $('#inputPhone');
+    if (login.val() != "") {
+        $.getJSON('/pwreset', {login: login.val()},
+            function (data) {
                 console.log(data);
-                if(data.result=="sent"){
+                if (data.result == "sent") {
                     swal("Пароль востановлен!", "Новый пароль отправлен на вашу почту!", "success");
                 }
-                else if(data.result==0){
+                else if (data.result == 0) {
                     swal("Упс!", "Такого пользователя нет!", "error");
                 }
-                else if(data.result==2){
-                    swal({   title: "Упс!",   text: "Что-то пошло не так!",   timer: 2000,   showConfirmButton: true });
+                else if (data.result == 2) {
+                    swal({title: "Упс!", text: "Что-то пошло не так!", timer: 2000, showConfirmButton: true});
                 }
             })
     }
-    else{
+    else {
         swal("Упс!", "Необходимо ввести телефон!", "warning");
     }
 
@@ -154,8 +259,13 @@ function calculateSumm() {
 
         }
     }
-    var data = dataTable.rows().data();
+    if ($('.userIsAuch .full_price').length){
+        $('.full_price').text(summ);
+    }
 
+    sessionStorage.setItem("cart", JSON.stringify(dataFromTable()));
+    sessionStorage.setItem("cart_price", summ);
+    sessionStorage.setItem("delivery", $.cookie('delivery'));
     return summ;
 
 }
@@ -207,22 +317,11 @@ $(document).keyup(function (e) {
 
 
 
-var dataTable = $('#tableOrder').DataTable({
-    "columnDefs": [{
-        "targets": [0],
-        "visible": false,
-        "searchable": false
-    }],
-    "language": {
-        "emptyTable": "Корзина пуста"
-    }
-});
 
 $(".one--buy").click(function () {
     var data_items = jQuery.parseJSON($(this).attr("data-items"));
-    if (data_items['item_category'] == "Вторая") { // todo: set name
+    if (data_items['item_category'] == 1) { // todo: set name
         dataTable.row.add([
-            data_items['item_id'],
             "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
             "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
             "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
@@ -239,7 +338,6 @@ $(".one--buy").click(function () {
 
     } else {
         dataTable.row.add([
-            data_items['item_id'],
             "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
             " ",
             "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
@@ -253,7 +351,6 @@ $(".one--buy").click(function () {
         $('.full span').text(calculateSumm());
     }
     cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
-    console.log(data);
     iosOverlay({
         text: "Добавлено!",
         duration: 2e3,
@@ -262,24 +359,26 @@ $(".one--buy").click(function () {
 });
 
 jQuery(document).ready(function () {
-    var sequenceElement = document.getElementById("sequence"),
-        options = {
-            animateCanvas: !1,
-            phaseThreshold: !1,
-            preloader: !0,
-            reverseWhenNavigatingBackwards: !0
-        },
-        mySequence = sequence(sequenceElement, options);
+    if ($('.index_page').length) {
+        var sequenceElement = document.getElementById("sequence"),
+            options = {
+                animateCanvas: !1,
+                phaseThreshold: !1,
+                preloader: !0,
+                reverseWhenNavigatingBackwards: !0
+            },
+            mySequence = sequence(sequenceElement, options);
 
-    var tableOrder = $('#tableOrder');
-    tableOrder.on('click', '.delete', function (e) {
-        dataTable.row('.selected').remove().draw(false);
-        cartItems.innerHTML = Number(cartItems.innerHTML) - 1;
 
-        $('.full span').text(calculateSumm());
+        var tableOrder = $('#tableOrder');
+        tableOrder.on('click', '.delete', function (e) {
+            dataTable.row('.selected').remove().draw(false);
+            cartItems.innerHTML = Number(cartItems.innerHTML) - 1;
 
-    });
+            $('.full span').text(calculateSumm());
 
+        });
+    }
 
 }); //ready
 
@@ -342,7 +441,7 @@ $('.slider__item').click(function (event) {
 
             $(".aboutProduct .action--buy").attr({
                 "value": e.result.id,
-                "data-items":  JSON.stringify(item_result)
+                "data-items": JSON.stringify(item_result)
             });
 
             arrays_one = (e.result.components).split(",");
@@ -399,17 +498,18 @@ $('.cart, .showCart').click(function (event) {
     //        });
     //    }
     //});
-    if (calculateSumm()==0) {
+    if (calculateSumm() == 0) {
         iosOverlay({
             text: "Корзина пуста",
             duration: 2e3,
             icon: "static/img/cross.png"
         });
-    } else{
-    $('.full span').text(calculateSumm());
+    } else {
+        $('.full span').text(calculateSumm());
 
-    $('.checkOut').addClass('isUp');
-    };
+        $('.checkOut').addClass('isUp');
+    }
+    ;
 });
 
 $('.closezakazbtn').click(function (event) {
@@ -421,23 +521,26 @@ $('.closezakazbtn').click(function (event) {
  **/
 //Function for fixin sidebar
 $(function () {
-    var sidebar = $('#bar');
-    var bodywithsidebar = $(".view");
-    var cart = $(".cart");
-    var top = sidebar.offset().top - parseFloat(sidebar.css('margin-top'));
+    if ($('.index_page').length) {
 
-    $(window).scroll(function (event) {
-        var y = $(this).scrollTop();
-        if (y >= top) {
-            sidebar.addClass('fixed');
-            bodywithsidebar.addClass('col-md-offset-2');
-            cart.addClass("cartAbsolute cartPerc")
-        } else {
-            sidebar.removeClass('fixed');
-            bodywithsidebar.removeClass('col-md-offset-2');
-            cart.removeClass('cartAbsolute cartPerc');
-        }
-    });
+        var sidebar = $('#bar');
+        var bodywithsidebar = $(".view");
+        var cart = $(".cart");
+        var top = sidebar.offset().top - parseFloat(sidebar.css('margin-top'));
+
+        $(window).scroll(function (event) {
+            var y = $(this).scrollTop();
+            if (y >= top) {
+                sidebar.addClass('fixed');
+                bodywithsidebar.addClass('col-md-offset-2');
+                cart.addClass("cartAbsolute cartPerc")
+            } else {
+                sidebar.removeClass('fixed');
+                bodywithsidebar.removeClass('col-md-offset-2');
+                cart.removeClass('cartAbsolute cartPerc');
+            }
+        });
+    }
 });
 
 
@@ -488,32 +591,41 @@ $(function () {
     }
 
     // sliders - flickity
-    var sliders = [].slice.call(document.querySelectorAll('.slider')),
-    // array where the flickity instances are going to be stored
-        flkties = [],
-    // grid element
-        grid = document.querySelector('.grid'),
-    // isotope instance
-        iso,
-    // filter ctrls
-        filterCtrls = [].slice.call(document.querySelectorAll('.filter > button')),
-    // cart
-        cart = document.querySelector('.cart'),
-        cartItems = cart.querySelector('.cart__count');
+    if ($('.index_page').length) {
+        var sliders = [].slice.call(document.querySelectorAll('.slider')),
+        // array where the flickity instances are going to be stored
+            flkties = [],
+        // grid element
+            grid = document.querySelector('.grid'),
+        // isotope instance
+            iso,
+        // filter ctrls
+            filterCtrls = [].slice.call(document.querySelectorAll('.filter > button')),
+        // cart
+            cart = document.querySelector('.cart'),
+            cartItems = cart.querySelector('.cart__count');
+    }
+
 
     function init() {
         // preload images
-        imagesLoaded(grid, function () {
-            barWidth();
-            // initFlickity();
-            initIsotope();
-            initEvents();
-            delivery_func();
-            classie.remove(grid, 'grid--loading');
-            $(".preloader").hide();
+        if ($('.index_page').length) {
+
+            imagesLoaded(grid, function () {
+                barWidth();
+                // initFlickity();
+                initIsotope();
+                initEvents();
+
+                delivery_func();
+                initIfhaveSession();
+                classie.remove(grid, 'grid--loading');
+                $(".preloader").hide();
 
 
-        });
+            });
+        }
+
     }
 
 
@@ -550,15 +662,7 @@ $(function () {
 
     }
 
-    function delivery_func() {
-        if (delivery === undefined) {
-            $("#select_delivery").nifty("show");
 
-        } else {
-            $("input:radio[name=group2][value='" + $.cookie('delivery') + "']").prop({"checked": true});
-        }
-
-    }
 
     function initEvents() {
         filterCtrls.forEach(function (filterCtrl) {
@@ -583,18 +687,16 @@ $(function () {
         [].slice.call(grid.querySelectorAll('.grid__item')).forEach(function (item) {
             item.querySelector('.items-buy').addEventListener('click', addToCart);
         });
+        //dataTable.
     }
-
 
 
     function addToCart() {
 
 
-        console.log(jQuery.parseJSON($(this).attr("data-items")));
         var data_items = jQuery.parseJSON($(this).attr("data-items"));
         if (data_items['item_category'] == "Вторая") { // todo: set name
             dataTable.row.add([
-                data_items['item_id'],
                 "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
                 "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
                 "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
@@ -611,7 +713,6 @@ $(function () {
 
         } else {
             dataTable.row.add([
-                data_items['item_id'],
                 "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
                 " ",
                 "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
@@ -651,3 +752,6 @@ $(function () {
     init();
 
 })(window);
+
+
+

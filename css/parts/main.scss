@@ -1980,13 +1980,15 @@ html,
 }
 
 .order {
-    background: #D9D9D9 no-repeat;
-    background-position: 0% 100%;
-    background-size: cover;
+
+
     width: 100%;
     height: 100%;
     display: block;
     position: absolute;
+    .container{
+        background: transparent;
+    }
     .loginOrNo {
         padding: 22px;
         color: #333;
@@ -1995,11 +1997,22 @@ html,
             color: #FF5252;
         }
         .userIsAuch {
-            display: none;
             input[type=number]::-webkit-inner-spin-button,
             input[type=number]::-webkit-outer-spin-button {
                 -webkit-appearance: none;
                 margin: 0;
+            }
+            h1{
+                font-family: NP, sans-serif;
+            }
+            h2{
+                &:hover{
+                    color: #ff5252;
+                    cursor: pointer;
+                }
+            }
+            .adressAuch{
+                    padding: 6px;
             }
         }
         .borderLeft {
