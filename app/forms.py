@@ -1,7 +1,7 @@
 # coding=utf-8
 from flask.ext.wtf import Form
 from flask.ext.wtf.file import FileField
-from wtforms import StringField, BooleanField, SelectField, IntegerField, PasswordField, SubmitField
+from wtforms import StringField, BooleanField, SelectField, IntegerField, PasswordField, SubmitField, TextAreaField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import Required
 from wtforms import validators
@@ -62,8 +62,16 @@ class RegistrationForm(Form):
     email = EmailField(u"Ваш email", validators=[validators.InputRequired(u"Введите Email"), Unique(
         User, User.email, message=u"Такой email существует")])
     password = PasswordField(u"Ваш пароль", validators=[validators.InputRequired(u"Введите Ваш пароль")])
-    phone = PhoneNumber(u"Ваш телефон",country_code='RU', display_format='e164', validators=[validators.InputRequired(u"Введите Ваш телефон"), Unique(
-        User, User.phone, message=u"Такой телефон существует"), validators.Optional()])
+    phone = PhoneNumber(u"Ваш телефон", country_code='RU', display_format='e164',
+                        validators=[validators.InputRequired(u"Введите Ваш телефон"), Unique(
+                            User, User.phone, message=u"Такой телефон существует"), validators.Optional()])
+
+
+class SaleAddForm(Form):
+    sale_name = StringField(u"Название Акции", validators=[validators.InputRequired(u"Введите Название")])
+    price_if_have = IntegerField(u"Цена если требуется", default=None)
+    about_sale = TextAreaField()
+    show_url = BooleanField()
 
 
 class CategoryForm(Form):

@@ -121,6 +121,11 @@ def get_order():
     return jsonify(response=response_order)
 
 
+@app.route('/panel/sale/add', methods=["GET", "POST"])
+def sale_add():
+    pass
+
+
 @app.route('/panel/category/category_add', methods=['GET', 'POST'])
 def category_add():
     form = CategoryForm()
