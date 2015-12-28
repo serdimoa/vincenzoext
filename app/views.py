@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 import random
 import string
+from jinja2.filters import environmentfilter
 import os
 import ast
 import json
@@ -10,13 +11,25 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from sqlalchemy import sql, select
 from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
-from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm
+from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit
 from models import User, Category, Items, Like, AnonymousUser
 import mandrill
 
 lm.anonymous_user = AnonymousUser
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+
+
+@app.template_filter()
+def filter_shuffle(seq):
+    try:
+        result = list(seq)
+        random.shuffle(result)
+        return result
+    except:
+        return seq
+
+app.jinja_env.filters['shuffle'] = filter_shuffle
 
 
 @app.before_request
@@ -67,6 +80,17 @@ def index():
         for likes in likes:
             liked.append(likes.items_id)
         return render_template("page.html", type=select_category, items=all_items, likes=liked, title="Vincenzo")
+
+
+@app.route('/settings', methods=['GET', 'POST'])
+def settings():
+    form = UserEdit()
+    answer = ""
+    if form.validate_on_submit():
+
+        return render_template("settings.html", form=form, answer=form.phone.data.e164)
+
+    return render_template("settings.html", form=form, answer=answer)
 
 
 @app.route('/panel/category', methods=['GET', 'POST'])

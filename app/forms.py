@@ -7,6 +7,23 @@ from wtforms.validators import Required
 from wtforms import validators
 from models import User
 from wtforms.validators import ValidationError
+from wtforms_components import PhoneNumberField
+
+
+class PhoneNumber(PhoneNumberField):
+    """
+    A string field representing a PhoneNumber object from
+    `SQLAlchemy-Utils`_.
+
+    .. _SQLAlchemy-Utils:
+       https://github.com/kvesteri/sqlalchemy-utils
+
+    :param country_code:
+        Country code of the phone number.
+    :param display_format:
+        The format in which the phone number is displayed.
+    """
+    error_msg = u'Вы ввели не коректный телефон'
 
 
 class Unique(object):
@@ -35,13 +52,18 @@ class ItemForm(Form):
     img = FileField(u"Изображение")
 
 
+class UserEdit(Form):
+    username = StringField(u"Ваш email")
+    phone = PhoneNumber(u"Ваш телефон", country_code='RU', display_format='e164', validators=[validators.Optional()])
+
+
 class RegistrationForm(Form):
     username = StringField(u"Ваше имя", validators=[validators.InputRequired(u"Введите Ваше имя")])
     email = EmailField(u"Ваш email", validators=[validators.InputRequired(u"Введите Email"), Unique(
         User, User.email, message=u"Такой email существует")])
     password = PasswordField(u"Ваш пароль", validators=[validators.InputRequired(u"Введите Ваш пароль")])
-    phone = StringField(u"Ваш телефон", validators=[validators.InputRequired(u"Введите Ваш телефон"), Unique(
-        User, User.phone, message=u"Такой телефон существует")])
+    phone = PhoneNumber(u"Ваш телефон",country_code='RU', display_format='e164', validators=[validators.InputRequired(u"Введите Ваш телефон"), Unique(
+        User, User.phone, message=u"Такой телефон существует"), validators.Optional()])
 
 
 class CategoryForm(Form):

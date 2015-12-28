@@ -16,6 +16,8 @@
 //= ../bower_components/nifty-modal/lib/nifty.js
 //= ../bower_components/instafeed.js/instafeed.js
 //= ../bower_components/sweetalert/dist/sweetalert.min.js
+//= ../bower_components/FitText.js/jquery.fittext.js
+//= ../bower_components/jquery.maskedinput/dist/jquery.maskedinput.js
 
 //= parts/iosOverlay.js
 //= parts/main.js

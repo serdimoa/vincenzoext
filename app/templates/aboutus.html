@@ -26,8 +26,7 @@
                 <ul class="aboutProfile">
                     <li>Привет, {{ current_user.username }}! </li>
                     <li class="divider"></li>
-                    <li><a href="#"><i class="fa fa-cog"></i> Настроить</a></li>
-                    <li><a href="#"><i class="fa fa-star-o"></i> Избранное</a></li>
+                    <li><a href="{{ url_for('settings') }}"><i class="fa fa-cog"></i> Настроить</a></li>
                     <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out"></i> Выход</a></li>
                 </ul>
                 {% endif %}

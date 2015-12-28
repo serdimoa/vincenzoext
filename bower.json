@@ -33,6 +33,9 @@
     "iCheck": "icheck#~1.0.2",
     "fancyselect": "",
     "instafeed.js": "",
-    "sweetalert": "~1.1.3"
+    "sweetalert": "~1.1.3",
+    "FitText.js": "~1.2.0",
+    "inputmask-multi": "~1.0.2",
+    "jquery.maskedinput": "~1.4.1"
   }
 }

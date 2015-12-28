@@ -8,7 +8,12 @@ if ($('.index_page').length) {
 }
 var delivery = $.cookie('delivery');
 
-
+if($("#inputPhone").length){
+    $("#inputPhone").mask("+79999999999",{autoclear: false});
+}
+if($("#phone").length){
+    $("#phone").mask("+79999999999",{autoclear: false})
+}
 var summ;
 var dataTable = $('#tableOrder').DataTable({
     "language": {
@@ -75,7 +80,7 @@ function initIfhaveSession() {
 }
 
 
-if ($('.userIsAuch .full_price').length) {
+if ($('.userIsAuch .full_price, .borderLeft .full_price').length){
     var full_price = sessionStorage.getItem("cart_price");
     console.log(full_price);
     $('.full_price').text(full_price);
@@ -87,7 +92,7 @@ if ($('.userIsAuch .full_price').length) {
             data: data
         });
 }
-$('.userIsAuch h2').click(function () {
+$('.userIsAuch h2, .borderLeft  h2 ').click(function () {
     $('.checkOut').addClass('isUp');
 });
 
@@ -124,7 +129,7 @@ $(".action--like").click(function (e) {
     console.log(page);
     $.getJSON('/like_add', {like: $(this).val()},
         function (data) {
-            if (data.result == "add") {
+            if (data.result == "adfavorited") {
                 page.find("i").addClass('fa-heart');
                 page.find("i").removeClass('fa-heart-o');
                 swal({
@@ -262,6 +267,10 @@ function calculateSumm() {
         }
     }
     if ($('.userIsAuch .full_price').length){
+        $('.full_price').text(summ);
+    }
+
+    if($('.borderLeft .full_price').length){
         $('.full_price').text(summ);
     }
 
@@ -429,12 +438,19 @@ $('.slider__item').click(function (event) {
             });
 
             arrays_one = (e.result.components).split(",");
-            $("#one_array").empty();
-            $.each(arrays_one, function (i) {
-                var li = $('<li/>')
-                    .text(arrays_one[i])
-                    .appendTo($("#one_array"));
-            });
+            if(arrays_one[0]=="") {
+                $(".aboutProduct h3").hide();
+            }
+            else{
+                $(".aboutProduct h3").show();
+            }
+                $("#one_array").empty();
+                $.each(arrays_one, function (i) {
+                    var li = $('<li/>')
+                        .text(arrays_one[i])
+                        .appendTo($("#one_array"));
+                });
+
             $("#one_weight").text(e.result.weight);
             $("#one_name").text(e.result.name);
             $(".preloader").hide();
@@ -445,6 +461,7 @@ $('.slider__item').click(function (event) {
 
         }
     });
+    jQuery("#one_name").fitText();
 
 
 });

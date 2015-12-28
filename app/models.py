@@ -1,5 +1,6 @@
 from app import db
 from flask.ext.login import UserMixin, AnonymousUserMixin
+from sqlalchemy_utils import PhoneNumberType
 
 
 class User(db.Model, UserMixin):
@@ -7,7 +8,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(80))
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(120))
-    phone = db.Column(db.Integer, unique=True)
+    phone = db.Column(PhoneNumberType(country_code='RU', max_length=20), unique=True)
 
     def __init__(self, username, email, phone, authenticated, password):
         self.username = username
@@ -97,6 +98,12 @@ class Admin(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     admin_name = db.Column(db.String(50))
     admin_password = db.Column(db.String(50))
+
+
+class Adress(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    adress = db.Column(db.String(50))
 
 
 class AnonymousUser(AnonymousUserMixin):

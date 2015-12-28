@@ -14,7 +14,7 @@
         <div class="container ">
             <div class="row">
                 <div class="col-md-12 text-center">
-                    <img src="{{ url_for('static',filename='img/Sir2.png') }}" alt="">
+                    <a href="{{ url_for('index') }}"><img src="{{ url_for('static',filename='img/Sir2.png') }}" alt=""></a>
                 </div>
             </div>
             <div class="row">
@@ -26,9 +26,10 @@
 
                                 <div class="userIsAuch">
                                     <h1>Привет, {{ current_user.username }}! </h1>
+
                                     <h2>Заказ на сумму: <span class=full_price></span> <i class="fa fa-rub"></i></h2>
 
-                                    <form method="POST"  class="form-horizontal">
+                                    <form method="POST" class="form-horizontal">
 
                                         <div class="form-group">
                                             <label for="moneyAuch" class="col-sm-5 control-label"> Сдача с суммы в
@@ -40,11 +41,12 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="col-sm-12">
-                                                 <label for="adressAuch" class="col-sm-12  text-left adressAuch"> Выберите адрес, либо напишите новый</label>
+                                                <label for="adressAuch" class="col-sm-12  text-left adressAuch">
+                                                    Выберите адрес, либо напишите новый</label>
                                                 <select id="adressAuch" multiple="multiple" title="Выберите адрес"
                                                         style="width: 100%">
                                                     {% for adres in adress %}
-                                                         <option>{{ adres }}</option>
+                                                        <option>{{ adres }}</option>
                                                     {% endfor %}
 
                                                 </select>
@@ -67,45 +69,46 @@
                         </div>
                         <div class="col-md-6 borderLeft">
                             {% if not current_user.is_authenticated %}
+                                <h2>Заказ на сумму: <span class=full_price></span> <i class="fa fa-rub"></i></h2>
 
-                            <h4>Для выполнения заказа необходимо заполнить форму ниже</h4>
+                                <h4>Для выполнения заказа необходимо заполнить форму ниже</h4>
 
-                            <form class="form-horizontal">
-                                <div class="form-group">
-                                    <label for="userName" class="col-sm-3 control-label">Имя</label>
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label for="userName" class="col-sm-3 control-label">Имя</label>
 
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="userName" placeholder="">
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="userName" placeholder="">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="userPhone" class="col-sm-3 control-label">Телефон</label>
+                                    <div class="form-group">
+                                        <label for="userPhone" class="col-sm-3 control-label">Телефон</label>
 
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="userPhone" placeholder="">
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="userPhone" placeholder="">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="userAddres" class="col-sm-3 control-label">Адрес</label>
+                                    <div class="form-group">
+                                        <label for="userAddres" class="col-sm-3 control-label">Адрес</label>
 
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" id="userAddres" placeholder="">
+                                        <div class="col-sm-9">
+                                            <input type="text" class="form-control" id="userAddres" placeholder="">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="money" class="col-sm-6 control-label"> Сдача с суммы в руб.</label>
+                                    <div class="form-group">
+                                        <label for="money" class="col-sm-6 control-label"> Сдача с суммы в руб.</label>
 
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="money" placeholder="">
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="money" placeholder="">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-offset-9 col-sm-3">
-                                        <button type="submit" id="sendAuchNone" class="btn btn-success">Заказать
-                                        </button>
+                                    <div class="form-group">
+                                        <div class="col-md-offset-9 col-sm-3">
+                                            <button type="submit" id="sendAuchNone" class="btn btn-success">Заказать
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
+                                </form>
                             {% endif %}
                         </div>
                     </div>
@@ -147,11 +150,11 @@
         </div>
     </div>
     <div class="checkOut">
-    <div class="row">
-        <div class="container">
-            <h2>Ваш заказ</h2>
-            <table class="table" id="tableOrder" cellspacing="0" width="100%">
-                <thead>
+        <div class="row">
+            <div class="container">
+                <h2>Ваш заказ</h2>
+                <table class="table" id="tableOrder" cellspacing="0" width="100%">
+                    <thead>
                     <tr>
                         <th class="">Наименование</th>
                         <th class=""></th>
@@ -159,41 +162,48 @@
                         <th class="col-md-1">Цена</th>
                         <th class="col-md-1"></th>
                     </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            <hr>
- <div class="col-sm-6">
-                <h3>Выберите вариант доставки</h3>
-                <div class="md-body">
-                    <p>
-                        <input value="delivery_home" name="group2" type="radio" id="delivery_home_order" />
-                        <label for="delivery_home_order">Доставка на дом(офис)</label>
-                    </p>
-                    <p>
-                        <input value="no_delivery" name="group2" type="radio" id="no_delivery_order" />
-                        <label for="no_delivery_order">Самовывоз <span class="red">-10%</span></label>
-                    </p>
-                    <p>
-                        <input value="in_cafe" name="group2" type="radio" id="in_cafe_order" />
-                        <label for="in_cafe_order">В кафе</label>
-                    </p>
-                    <p>
-                        <input value="delivery_in_time" name="group2" type="radio" id="delivery_in_time_order" />
-                        <label for="delivery_in_time_order">Предзаказ</label>
-                    </p>
-                </div>
-            </div>
-            <div class="col-md-6 text-right">
-                <h2>Всего:</h2>
-                <p class="full"><span></span><small><i class="fa fa-rub"></i></small></p>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <hr>
+                <div class="col-sm-6">
+                    <h3>Выберите вариант доставки</h3>
 
+                    <div class="md-body">
+                        <p>
+                            <input value="delivery_home" name="group2" type="radio" id="delivery_home_order"/>
+                            <label for="delivery_home_order">Доставка на дом(офис)</label>
+                        </p>
+
+                        <p>
+                            <input value="no_delivery" name="group2" type="radio" id="no_delivery_order"/>
+                            <label for="no_delivery_order">Самовывоз <span class="red">-10%</span></label>
+                        </p>
+
+                        <p>
+                            <input value="in_cafe" name="group2" type="radio" id="in_cafe_order"/>
+                            <label for="in_cafe_order">В кафе</label>
+                        </p>
+
+                        <p>
+                            <input value="delivery_in_time" name="group2" type="radio" id="delivery_in_time_order"/>
+                            <label for="delivery_in_time_order">Предзаказ</label>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-6 text-right">
+                    <h2>Всего:</h2>
+
+                    <p class="full"><span></span>
+                        <small><i class="fa fa-rub"></i></small>
+                    </p>
+
+                </div>
+                <a href="#0" class="closezakazbtn"><span class="og-close"></span></a>
             </div>
-            <a href="#0" class="closezakazbtn"><span class="og-close"></span></a>
         </div>
     </div>
-</div>
 {% endblock %} {% block footer %} {% endblock %} {% block script %}
 
 {% endblock %}

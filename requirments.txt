@@ -32,3 +32,4 @@ sqlparse==0.1.18
 validators==0.9
 wsgiref==0.1.2
 mandrill
+phonenumbers
