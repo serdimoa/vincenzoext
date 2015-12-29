@@ -923,7 +923,7 @@ html,
     position: absolute;
     top: 50%;
     margin-top: -53px;
-    width: 66px;
+    width: 60px;
     background: rgba(0, 0, 0, 0.7);
     height: 90px;
     border: none;
@@ -941,7 +941,7 @@ html,
 }
 
 .seq .seq-next {
-    right: 49px;
+    right: 1em;
 }
 
 .seq .seq-next:focus,
@@ -949,6 +949,7 @@ html,
     -webkit-transform: translate3d(4px, 0, 0);
     -ms-transform: translate3d(4px, 0, 0);
     transform: translate3d(4px, 0, 0);
+    outline: none;
 }
 
 .seq .seq-prev {

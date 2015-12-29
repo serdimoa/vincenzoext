@@ -11,8 +11,8 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from sqlalchemy import sql, select
 from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
-from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit
-from models import User, Category, Items, Like, AnonymousUser
+from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm
+from models import User, Category, Items, Like, AnonymousUser, Sale
 import mandrill
 
 lm.anonymous_user = AnonymousUser
@@ -28,6 +28,7 @@ def filter_shuffle(seq):
         return result
     except:
         return seq
+
 
 app.jinja_env.filters['shuffle'] = filter_shuffle
 
@@ -68,10 +69,11 @@ def user_loader(user_id):
 
 @app.route('/')
 def index():
+    select_sale = Sale.query.all()
     if current_user.id is None:
         select_category = Category.query.all()
         all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
-        return render_template("page.html", type=select_category, items=all_items, title="Vincenzo")
+        return render_template("page.html", type=select_category, sales=select_sale, items=all_items, title="Vincenzo")
     else:
         select_category = Category.query.all()
         all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
@@ -79,7 +81,8 @@ def index():
         liked = []
         for likes in likes:
             liked.append(likes.items_id)
-        return render_template("page.html", type=select_category, items=all_items, likes=liked, title="Vincenzo")
+        return render_template("page.html", type=select_category, sales=select_sale, items=all_items, likes=liked,
+                               title="Vincenzo")
 
 
 @app.route('/settings', methods=['GET', 'POST'])
@@ -87,7 +90,6 @@ def settings():
     form = UserEdit()
     answer = ""
     if form.validate_on_submit():
-
         return render_template("settings.html", form=form, answer=form.phone.data.e164)
 
     return render_template("settings.html", form=form, answer=answer)
@@ -123,7 +125,82 @@ def get_order():
 
 @app.route('/panel/sale/add', methods=["GET", "POST"])
 def sale_add():
-    pass
+    form = SaleAddForm()
+    if form.validate_on_submit():
+        filename = secure_filename(form.img.data.filename)
+        if filename:
+            sale_data = Sale(sale_name=form.sale_name.data,
+                             price_if_have=form.price_if_have.data,
+                             about_sale=form.about_sale.data,
+                             show_url=form.show_url.data,
+                             to_slider=form.to_slider.data,
+                             img=form.sale_name.data + filename)
+            db.session.add(sale_data)
+            db.session.commit()
+            form.img.data.save(basedir + "/static/upload/" + form.sale_name.data + filename)
+            flash("Добавлена новая акция", "success")
+            return redirect(url_for('sale'))
+        else:
+            sale_data = Sale(sale_name=form.sale_name.data,
+                             price_if_have=form.price_if_have.data,
+                             about_sale=form.about_sale.data,
+                             show_url=form.show_url.data,
+                             to_slider=form.to_slider.data
+
+                             )
+            db.session.add(sale_data)
+            db.session.commit()
+            flash("Добавлена новая акция", "success")
+            return redirect(url_for('sale'))
+    return render_template('sales_add.html', form=form)
+
+
+@app.route('/panel/sales', methods=["GET"])
+def sale():
+    all_sales = db.session.query(Sale).all()
+    return render_template("sales.html", items=all_sales)
+
+
+@app.route('/panel/sale_edit/<int:sale_id>', methods=['GET', 'POST'])
+def sale_edit(sale_id):
+    select_item = Sale.query.filter_by(id=sale_id).first()
+    img = select_item.img
+    form = SaleAddForm(obj=select_item)
+    if form.validate_on_submit():
+        filename = secure_filename(form.img.data.filename)
+        if filename:
+            item = Sale.query.get(sale_id)
+            item.sale_name = form.sale_name.data
+            item.price_if_have = form.price_if_have.data
+            item.about_sale = form.about_sale.data
+            item.show_url = form.show_url.data
+            item.to_slider = form.to_slider.data
+            item.img = form.sale_name.data + filename
+            form.img.data.save(basedir + "/static/upload/" + form.about_sale.data + filename)
+            db.session.commit()
+        else:
+            item = Sale.query.get(sale_id)
+            item.sale_name = form.sale_name.data
+            item.to_slider = form.to_slider.data
+            item.price_if_have = form.price_if_have.data
+            item.about_sale = form.about_sale.data
+            item.show_url = form.show_url.data
+            item.img = img
+            db.session.commit()
+
+        flash(u"Изменено", "info")
+        return redirect(url_for("sale"))
+
+    return render_template('sale_edit.html', form=form, img=img)
+
+
+@app.route('/panel/sales_delete/<int:item_id>', methods=['GET', 'POST'])
+def sale_delete(item_id):
+    item = Sale.query.get(item_id)
+    Sale.query.filter_by(id=item_id).delete()
+    db.session.commit()
+    flash("Удален - " + item.sale_name, "success")
+    return redirect(url_for("sale"))
 
 
 @app.route('/panel/category/category_add', methods=['GET', 'POST'])
@@ -195,7 +272,7 @@ def order():
         return render_template("order.html")
     else:
         if current_user.id is None:
-            return render_template("order.html",  title="Vincenzo")
+            return render_template("order.html", title="Vincenzo")
         else:
             return render_template("order.html", title="Vincenzo")
 
@@ -350,7 +427,7 @@ def pwreset():
             'from_email': 'sir.vincenzo.office@gmail.com',
             'from_name': 'Востановление пароля Sir Vincenzo ',
             'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-            'html': '<p>Ваш новый пароль: '+new_password+'</p>',
+            'html': '<p>Ваш новый пароль: ' + new_password + '</p>',
             'subject': 'Востановление пароля с сайта Sir Vincenzo ',
             'to': [{'email': is_user.email,
                     'name': is_user.username,

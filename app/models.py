@@ -110,8 +110,10 @@ class Sale(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     sale_name = db.Column(db.String(20))
     price_if_have = db.Column(db.Integer)
+    to_slider = db.Column(db.Boolean)
     about_sale = db.Column(db.String(255))
-    show_url = db.Column(db.Boolean, default=True)
+    show_url = db.Column(db.Boolean)
+    img = db.Column(db.String(50))
 
 
 class AnonymousUser(AnonymousUserMixin):

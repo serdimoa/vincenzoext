@@ -26,6 +26,16 @@ class PhoneNumber(PhoneNumberField):
     error_msg = u'Вы ввели не коректный телефон'
 
 
+class Integers(IntegerField):
+    def process_formdata(self, valuelist):
+        if valuelist:
+            try:
+                self.data = int(valuelist[0])
+            except ValueError:
+                self.data = None
+                raise ValueError(self.gettext(u'Должно быть числом'))
+
+
 class Unique(object):
     def __init__(self, model, field, message=u'This element already exists.'):
         self.model = model
@@ -69,9 +79,11 @@ class RegistrationForm(Form):
 
 class SaleAddForm(Form):
     sale_name = StringField(u"Название Акции", validators=[validators.InputRequired(u"Введите Название")])
-    price_if_have = IntegerField(u"Цена если требуется", default=None)
-    about_sale = TextAreaField()
-    show_url = BooleanField()
+    price_if_have = Integers(u"Цена если требуется", validators=[validators.Optional()])
+    about_sale = TextAreaField(u"Информация об акции")
+    show_url = BooleanField(u"Покаывать кнопку или нет")
+    to_slider = BooleanField(u"Покаывать в слайдере ")
+    img = FileField(u"Изображение")
 
 
 class CategoryForm(Form):

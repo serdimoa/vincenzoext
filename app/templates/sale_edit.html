@@ -1,0 +1,11 @@
+{% extends "panel.html" %}
+{% from 'form_gen.html' import render_form_file %}
+{% block body %}
+    <div class="col-md-6">
+        {{ render_form_file(form, action_url='', action_text='Изменить') }}
+
+    </div>
+    <div class="col-md-6">
+        <img src="{{ url_for("static", filename='upload/'+img) }}" class="img-responsive" alt="">
+    </div>
+{% endblock %}
