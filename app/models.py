@@ -113,6 +113,7 @@ class Sale(db.Model):
     to_slider = db.Column(db.Boolean)
     about_sale = db.Column(db.String(255))
     show_url = db.Column(db.Boolean)
+    end_sale = db.Column(db.Date)
     img = db.Column(db.String(50))
 
 

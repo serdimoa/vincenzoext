@@ -1260,21 +1260,31 @@ html,
     }
 }
 
+h2 small span{
+    color:#FF5252;
+}
 @media only screen and (min-width: 1020px) {
     .seq .seq-model {
-        margin-left: 5%;
-        width: 32.5%;
+        margin-left: 0;
+        width: 45%;
+        margin-top:8em;
+        float: right;
     }
     .seq .seq-title {
-        width: 47.5%;
+        width: 40%;
         margin-right: 5%;
+    }
+    .seq .seq-in .seq-model img {
+        -webkit-transform: translate3d(180px, 0, 0);
+        transform: translate3d(180px, 0, 0);
+        opacity: 1;
     }
 }
 
-@media only screen and (min-width: 1120px) {
+@media only screen and (min-width: 1500px) {
     .seq .seq-model {
         position: absolute;
-        margin-left: 75%;
+        margin-left: 50%;
         float: right;
         width: 70%;
         margin-top: 8em;
@@ -2384,4 +2394,8 @@ div.fancy-select ul.options {
     -moz-osx-font-smoothing: grayscale;
     opacity: 1;
     visibility: visible;
+}
+
+.one-sale {
+    border-bottom: 1px solid #eee;
 }

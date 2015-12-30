@@ -9,6 +9,7 @@ import json
 from flask import render_template, flash, redirect, session, url_for, request, g, jsonify, make_response, Response
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from sqlalchemy import sql, select
+from sqlalchemy_utils.types.locale import babel
 from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
 from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm
@@ -31,6 +32,18 @@ def filter_shuffle(seq):
 
 
 app.jinja_env.filters['shuffle'] = filter_shuffle
+
+
+@app.template_filter()
+def format_datetime(value, format='medium'):
+    if format == 'full':
+        format = "EEEE, d. MMMM y 'at' HH:mm"
+    elif format == 'medium':
+        format = "EE dd.MM.y HH:mm"
+    return babel.dates.format_datetime(value, format)
+
+
+app.jinja_env.filters['datetime'] = format_datetime
 
 
 @app.before_request
@@ -133,6 +146,7 @@ def sale_add():
                              price_if_have=form.price_if_have.data,
                              about_sale=form.about_sale.data,
                              show_url=form.show_url.data,
+                             end_sale=form.end_sale.data,
                              to_slider=form.to_slider.data,
                              img=form.sale_name.data + filename)
             db.session.add(sale_data)
@@ -174,6 +188,7 @@ def sale_edit(sale_id):
             item.price_if_have = form.price_if_have.data
             item.about_sale = form.about_sale.data
             item.show_url = form.show_url.data
+            item.end_sale = form.end_sale.data
             item.to_slider = form.to_slider.data
             item.img = form.sale_name.data + filename
             form.img.data.save(basedir + "/static/upload/" + form.about_sale.data + filename)
@@ -182,6 +197,7 @@ def sale_edit(sale_id):
             item = Sale.query.get(sale_id)
             item.sale_name = form.sale_name.data
             item.to_slider = form.to_slider.data
+            item.end_sale = form.end_sale.data
             item.price_if_have = form.price_if_have.data
             item.about_sale = form.about_sale.data
             item.show_url = form.show_url.data
@@ -292,6 +308,17 @@ def get_one_item(item_id):
                                )
 
                    )
+
+
+@app.route('/sales', methods=['GET', 'POST'])
+def sales():
+    select_sales = Sale.query.all()
+    return render_template('sale.html', sales=select_sales)
+
+
+@app.route('/one_sale/<int:sale_id>', methods=['GET', 'POST'])
+def one_sale(sale_id):
+    pass
 
 
 @app.route('/aboutus', methods=['GET', 'POST'])

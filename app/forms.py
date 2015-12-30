@@ -2,7 +2,7 @@
 from flask.ext.wtf import Form
 from flask.ext.wtf.file import FileField
 from wtforms import StringField, BooleanField, SelectField, IntegerField, PasswordField, SubmitField, TextAreaField
-from wtforms.fields.html5 import EmailField
+from wtforms.fields.html5 import EmailField, DateField
 from wtforms.validators import Required
 from wtforms import validators
 from models import User
@@ -79,6 +79,7 @@ class RegistrationForm(Form):
 
 class SaleAddForm(Form):
     sale_name = StringField(u"Название Акции", validators=[validators.InputRequired(u"Введите Название")])
+    end_sale = DateField(u"Дата окончания", format='%Y-%m-%d')
     price_if_have = Integers(u"Цена если требуется", validators=[validators.Optional()])
     about_sale = TextAreaField(u"Информация об акции")
     show_url = BooleanField(u"Покаывать кнопку или нет")
