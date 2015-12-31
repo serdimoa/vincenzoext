@@ -81,7 +81,7 @@
                         <div>
                             {{ sale.about_sale|truncate(70, True) }}
                         </div>
-                        <a href="{{ url_for("one_sale", sale_id=sale.id) }}">Читать полностью</a>
+                        <a class="read_full" href="{{ url_for("one_sale", sale_id=sale.id) }}">Читать полностью</a>
                     </div>
                 {% endfor %}
 
