@@ -371,14 +371,7 @@ $(".one--buy").click(function () {
 
 jQuery(document).ready(function () {
     if ($('.index_page').length) {
-        var sequenceElement = document.getElementById("sequence"),
-            options = {
-                animateCanvas: !1,
-                phaseThreshold: !1,
-                preloader: !0,
-                reverseWhenNavigatingBackwards: !0
-            },
-            mySequence = sequence(sequenceElement, options);
+
 
 
         var tableOrder = $('#tableOrder');
@@ -621,6 +614,8 @@ $(function () {
                 delivery_func();
                 initIfhaveSession();
                 classie.remove(grid, 'grid--loading');
+                jQuery(".seq-title h2").fitText();
+
                 $(".preloader").hide();
 
 

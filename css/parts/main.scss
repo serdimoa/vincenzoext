@@ -815,8 +815,8 @@ html,
         font-size: .5em;
         display: block;
         float: left;
-        position: absolute;
-        margin-top: -53px;
+        position: relative;
+        margin-top: -90px;
         width: 100%;
         background: rgba(0, 0, 0, .7);
         height: 90px;
@@ -901,8 +901,8 @@ html,
 .seq.seq-active .seq-nav {
     /* Show navigation and pagination if JS is enabled */
     display: block;
-    position: absolute;
-    left: 180px;
+    position: relative;
+    left: 0;
 }
 
 .seq .seq-nav {
@@ -920,7 +920,7 @@ html,
 
 .seq .seq-next,
 .seq .seq-prev {
-    position: absolute;
+    position: relative;
     top: 50%;
     margin-top: -53px;
     width: 60px;
@@ -941,7 +941,6 @@ html,
 }
 
 .seq .seq-next {
-    right: 1em;
 }
 
 .seq .seq-next:focus,
@@ -953,7 +952,6 @@ html,
 }
 
 .seq .seq-prev {
-    left: 49px;
 }
 
 .seq .seq-prev:focus,
@@ -970,7 +968,6 @@ html,
 
 .seq .seq-title {
     bottom: 5%;
-    margin: 0 2.5%;
     width: 95%;
 }
 
@@ -1026,6 +1023,7 @@ html,
     color: white;
     background: black;
     float: left;
+    margin-bottom: 25px;
 }
 
 .seq .seq-title h3 {
@@ -1045,7 +1043,7 @@ html,
 @include mq(lg) {
     .seq .seq-title h2,
     .seq .seq-title h3 {
-        font-size: 10em;
+        font-size: 200px;
     }
 }
 
@@ -1123,7 +1121,6 @@ html,
         position: relative;
         display: inline-block;
         vertical-align: middle;
-        margin: 0 5% 0 2.5%;
     }
     .seq .seq-model {
         top: 0;
@@ -1142,12 +1139,12 @@ html,
     }
     .seq .seq-title {
         bottom: 0;
-        width: 40%;
-        margin-right: 12.5%;
+        width: 50%;
     }
     .seq .seq-title h2,
     .seq .seq-title h3 {
         display: inline-block;
+        padding: 0em 2.6em;
         width: auto;
         margin: 0;
         opacity: 0;
@@ -1158,21 +1155,19 @@ html,
         transition-properties: transform, opacity;
     }
     .seq .seq-title h2 {
-        padding: 0 .6em;
         font-family: 'NP', sans-serif;
         color: white;
         line-height: 0.9;
         background: none;
+        margin-bottom: 25px;
         -webkit-transform: translate3d(-120px, 0, 0);
         -ms-transform: translate3d(-120px, 0, 0);
         transform: translate3d(-120px, 0, 0);
     }
     .seq .seq-title h3 {
-        padding: 0 .6em;
         display: block;
         float: left;
         font-size: 5em;
-        margin-left: 1em;
         font-family: 'NP', sans-serif;
         -webkit-transform: translate3d(120px, 0, 0);
         -ms-transform: translate3d(120px, 0, 0);
@@ -1248,12 +1243,10 @@ html,
 
 @media only screen and (min-width: 860px) {
     .seq .seq-model {
-        margin-left: 10%;
         width: 27.5%;
     }
     .seq .seq-title {
         width: 42.5%;
-        margin-right: 10%;
     }
     .seq .seq-title br {
         display: inline-block;
@@ -1271,8 +1264,7 @@ h2 small span{
         float: right;
     }
     .seq .seq-title {
-        width: 40%;
-        margin-right: 5%;
+        width: 50%;
     }
     .seq .seq-in .seq-model img {
         -webkit-transform: translate3d(180px, 0, 0);
@@ -2398,4 +2390,13 @@ div.fancy-select ul.options {
 
 .one-sale {
     border-bottom: 1px solid #eee;
+    h2{
+        a{
+            color: #333;
+            &:hover{
+                text-decoration: none;
+                color: #337ab7;
+            }
+        }
+    }
 }
