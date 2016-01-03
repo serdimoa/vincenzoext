@@ -1253,14 +1253,15 @@ html,
     }
 }
 
-h2 small span{
-    color:#FF5252;
+h2 small span {
+    color: #FF5252;
 }
+
 @media only screen and (min-width: 1020px) {
     .seq .seq-model {
         margin-left: 0;
         width: 45%;
-        margin-top:8em;
+        margin-top: 8em;
         float: right;
     }
     .seq .seq-title {
@@ -1821,7 +1822,7 @@ h2 small span{
     color: #333;
     padding-right: 2.5em;
     h2 {
-        font-size: 330px;
+        font-size: 2vw;
         font-family: NP;
         margin-top: 40px;
     }
@@ -2390,13 +2391,75 @@ div.fancy-select ul.options {
 
 .one-sale {
     border-bottom: 1px solid #eee;
-    h2{
-        a{
+    h2 {
+        a {
             color: #333;
-            &:hover{
+            &:hover {
                 text-decoration: none;
                 color: #337ab7;
             }
+        }
+    }
+}
+
+.bgs {
+    background: #D9D9D9 url("img/bg.jpg") no-repeat;
+    background-position: 0% 100%;
+    background-size: cover;
+    height: 600px;
+}
+
+.sliders {
+    background: none;
+    overflow: auto;
+    position: relative;
+    -ms-touch-action: pan-y;
+    touch-action: pan-y;
+    .slider-item {
+        margin-top: 230px;
+        .about-sale-img h2 {
+            font-family: NP, sans-serif;
+            font-size: 36px; /* Some tweener fallback that doesn't look awful */
+            font-size: 5.4vw;
+            color: #ffffff;
+        }
+
+        .seq-next,
+        .seq-full,
+        .seq-prev {
+            position: relative;
+            top: 50%;
+            width: 60px;
+            background: rgba(0, 0, 0, 0.7);
+            height: 90px;
+            border: none;
+            font-size: 60px;
+            font-size: 4.6vw;
+            text-align: center;
+            display: inline-block;
+            cursor: pointer;
+            pointer-events: auto;
+            -webkit-transition-duration: .2s;
+            transition-duration: .2s;
+            -webkit-transform: translate3d(0, 0, 0);
+            -ms-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+            /* Image replacement */
+            border: 0;
+            text-shadow: none;
+            color: #fff;
+        }
+        .seq-full{
+            width: auto;
+            padding: 0 25px;
+        }
+
+        .seq-next:focus,
+        .seq-next:hover {
+            -webkit-transform: translate3d(4px, 0, 0);
+            -ms-transform: translate3d(4px, 0, 0);
+            transform: translate3d(4px, 0, 0);
+            outline: none;
         }
     }
 }

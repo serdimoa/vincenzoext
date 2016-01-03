@@ -311,7 +311,8 @@ function removeA(arr) {
         L = a.length,
         ax;
     while (L > 1 && arr.length) {
-        what = a[--L];
+        what = a[--L];$('.slider').anyslider();
+
         while ((ax = arr.indexOf(what)) !== -1) {
             arr.splice(ax, 1);
         }
@@ -454,7 +455,6 @@ $('.slider__item').click(function (event) {
 
         }
     });
-    jQuery("#one_name").fitText();
 
 
 });
@@ -614,7 +614,10 @@ $(function () {
                 delivery_func();
                 initIfhaveSession();
                 classie.remove(grid, 'grid--loading');
-                jQuery(".seq-title h2").fitText();
+                $('.sliders').anyslider({
+                    showBullets: true,
+                    showControls: true
+                });
 
                 $(".preloader").hide();
 

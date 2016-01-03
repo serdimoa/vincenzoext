@@ -6,7 +6,7 @@
 //= ../bower_components/waypoints/lib/noframework.waypoints.js
 //= ../bower_components/jquery.cookie/jquery.cookie.js
 //= ../bower_components/hammerjs/hammer.js
-//= ../bower_components/sequencejs/src/sequence.js
+//= ../bower_components/anyslider/dist/jquery.anyslider.js
 //= ../bower_components/flickity/dist/flickity.pkgd.js
 //= ../bower_components/isotope/dist/isotope.pkgd.js
 //= ../bower_components/slicknav/dist/jquery.slicknav.js
