@@ -318,7 +318,8 @@ def sales():
 
 @app.route('/one_sale/<int:sale_id>', methods=['GET', 'POST'])
 def one_sale(sale_id):
-    pass
+    one_sales = db.session.query(Sale).filter_by(id=sale_id).first()
+    return render_template('one_sale.html', sale=one_sales)
 
 
 @app.route('/aboutus', methods=['GET', 'POST'])

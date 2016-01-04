@@ -8,11 +8,11 @@ if ($('.index_page').length) {
 }
 var delivery = $.cookie('delivery');
 
-if($("#inputPhone").length){
-    $("#inputPhone").mask("+79999999999",{autoclear: false});
+if ($("#inputPhone").length) {
+    $("#inputPhone").mask("+79999999999", {autoclear: false});
 }
-if($("#phone").length){
-    $("#phone").mask("+79999999999",{autoclear: false})
+if ($("#phone").length) {
+    $("#phone").mask("+79999999999", {autoclear: false})
 }
 var summ;
 var dataTable = $('#tableOrder').DataTable({
@@ -22,18 +22,18 @@ var dataTable = $('#tableOrder').DataTable({
 });
 
 function delivery_func() {
-        if (delivery === undefined) {
-            $("#select_delivery").nifty("show");
+    if (delivery === undefined) {
+        $("#select_delivery").nifty("show");
 
-        } else {
-            $("input:radio[name=group2][value='" + $.cookie('delivery') + "']").prop({"checked": true});
-        }
-
+    } else {
+        $("input:radio[name=group2][value='" + $.cookie('delivery') + "']").prop({"checked": true});
     }
+
+}
 
 function initIfhaveSession() {
     var cartValue = sessionStorage.getItem("cart");
-    if(cartValue!=null) {
+    if (cartValue != null) {
         var cartObj = JSON.parse(cartValue);
         if (cartObj[0].row[0] != "Корзина пуста") {
             cartObj.forEach(function (entry) {
@@ -80,17 +80,17 @@ function initIfhaveSession() {
 }
 
 
-if ($('.userIsAuch .full_price, .borderLeft .full_price').length){
+if ($('.userIsAuch .full_price, .borderLeft .full_price').length) {
     var full_price = sessionStorage.getItem("cart_price");
     console.log(full_price);
     $('.full_price').text(full_price);
     initIfhaveSession();
     delivery_func();
     $("#adressAuch").select2({
-            maximumSelectionLength: 1,
-            tags: true,
-            data: data
-        });
+        maximumSelectionLength: 1,
+        tags: true,
+        data: data
+    });
 }
 $('.userIsAuch h2, .borderLeft  h2 ').click(function () {
     $('.checkOut').addClass('isUp');
@@ -266,11 +266,11 @@ function calculateSumm() {
 
         }
     }
-    if ($('.userIsAuch .full_price').length){
+    if ($('.userIsAuch .full_price').length) {
         $('.full_price').text(summ);
     }
 
-    if($('.borderLeft .full_price').length){
+    if ($('.borderLeft .full_price').length) {
         $('.full_price').text(summ);
     }
 
@@ -311,7 +311,8 @@ function removeA(arr) {
         L = a.length,
         ax;
     while (L > 1 && arr.length) {
-        what = a[--L];$('.slider').anyslider();
+        what = a[--L];
+        $('.slider').anyslider();
 
         while ((ax = arr.indexOf(what)) !== -1) {
             arr.splice(ax, 1);
@@ -326,8 +327,6 @@ $(document).keyup(function (e) {
 
     }
 });
-
-
 
 
 $(".one--buy").click(function () {
@@ -372,7 +371,6 @@ $(".one--buy").click(function () {
 
 jQuery(document).ready(function () {
     if ($('.index_page').length) {
-
 
 
         var tableOrder = $('#tableOrder');
@@ -432,18 +430,18 @@ $('.slider__item').click(function (event) {
             });
 
             arrays_one = (e.result.components).split(",");
-            if(arrays_one[0]=="") {
+            if (arrays_one[0] == "") {
                 $(".aboutProduct h3").hide();
             }
-            else{
+            else {
                 $(".aboutProduct h3").show();
             }
-                $("#one_array").empty();
-                $.each(arrays_one, function (i) {
-                    var li = $('<li/>')
-                        .text(arrays_one[i])
-                        .appendTo($("#one_array"));
-                });
+            $("#one_array").empty();
+            $.each(arrays_one, function (i) {
+                var li = $('<li/>')
+                    .text(arrays_one[i])
+                    .appendTo($("#one_array"));
+            });
 
             $("#one_weight").text(e.result.weight);
             $("#one_name").text(e.result.name);
@@ -614,9 +612,21 @@ $(function () {
                 delivery_func();
                 initIfhaveSession();
                 classie.remove(grid, 'grid--loading');
-                $('.sliders').anyslider({
-                    showBullets: true,
-                    showControls: true
+
+                var slider = $('.sliders').anyslider({
+                    interval: 10000,
+                    showBullets: false,
+                    showControls: false
+                });
+                var anyslider = slider.data('anyslider');
+
+                $(".seq-prev").click(function (e) {
+                    anyslider.prev();
+
+                });
+
+                $(".seq-next").click(function (e) {
+                    anyslider.next();
                 });
 
                 $(".preloader").hide();
@@ -660,7 +670,6 @@ $(function () {
         });
 
     }
-
 
 
     function initEvents() {

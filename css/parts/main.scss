@@ -2423,7 +2423,9 @@ div.fancy-select ul.options {
             font-size: 4.4vw;
             color: #ffffff;
         }
-
+        .noImg {
+            text-align: center;
+        }
         .seq-next,
         .seq-full,
         .seq-prev {
@@ -2454,6 +2456,11 @@ div.fancy-select ul.options {
             padding: 0 25px;
         }
 
+        .center-nav-noImg {
+            width: 100%;
+            text-align: center;
+        }
+
         .seq-next:focus,
         .seq-next:hover {
             -webkit-transform: translate3d(4px, 0, 0);
@@ -2472,6 +2479,9 @@ div.fancy-select ul.options {
 
 }
 
+.page-header h1{
+    font-family: NP, sans-serif;
+}
 @include mq(lg) {
     .bgs {
         height: 700px;;
