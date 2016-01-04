@@ -191,7 +191,7 @@ def sale_edit(sale_id):
             item.end_sale = form.end_sale.data
             item.to_slider = form.to_slider.data
             item.img = form.sale_name.data + filename
-            form.img.data.save(basedir + "/static/upload/" + form.about_sale.data + filename)
+            form.img.data.save(basedir + "/static/upload/" + form.sale_name.data + filename)
             db.session.commit()
         else:
             item = Sale.query.get(sale_id)

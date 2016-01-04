@@ -2420,7 +2420,7 @@ div.fancy-select ul.options {
         .about-sale-img h2 {
             font-family: NP, sans-serif;
             font-size: 36px; /* Some tweener fallback that doesn't look awful */
-            font-size: 5.4vw;
+            font-size: 4.4vw;
             color: #ffffff;
         }
 
@@ -2431,10 +2431,10 @@ div.fancy-select ul.options {
             top: 50%;
             width: 60px;
             background: rgba(0, 0, 0, 0.7);
-            height: 90px;
+            height: auto;
             border: none;
             font-size: 60px;
-            font-size: 4.6vw;
+            font-size: 3.6vw;
             text-align: center;
             display: inline-block;
             cursor: pointer;
@@ -2449,7 +2449,7 @@ div.fancy-select ul.options {
             text-shadow: none;
             color: #fff;
         }
-        .seq-full{
+        .seq-full {
             width: auto;
             padding: 0 25px;
         }
@@ -2461,5 +2461,19 @@ div.fancy-select ul.options {
             transform: translate3d(4px, 0, 0);
             outline: none;
         }
+    }
+
+    @include mq(md) {
+        .seq .seq-title h2,
+        .seq .seq-title h3 {
+            font-size: 8em;
+        }
+    }
+
+}
+
+@include mq(lg) {
+    .bgs {
+        height: 700px;;
     }
 }
