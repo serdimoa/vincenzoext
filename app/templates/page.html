@@ -1,4 +1,6 @@
-{% extends "base.html" %} {% block head %}
+{% extends "base.html" %}
+{% load thumbnail %}
+{% block head %}
     <link rel="stylesheet" type="text/css"
           href="{{ url_for('static', filename='fonts/pixelfabric-clothes/style.css') }}"/>
     <link rel="stylesheet" type="text/css"
@@ -22,7 +24,7 @@
                                      alt=""></a>
                 </li>
                 <li><a href="{{ url_for('index') }}">Главная</a></li>
-                <li><a href="#">Акции</a></li>
+                <li><a href="{{ url_for('sales') }}">Акции</a></li>
                 <li><a class="showCart" href="#">Корзина</a></li>
                 <li><a href="#!">Мой Vincenzo</a>
 

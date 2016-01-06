@@ -494,7 +494,7 @@ $('.cart, .showCart').click(function (event) {
         iosOverlay({
             text: "Корзина пуста",
             duration: 2e3,
-            icon: "static/img/cross.png"
+            icon: "/static/img/cross.png"
         });
     } else {
         $('.full span').text(calculateSumm());
@@ -608,9 +608,7 @@ $(function () {
                 // initFlickity();
                 initIsotope();
                 initEvents();
-
                 delivery_func();
-                initIfhaveSession();
                 classie.remove(grid, 'grid--loading');
 
                 var slider = $('.sliders').anyslider({
@@ -634,6 +632,8 @@ $(function () {
 
             });
         }
+        initIfhaveSession();
+
 
     }
 
