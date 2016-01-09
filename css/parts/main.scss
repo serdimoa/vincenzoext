@@ -2480,11 +2480,28 @@ div.fancy-select ul.options {
 
 }
 
-.page-header h1{
+.page-header h1 {
     font-family: NP, sans-serif;
 }
+
 @include mq(lg) {
     .bgs {
-        height: 700px;;
+        height: 700px;
+    }
+}
+
+.nav-tabs.nav-justified>li>a{
+    color:#333;
+    &:hover{
+        color: #FF5252;
+    }
+}
+.badge{
+    background-color: transparent;
+    a{
+        color: #333;
+        &:hover{
+            color: #FF5252;
+        }
     }
 }

@@ -61,17 +61,19 @@ class Items(db.Model):
     weight = db.Column(db.String(50))
     price = db.Column(db.String(50), default=0)
     img = db.Column(db.String(50))
+    thumbnail = db.Column(db.String(255))
 
     def __unicode__(self):
         return self.item_name
 
-    def __init__(self, item_name, item_component, category_id, weight, price, img):
+    def __init__(self, item_name, item_component, category_id, weight, price, img, thumbnail):
         self.item_name = item_name
         self.item_component = item_component
         self.category_id = category_id
         self.weight = weight
         self.price = price
         self.img = img
+        self.thumbnail = thumbnail
 
     def __repr__(self):
         return '<Item %r>' % self.item_name

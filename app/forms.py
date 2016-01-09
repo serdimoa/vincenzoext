@@ -60,11 +60,18 @@ class ItemForm(Form):
     weight = StringField(u"Вес/Объем")
     price = IntegerField(u"Цена")
     img = FileField(u"Изображение")
+    thumbnail = FileField(u"Миниатюра")
 
 
 class UserEdit(Form):
-    username = StringField(u"Ваш email")
-    phone = PhoneNumber(u"Ваш телефон", country_code='RU', display_format='e164', validators=[validators.Optional()])
+    username = StringField(u"Ваше имя")
+    phone = PhoneNumber(u"Ваш телефон", country_code='RU', display_format='e164',
+                        validators=[validators.Optional(), Unique(User, User.phone, message=u"Такой телефон существует")])
+
+
+class ChangeUserPassword(Form):
+    old_password = PasswordField(u"Ваш старый пароль")
+    new_password = StringField(u"Ваш новый пароль")
 
 
 class RegistrationForm(Form):

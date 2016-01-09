@@ -1,6 +1,7 @@
 {% extends "panel.html" %}
 {% block body %}
-    <a href="{{ url_for("item_add") }}">добавить</a>
+    <h2>Товары <a href="{{ url_for("item_add") }}"><span class="label label-primary">Добавить новый</span></a></h2>
+
     <div class="table-responsive col-md-12 col-lg-12">
         <table id="dts" class="table table-condensed">
             <thead>

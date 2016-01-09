@@ -11,6 +11,9 @@ var delivery = $.cookie('delivery');
 if ($("#inputPhone").length) {
     $("#inputPhone").mask("+79999999999", {autoclear: false});
 }
+if ($("#form-phone").length){
+    $("#form-phone").mask("+79999999999", {autoclear: false});
+}
 if ($("#phone").length) {
     $("#phone").mask("+79999999999", {autoclear: false})
 }
@@ -29,6 +32,10 @@ function delivery_func() {
         $("input:radio[name=group2][value='" + $.cookie('delivery') + "']").prop({"checked": true});
     }
 
+}
+
+if($(".settings, .sale, .aboutus").length){
+    delivery_func();
 }
 
 function initIfhaveSession() {

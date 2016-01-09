@@ -12,7 +12,7 @@ from sqlalchemy import sql, select
 from sqlalchemy_utils.types.locale import babel
 from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
-from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm
+from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm, ChangeUserPassword
 from models import User, Category, Items, Like, AnonymousUser, Sale
 import mandrill
 
@@ -100,12 +100,31 @@ def index():
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
-    form = UserEdit()
-    answer = ""
-    if form.validate_on_submit():
-        return render_template("settings.html", form=form, answer=form.phone.data.e164)
+    if current_user.is_authenticated:
+        form = UserEdit(obj=User.query.filter_by(id=current_user.id).first(), prefix="form")
+        form_password = ChangeUserPassword(prefix="form_password")
+        if form_password.validate_on_submit() and form_password.is_submitted():
+            item = User.query.get(current_user.id)
+            if item.password == form_password.old_password.data:
+                item.password = form_password.new_password.data
+                db.session.commit()
+                flash(u'Изменено', 'errors')
+                return redirect(url_for("settings"))
+            else:
+                flash(u'Неправильный старый пароль', 'errors')
+                return redirect(url_for("settings"))
 
-    return render_template("settings.html", form=form, answer=answer)
+        if form.validate_on_submit() and form.is_submitted():
+            item = User.query.get(current_user.id)
+            item.username = form.username.data
+            item.phone = form.phone.data
+            db.session.commit()
+            flash(u'Изменено', 'errors')
+            return redirect(url_for("settings"))
+
+        return render_template("settings.html", form=form, form_password=form_password)
+    else:
+        return redirect(url_for("index"))
 
 
 @app.route('/panel/category', methods=['GET', 'POST'])
@@ -243,7 +262,7 @@ def like_add():
             like = Like(user_id=current_user.id, items_id=items_id)
             db.session.add(like)
             db.session.commit()
-            return jsonify(result="add")
+            return jsonify(result="adfavorited")
         else:
             Like.query.filter_by(user_id=current_user.id, items_id=items_id).delete()
             db.session.commit()
@@ -333,18 +352,21 @@ def item_add():
     form.category_id.choices = [(c.id, c.category_name) for c in Category.query.all()]
     if request.method == 'POST':
         filename = secure_filename(form.img.data.filename)
+        thumbnail = secure_filename(form.thumbnail.data.filename)
         item_data = Items(
             item_name=form.item_name.data,
             item_component=form.item_component.data,
             category_id=form.category_id.data,
             weight=form.weight.data,
             price=form.price.data,
-            img=form.item_name.data + filename
+            img=form.item_name.data + filename,
+            thumbnail=form.item_name.data + "thumbnail" + thumbnail
 
         )
         db.session.add(item_data)
         db.session.commit()
         form.img.data.save(basedir + "/static/upload/" + form.item_name.data + filename)
+        form.thumbnail.data.save(basedir + "/static/upload/" + form.item_name.data + "thumbnail" + thumbnail)
         flash("Добавлен новый товар", "success")
         return redirect(url_for("items"))
 
@@ -355,11 +377,13 @@ def item_add():
 def item_edit(item_id):
     select_item = Items.query.filter_by(id=item_id).first()
     img = select_item.img
+    thumb = select_item.thumbnail
     form = ItemForm(obj=select_item)
     form.category_id.choices = [(c.id, c.category_name) for c in Category.query.all()]
     if request.method == 'POST':
         filename = secure_filename(form.img.data.filename)
-        if filename:
+        thumbnail = secure_filename(form.thumbnail.data.filename)
+        if filename and thumbnail:  # Есть картика и миниатюра
             item = Items.query.get(item_id)
             item.item_name = form.item_name.data
             item.item_component = form.item_component.data
@@ -367,9 +391,24 @@ def item_edit(item_id):
             item.weight = form.weight.data
             item.price = form.price.data
             item.img = form.item_name.data + filename
+            item.thumbnail = form.item_name.data + "thumbnail" + thumbnail
+            form.img.data.save(basedir + "/static/upload/" + form.item_name.data + filename)
+            form.thumbnail.data.save(basedir + "/static/upload/" + form.item_name.data + "thumbnail" + thumbnail)
+            db.session.commit()
+
+        elif filename and not thumbnail:  # Есть картика, но нет миниатюры
+            item = Items.query.get(item_id)
+            item.item_name = form.item_name.data
+            item.item_component = form.item_component.data
+            item.category_id = form.category_id.data
+            item.weight = form.weight.data
+            item.price = form.price.data
+            item.img = form.item_name.data + filename
+            item.thumbnail = thumb
             form.img.data.save(basedir + "/static/upload/" + form.item_name.data + filename)
             db.session.commit()
-        else:
+
+        elif thumbnail and not filename:  # Есть миниатюра, но нет картинки
             item = Items.query.get(item_id)
             item.item_name = form.item_name.data
             item.item_component = form.item_component.data
@@ -377,6 +416,19 @@ def item_edit(item_id):
             item.weight = form.weight.data
             item.price = form.price.data
             item.img = img
+            form.thumbnail.data.save(basedir + "/static/upload/" + form.item_name.data + "thumbnail" + thumbnail)
+            item.thumbnail = form.item_name.data + "thumbnail" + thumbnail
+            db.session.commit()
+
+        else:  # нет миниатюры и нет картинки
+            item = Items.query.get(item_id)
+            item.item_name = form.item_name.data
+            item.item_component = form.item_component.data
+            item.category_id = form.category_id.data
+            item.weight = form.weight.data
+            item.price = form.price.data
+            item.img = img
+            item.thumbnail = thumb
             db.session.commit()
 
         flash(u"Изменено", "info")

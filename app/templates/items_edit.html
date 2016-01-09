@@ -1,50 +1,11 @@
 {% extends "panel.html" %}
+{% from 'form_gen.html' import render_form_file %}
 {% block body %}
-
-    <form action="" class="col-md-6" method="post" enctype=multipart/form-data>
-
-
-    <div class="form-group">
-        <label for="{{ form.item_name.id }}">{{ form.item_name.label.text }}</label>
-
-    {{ form.item_name(class="form-control", placeholder=form.item_name.label.text) }}
+    <div class="col-md-6">
+        {{ render_form_file(form, action_url='', action_text="Изменить") }}
+        <a href="#" class="btn btn-default" onclick="window.history.back()">Назад</a>
     </div>
 
-    <div class="form-group">
-        <label for="{{ form.item_component.id }}">{{ form.item_component.label.text }}</label>
-
-    {{ form.item_component(class="form-control", placeholder=form.item_component.label.text) }}
-    </div>
-
-    <div class="form-group">
-        <label for="{{ form.category_id.id }}">{{ form.category_id.label.text }}</label>
-
-    {{ form.category_id(class="form-control", placeholder=form.category_id.label.text) }}
-    </div>
-
-    <div class="form-group">
-        <label for="{{ form.price.id }}">{{ form.price.label.text }}</label>
-
-        {{ form.price(class="form-control", placeholder=form.price.label.text) }}
-    </div>
-
-    <div class="form-group">
-    <label for="{{ form.weight.id }}">{{ form.weight.label.text }}</label>
-
-    {{ form.weight(class="form-control", placeholder=form.weight.label.text) }}
-    </div>
-
-
-    <div class="form-group">
-        <label for="{{ form.img.id }}">{{ form.img.label.text }}</label>
-
-    {{ form.img(class="form-control", value=img) }}
-    </div>
-
-        <a class="btn btn-default" href="{{ url_for("items") }}">Назад</a>
-        <input class="btn btn-success" value="Добавить" type="submit">
-
-</form>
     <div class="col-md-6">
         <img src="{{ url_for("static", filename='upload/'+img) }}" class="img-responsive" alt="">
     </div>

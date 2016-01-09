@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load thumbnail %}
 {% block head %}
     <link rel="stylesheet" type="text/css"
           href="{{ url_for('static', filename='fonts/pixelfabric-clothes/style.css') }}"/>
@@ -31,9 +30,7 @@
                     {% if  current_user.is_authenticated %}
                         <ul class="aboutProfile">
                             <li>Привет, {{ current_user.username }}!</li>
-                            <li class="divider"></li>
                             <li><a href="{{ url_for('settings') }}"><i class="fa fa-cog"></i> Настроить</a></li>
-
                             <li><a href="{{ url_for('logout') }}"><i class="fa fa-sign-out"></i> Выход</a></li>
                         </ul>
                     {% endif %}
@@ -182,8 +179,14 @@
             {% endif %}
             ">
                         <div class="slider">
-                            <div data-id-item="{{ item[0].id }}" class="slider__item"><img
-                                    src="{{ url_for('static',filename='upload/'+item[0].img) }}" alt="Dummy"/></div>
+                            <div data-id-item="{{ item[0].id }}" class="slider__item">
+                                {% if item[0].thumbnail %}
+                                    <img src="{{ url_for('static',filename='upload/'+item[0].thumbnail) }}" alt="Dummy"/>
+                                    {% else %}
+                                    <img src="{{ url_for('static',filename='upload/'+item[0].img) }}" alt="Dummy"/>
+
+                                {% endif %}
+                            </div>
                         </div>
                         <div class="meta">
                             <span class="meta__title">{{ item[0].item_name }}</span>
