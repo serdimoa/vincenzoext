@@ -13,7 +13,7 @@ from sqlalchemy_utils.types.locale import babel
 from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
 from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm, ChangeUserPassword
-from models import User, Category, Items, Like, AnonymousUser, Sale
+from models import User, Category, Items, Like, AnonymousUser, Sale, Adress
 import mandrill
 
 lm.anonymous_user = AnonymousUser
@@ -123,6 +123,33 @@ def settings():
             return redirect(url_for("settings"))
 
         return render_template("settings.html", form=form, form_password=form_password)
+    else:
+        return redirect(url_for("index"))
+
+
+@app.route('/address', methods=['GET', 'POST'])
+def address():
+    if current_user.is_authenticated:
+        if request.method == "POST":
+            user_address = Adress.query.filter_by(user_id=current_user.id).first()
+            if user_address is None:
+                address_data = Adress(user_id=current_user.id, address=request.values.get('addresses'))
+                db.session.add(address_data)
+                db.session.commit()
+                return jsonify(result="ok, is None")
+            else:
+                db.session.query(Adress).filter(Adress.user_id == current_user.id).update(
+                    {'address': request.values.get('addresses')})
+                db.session.commit()
+                return jsonify(result="ok")
+
+        elif request.method == 'GET':
+            user_address = Adress.query.filter_by(user_id=current_user.id).all()
+            addr = user_address[0].address
+            return jsonify(result=addr)
+
+        else:
+            return redirect(url_for("index"))
     else:
         return redirect(url_for("index"))
 
@@ -309,7 +336,9 @@ def order():
         if current_user.id is None:
             return render_template("order.html", title="Vincenzo")
         else:
-            return render_template("order.html", title="Vincenzo")
+            user_address = Adress.query.filter_by(user_id=current_user.id).first()
+            addreses = eval(user_address.address)
+            return render_template("order.html", title="Vincenzo", addreses=addreses)
 
 
 @app.route('/get_one_item/<int:item_id>', methods=['GET', 'POST'])

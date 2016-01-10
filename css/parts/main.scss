@@ -511,6 +511,9 @@ a:hover {
             font-size: 1.7em;
             font-family: 'Exo 2', sans-serif;
             text-decoration: none;
+            &:focus {
+                color: #ffffff;
+            }
 
             img {
                 height: 5em;
@@ -2005,6 +2008,7 @@ h2 small span {
             color: #FF5252;
         }
         .userIsAuch {
+
             input[type=number]::-webkit-inner-spin-button,
             input[type=number]::-webkit-outer-spin-button {
                 -webkit-appearance: none;
@@ -2490,18 +2494,36 @@ div.fancy-select ul.options {
     }
 }
 
-.nav-tabs.nav-justified>li>a{
-    color:#333;
-    &:hover{
+.nav-tabs.nav-justified > li > a {
+    color: #333;
+    &:hover {
         color: #FF5252;
     }
 }
-.badge{
+
+.badge {
     background-color: transparent;
-    a{
+    a {
         color: #333;
-        &:hover{
+        &:hover {
             color: #FF5252;
+        }
+    }
+}
+
+.addrList {
+    li {
+        &:hover {
+            background-color: #FF5252;
+            transition: 0.7s;
+            color: #fff;
+            cursor: text;
+        }
+        span {
+            float: right;
+            &:hover {
+                cursor: pointer;
+            }
         }
     }
 }

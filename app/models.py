@@ -105,7 +105,11 @@ class Admin(db.Model):
 class Adress(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    adress = db.Column(db.String(50))
+    address = db.Column(db.Text)
+
+    def __init__(self, user_id, address):
+        self.user_id = user_id
+        self.address = address
 
 
 class Sale(db.Model):

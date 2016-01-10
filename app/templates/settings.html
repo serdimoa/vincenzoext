@@ -38,10 +38,10 @@
                                                                   data-toggle="tab">Общие</a></li>
                         <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Пароль</a>
                         </li>
-                        <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Адреса доставки</a>
+                        <li role="presentation"><a href="#messages" aria-controls="messages" role="tab"
+                                                   data-toggle="tab">Адреса доставки</a>
                         </li>
-                        <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Добавить адрес доставки</a>
-                        </li>
+
 
 
                     </ul>
@@ -56,12 +56,17 @@
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="messages">
                             <br>
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <span class="badge"><a href="#"><i class="fa fa-close"></i></a></span>
-                                    Cras justo odio
-                                </li>
+
+                            <div class="input-group">
+                                <input type="text" id="main-input" class="form-control" placeholder="Напишите адрес сюда">
+                                <span class="input-group-btn">
+                                  <button class="btn btn-success addaddres" id="main-button" type="button">Добавить адрес</button>
+                                </span>
+                            </div>
+                            <br>
+                            <ul class="list-group addrList ">
                             </ul>
+
                         </div>
                     </div>
 
@@ -71,6 +76,30 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="editModal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true" class="fa fa-close"></span></button>
+                    <h4 class="modal-title">Изменить</h4>
+                </div>
+
+                <div class="modal-body">
+                    <input type="text" class="form-control" id="edit-input">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="edit-button" data-dismiss="modal">Изменить
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <div class="checkOut">
         <div class="row">
             <div class="container">

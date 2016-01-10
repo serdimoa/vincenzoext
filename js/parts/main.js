@@ -11,7 +11,7 @@ var delivery = $.cookie('delivery');
 if ($("#inputPhone").length) {
     $("#inputPhone").mask("+79999999999", {autoclear: false});
 }
-if ($("#form-phone").length){
+if ($("#form-phone").length) {
     $("#form-phone").mask("+79999999999", {autoclear: false});
 }
 if ($("#phone").length) {
@@ -34,8 +34,94 @@ function delivery_func() {
 
 }
 
-if($(".settings, .sale, .aboutus").length){
+if ($(".settings, .sale, .aboutus").length) {
     delivery_func();
+}
+
+if ($(".settings").length) {
+    $.getJSON("/address","",
+        function (data) {
+            console.log(JSON.parse(data.result));
+            localStorage["memos"] = JSON.stringify(JSON.parse(data.result));
+        });
+
+    var items = getFromLocal('memos');
+    var index;
+    loadList(items);
+    // if input is empty disable button
+    $('#main-button').prop('disabled', true);
+    $('#main-input').keyup(function () {
+        if ($(this).val().length !== 0) {
+            $('#main-button').prop('disabled', false);
+        } else {
+            $('#main-button').prop('disabled', true);
+        }
+    });
+    // bind input enter with button submit
+    $('#main-input').keypress(function (e) {
+        if (e.which === 13) {
+            if ($('#main-input').val().length !== 0)
+                $('#main-button').click();
+        }
+    });
+    $('#main-button').click(function () {
+        var value = $('#main-input').val();
+        items.push(value);
+        //console.log(items[0]);
+        $('#main-input').val('');
+        loadList(items);
+        storeToLocal('memos', items);
+        // set button to
+        $('button').prop('disabled', true);
+    });
+    // delete one item
+    $('ul.addrList').delegate("span", "click", function (event) {
+        event.stopPropagation();
+        index = $('span').index(this);
+        $('.addrList li').eq(index).remove();
+        items.splice(index, 1);
+        storeToLocal('memos', items);
+
+    });
+
+    // edit panel
+    $('ul.addrList').delegate('li', 'click', function () {
+        index = $('.addrList li').index(this);
+        var content = items[index];
+        $('#edit-input').val(content);
+    });
+
+    $('#edit-button').click(function () {
+        items[index] = $('#edit-input').val();
+        loadList(items);
+        storeToLocal("memos", items);
+    });
+
+    // loadList
+    function loadList(items) {
+        $('.addrList li').remove();
+        if (items.length > 0) {
+            for (var i = 0; i < items.length; i++) {
+                $('ul.addrList').append('<li class= "list-group-item" data-toggle="modal" data-target="#editModal">' + items[i] + '<span class="fa fa-close"></span</li>');
+            }
+        }
+    };
+
+    function storeToLocal(key, items) {
+        var allAddress= JSON.stringify(items);
+        localStorage[key] = allAddress;
+        $.post("/address", { addresses : allAddress} )
+    }
+
+    function getFromLocal(key) {
+
+        if (localStorage[key]){
+            return JSON.parse(localStorage[key]);
+        }
+        else
+            return [];
+    }
+
 }
 
 function initIfhaveSession() {
@@ -44,7 +130,6 @@ function initIfhaveSession() {
         var cartObj = JSON.parse(cartValue);
         if (cartObj[0].row[0] != "Корзина пуста") {
             cartObj.forEach(function (entry) {
-                console.log(entry.row[0]);
                 if (entry.row[1] == null) {
                     dataTable.row.add([
                         entry.row[0],
@@ -87,16 +172,16 @@ function initIfhaveSession() {
 }
 
 
+
 if ($('.userIsAuch .full_price, .borderLeft .full_price').length) {
     var full_price = sessionStorage.getItem("cart_price");
-    console.log(full_price);
     $('.full_price').text(full_price);
     initIfhaveSession();
     delivery_func();
     $("#adressAuch").select2({
-        maximumSelectionLength: 1,
         tags: true,
-        data: data
+        maximumSelectionLength: 1
+        //data: data
     });
 }
 $('.userIsAuch h2, .borderLeft  h2 ').click(function () {
@@ -183,7 +268,6 @@ $('#auch-menu-btn').click(function (event) {
             password: $('#inputPassword').val()
         },
         function (data) {
-            console.log(data.result);
             if (data.result == 1) {
                 swal({
                         title: "Ура!",
@@ -395,16 +479,6 @@ jQuery(document).ready(function () {
 $('#orderNow').click(function (event) {
     window.location.href = "/order";
 });
-var data = [{
-    id: 1,
-    text: 'г.Нижневартовск'
-}, {
-    id: 2,
-    text: 'г.Мегион'
-}, {
-    id: 3,
-    text: 'г.Лангепас'
-}];
 
 $('.slider__item').click(function (event) {
     $(".preloader").show();
@@ -707,8 +781,6 @@ $(function () {
 
 
     function addToCart() {
-
-
         var data_items = jQuery.parseJSON($(this).attr("data-items"));
         if (data_items['item_category'] == "Вторая") { // todo: set name
             dataTable.row.add([
