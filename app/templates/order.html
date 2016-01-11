@@ -8,7 +8,7 @@
     <link href='https://fonts.googleapis.com/css?family=Exo+2:400,100,200,300,500,700,600,800&subset=latin,cyrillic'
           rel='stylesheet' type='text/css'> {% endblock %} {% block navigation %} {% endblock %}
 {% block slider %} {% endblock %} {% block body %}
-    <div class="bg"></div>
+    <div class="bg sale"></div>
 
     <div class="order">
         <div class="container ">
@@ -43,13 +43,21 @@
                                             <div class="col-sm-12">
                                                 <label for="adressAuch" class="col-sm-12  text-left adressAuch">
                                                     Выберите адрес, либо напишите новый</label>
-                                                <select id="adressAuch" multiple="multiple" title="Выберите адрес"
+                                                <select id="adressAuch" title="Выберите адрес"
                                                         style="width: 100%">
                                                     {% for address in addreses %}
                                                         <option>{{ address }}</option>
                                                     {% endfor %}
 
                                                 </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-sm-12">
+
+                                                <label for="text-area-form" class="col-sm-12  text-left adressAuch">
+                                                    Комментарии к заказу</label>
+                                                <textarea id="text-area-form" class="form-control" rows="3"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -102,6 +110,14 @@
                                             <input type="text" class="form-control" id="money" placeholder="">
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                            <div class="col-sm-12">
+
+                                                <label for="text-area-form" class="col-sm-12  text-left adressAuch">
+                                                    Комментарии к заказу</label>
+                                                <textarea id="text-area-form" class="form-control" rows="3"></textarea>
+                                            </div>
+                                        </div>
                                     <div class="form-group">
                                         <div class="col-md-offset-9 col-sm-3">
                                             <button type="submit" id="sendAuchNone" class="btn btn-success">Заказать
@@ -173,7 +189,13 @@
                     <div class="md-body">
                         <p>
                             <input value="delivery_home" name="group2" type="radio" id="delivery_home_order"/>
-                            <label for="delivery_home_order">Доставка на дом(офис)</label>
+                            <label for="delivery_home_order">Доставка по городу</label>
+                        </p>
+
+                        <p>
+                            <input value="delivery_out_home" name="group2" type="radio" id="delivery_out_home_order"/>
+                            <label for="delivery_out_home_order">Доставка за пределы города <span
+                                    class="red">+10%</span></label>
                         </p>
 
                         <p>

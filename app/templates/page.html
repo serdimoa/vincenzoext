@@ -100,9 +100,9 @@
                             <div class="seq-prev"><</div>
                             <div class="seq-next">></div>
                             {% if sale.about_sale != "" %}
-                                    <div class="seq-full">
-                                        <a href="{{ url_for('one_sale',sale_id=sale.id) }}">Подробнее</a>
-                                    </div>
+                                <div class="seq-full">
+                                    <a href="{{ url_for('one_sale',sale_id=sale.id) }}">Подробнее</a>
+                                </div>
                             {% endif %}
 
                         </div>
@@ -181,8 +181,9 @@
                         <div class="slider">
                             <div data-id-item="{{ item[0].id }}" class="slider__item">
                                 {% if item[0].thumbnail %}
-                                    <img src="{{ url_for('static',filename='upload/'+item[0].thumbnail) }}" alt="Dummy"/>
-                                    {% else %}
+                                    <img src="{{ url_for('static',filename='upload/'+item[0].thumbnail) }}"
+                                         alt="Dummy"/>
+                                {% else %}
                                     <img src="{{ url_for('static',filename='upload/'+item[0].img) }}" alt="Dummy"/>
 
                                 {% endif %}
@@ -280,8 +281,15 @@
                     <div class="md-body">
                         <p>
                             <input value="delivery_home" name="group2" type="radio" id="delivery_home_order"/>
-                            <label for="delivery_home_order">Доставка на дом(офис)</label>
+                            <label for="delivery_home_order">Доставка по городу</label>
                         </p>
+
+                        <p>
+                            <input value="delivery_out_home" name="group2" type="radio" id="delivery_out_home_order"/>
+                            <label for="delivery_out_home_order">Доставка за пределы города <span
+                                    class="red">+10%</span></label>
+                        </p>
+
 
                         <p>
                             <input value="no_delivery" name="group2" type="radio" id="no_delivery_order"/>
@@ -321,7 +329,13 @@
             <div class='md-body'>
                 <p>
                     <input value="delivery_home" name="group1" type="radio" id="delivery_home"/>
-                    <label for="delivery_home">Доставка на дом(офис)</label>
+                    <label for="delivery_home">Доставка по городу</label>
+                </p>
+
+                <p>
+                    <input value="delivery_out_home" name="group1" type="radio" id="delivery_out_home_order"/>
+                    <label for="delivery_out_home_order">Доставка за пределы города <span
+                            class="red">+10%</span></label>
                 </p>
 
                 <p>

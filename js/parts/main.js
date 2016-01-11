@@ -125,7 +125,7 @@ if ($(".settings").length) {
 }
 
 function initIfhaveSession() {
-    var cartValue = sessionStorage.getItem("cart");
+    var cartValue = localStorage.getItem("cart");
     if (cartValue != null) {
         var cartObj = JSON.parse(cartValue);
         if (cartObj[0].row[0] != "Корзина пуста") {
@@ -174,13 +174,13 @@ function initIfhaveSession() {
 
 
 if ($('.userIsAuch .full_price, .borderLeft .full_price').length) {
-    var full_price = sessionStorage.getItem("cart_price");
-    $('.full_price').text(full_price);
-    initIfhaveSession();
-    delivery_func();
+//    var full_price = localStorage.getItem("cart_price");
+//    $('.full_price').text(full_price);
+//    initIfhaveSession();
+//    delivery_func();
     $("#adressAuch").select2({
-        tags: true,
-        maximumSelectionLength: 1
+          tags: true
+
         //data: data
     });
 }
@@ -354,9 +354,14 @@ function calculateSumm() {
 
         if ($.cookie('delivery') == "no_delivery") {
             summ = summ - summ * 10 / 100;
-
         }
+
+        if ($.cookie('delivery') == "delivery_out_home") {
+            summ = summ + summ * 10 / 100;
+        }
+
     }
+
     if ($('.userIsAuch .full_price').length) {
         $('.full_price').text(summ);
     }
@@ -365,9 +370,9 @@ function calculateSumm() {
         $('.full_price').text(summ);
     }
 
-    sessionStorage.setItem("cart", JSON.stringify(dataFromTable()));
-    sessionStorage.setItem("cart_price", summ);
-    sessionStorage.setItem("delivery", $.cookie('delivery'));
+    localStorage.setItem("cart", JSON.stringify(dataFromTable()));
+    localStorage.setItem("cart_price", summ);
+    localStorage.setItem("delivery", $.cookie('delivery'));
     return summ;
 
 }
@@ -461,18 +466,15 @@ $(".one--buy").click(function () {
 });
 
 jQuery(document).ready(function () {
-    if ($('.index_page').length) {
-
-
         var tableOrder = $('#tableOrder');
         tableOrder.on('click', '.delete', function (e) {
             dataTable.row('.selected').remove().draw(false);
-            cartItems.innerHTML = Number(cartItems.innerHTML) - 1;
-
+            if ($('.index_page').length) {
+                cartItems.innerHTML = Number(cartItems.innerHTML) - 1;
+            }
             $('.full span').text(calculateSumm());
 
         });
-    }
 
 }); //ready
 
@@ -542,35 +544,8 @@ $('.closebtn').click(function (event) {
 
 });
 
-$('.cart, .showCart').click(function (event) {
-    //dataTable.clear().draw();
-    //$.ajax({
-    //    type: 'POST',
-    //// Provide correct Content-Type, so that Flask will know how to process it.
-    //    contentType: 'application/json',
-    //// Encode your data as JSON.
-    //    data: JSON.stringify($.parseJSON($.cookie('order')).values),
-    //// This is the type of data you're expecting back from the server.
-    //    dataType: 'json',
-    //    url: '/get_order',
-    //    success: function (e) {
-    //        summ=0;
-    //        //for (var item_resp in e.response){
-    //        //    dataTable.row.add([
-    //        //        "<h3>"+ e.response[item_resp].item_name+"</h3><small>"+e.response[item_resp].item_component+"</small>",
-    //        //        "<input type='number' value='1' data-price='"+e.response[item_resp].price+"' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
-    //        //        "<span class='cena'>"+e.response[item_resp].price+" <i class='fa fa-rub'></i></span>",
-    //        //        "<a href='#0' id='"+e.response[item_resp].id+"' class='delete'><i class='fa fa-times'></i></a>"]
-    //        //    ).draw( false );
-    //        //        summ += parseInt(e.response[item_resp].price);
-    //        //        $(".full span").text(summ);
-    //
-    //
-    //        $(".checkOut input[type=number]").change(function () {
-    //            $(".full span").text(calculateSumm())
-    //        });
-    //    }
-    //});
+$('.cart, .showCart, .userIsAuch h2,.borderLeft h2').click(function (event) {
+
     if (calculateSumm() == 0) {
         iosOverlay({
             text: "Корзина пуста",
