@@ -181,7 +181,7 @@
                         <div class="slider">
                             <div data-id-item="{{ item[0].id }}" class="slider__item">
                                 {% if item[0].thumbnail %}
-                                    <img src="{{ url_for('static',filename='upload/'+item[0].thumbnail) }}"
+                                    <img data-original ="{{ url_for('static',filename='upload/'+item[0].thumbnail) }}"
                                          alt="Dummy"/>
                                 {% else %}
                                     <img src="{{ url_for('static',filename='upload/'+item[0].img) }}" alt="Dummy"/>
