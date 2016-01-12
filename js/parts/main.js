@@ -670,12 +670,12 @@ $(function () {
 
             iso.on('layoutComplete', function () {
                 loadVisible($imgs, 'lazylazy');
-                initEvents();
+                initIsotope();
             });
 
             $win.on('scroll', function () {
                 loadVisible($imgs, 'lazylazy');
-                initEvents();
+                initIsotope();
             });
 
             $imgs.lazyload({
@@ -683,7 +683,6 @@ $(function () {
                 failure_limit: Math.max($imgs.length - 1, 0),
                 event: 'lazylazy'
             });
-                barWidth();
                 // initFlickity();
 
                 initEvents();
@@ -716,8 +715,7 @@ $(function () {
     }
 
 
-    function barWidth() {
-    }
+
 
     function initFlickity() {
         sliders.forEach(function (slider) {
