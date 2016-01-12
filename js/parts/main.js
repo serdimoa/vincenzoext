@@ -670,14 +670,12 @@ $(function () {
 
             iso.on('layoutComplete', function () {
                 loadVisible($imgs, 'lazylazy');
-                recalcFlickities();
-                iso.layout();
+                initEvents();
             });
 
             $win.on('scroll', function () {
                 loadVisible($imgs, 'lazylazy');
-                recalcFlickities();
-                iso.layout();
+                initEvents();
             });
 
             $imgs.lazyload({
