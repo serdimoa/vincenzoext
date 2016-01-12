@@ -525,7 +525,7 @@ $('.slider__item').click(function (event) {
                     .text(arrays_one[i])
                     .appendTo($("#one_array"));
             });
-
+            $("#one_price").html(e.result.price+'<i class="fa fa-rub"></i>');
             $("#one_weight").text(e.result.weight);
             $("#one_name").text(e.result.name);
             $(".preloader").hide();
@@ -654,15 +654,36 @@ $(function () {
             cartItems = cart.querySelector('.cart__count');
     }
 
+    function loadVisible($els, trigger) {
+                $els.filter(function () {
+                    var rect = this.getBoundingClientRect();
+                    return rect.top >= 0 && rect.top <= window.innerHeight;
+                }).trigger(trigger);
+            }
 
     function init() {
         // preload images
         if ($('.index_page').length) {
+            initIsotope();
+            var $win = $(window),
+            $imgs = $(".grid__item .slider .slider__item img");
 
-            imagesLoaded(grid, function () {
+            iso.on('layoutComplete', function () {
+                loadVisible($imgs, 'lazylazy');
+            });
+
+            $win.on('scroll', function () {
+                loadVisible($imgs, 'lazylazy');
+            });
+
+            $imgs.lazyload({
+                effect: "fadeIn",
+                failure_limit: Math.max($imgs.length - 1, 0),
+                event: 'lazylazy'
+            });
                 barWidth();
                 // initFlickity();
-                initIsotope();
+
                 initEvents();
                 delivery_func();
                 classie.remove(grid, 'grid--loading');
@@ -686,7 +707,6 @@ $(function () {
                 $(".preloader").hide();
 
 
-            });
         }
         initIfhaveSession();
 
