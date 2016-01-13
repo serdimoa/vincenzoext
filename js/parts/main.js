@@ -655,13 +655,7 @@ $(function () {
             cartItems = cart.querySelector('.cart__count');
     }
 
-    function loadVisible($els, trigger) {
-                $els.filter(function () {
-                    var rect = this.getBoundingClientRect();
-                    return rect.top >= 0 && rect.top <= window.innerHeight;
-                }).trigger(trigger);
 
-            }
 
     function init() {
         // preload images
@@ -669,14 +663,7 @@ $(function () {
             initIsotope();
             initEvents();
 
-            var $win = $(window),
-            $imgs = $(".grid__item .slider .slider__item img");
-
-            iso.on('layoutComplete', function () {
-                loadVisible($imgs, 'lazylazy');
-
-            });
-
+            var $win = $(window);
             //$win.on('scroll', function () {
             //    loadVisible($imgs, 'lazylazy');
             //            iso.arrange()
@@ -748,7 +735,7 @@ $(function () {
                 // use outer width of grid-sizer for columnWidth
                 columnWidth: '.grid__sizer'
             },
-            transitionDuration: '0.6s'
+            transitionDuration: '0'
         });
 
     }
