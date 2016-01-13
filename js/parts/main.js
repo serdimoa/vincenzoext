@@ -684,6 +684,9 @@ $(function () {
             //});
             var bLazy = new Blazy({
                 offset: 100,
+                success:function(){
+                    iso.arrange();
+                }
             });
 
 
