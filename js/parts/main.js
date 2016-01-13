@@ -686,11 +686,7 @@ $(function () {
             var bLazy = new Blazy({
             });
 
-            $imgs.lazyload({
-                effectspeed: 0,
-                failure_limit: Math.max($imgs.length - 1, 0),
-                event: 'lazylazy'
-            });
+
                 // initFlickity();
 
                 delivery_func();
