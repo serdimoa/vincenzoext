@@ -6,7 +6,7 @@ if ($('.index_page').length) {
 
     var cartItems = cart.querySelector('.cart__count');
 }
-var delivery = $.cookie('delivery');
+var delivery = sessionStorage.getItem('delivery');
 
 if ($("#inputPhone").length) {
     $("#inputPhone").mask("+79999999999", {autoclear: false});
@@ -29,7 +29,7 @@ function delivery_func() {
         $("#select_delivery").nifty("show");
 
     } else {
-        $("input:radio[name=group2][value='" + $.cookie('delivery') + "']").prop({"checked": true});
+        $("input:radio[name=group2][value='" + sessionStorage.getItem('delivery') + "']").prop({"checked": true});
     }
 
 }
@@ -293,19 +293,16 @@ $('#auch-menu-btn').click(function (event) {
 });
 
 $('input:radio[name=group2]').change(function () {
-    $.cookie('delivery', this.value, {
-        expires: 7
-    });
+    sessionStorage.setItem('delivery', this.value);
     $('.full span').text(calculateSumm());
 });
 
 $('input:radio[name=group1]').change(function () {
-    $.cookie('delivery', this.value, {
-        expires: 7
-    });
+    sessionStorage.setItem('delivery', this.value);
+
 
     $("#select_delivery").nifty("hide");
-    $("input:radio[name=group2][value='" + $.cookie('delivery') + "']").prop({"checked": true});
+    $("input:radio[name=group2][value='" + sessionStorage.getItem('delivery') + "']").prop({"checked": true});
 
     $('.full span').text(calculateSumm());
 });
@@ -352,11 +349,11 @@ function calculateSumm() {
     });
     if (summ != 0) {
 
-        if ($.cookie('delivery') == "no_delivery") {
+        if ( sessionStorage.getItem('delivery') == "no_delivery") {
             summ = summ - summ * 10 / 100;
         }
 
-        if ($.cookie('delivery') == "delivery_out_home") {
+        if (sessionStorage.getItem('delivery') == "delivery_out_home") {
             summ = summ + summ * 10 / 100;
         }
 
@@ -372,7 +369,7 @@ function calculateSumm() {
 
     localStorage.setItem("cart", JSON.stringify(dataFromTable()));
     localStorage.setItem("cart_price", summ);
-    localStorage.setItem("delivery", $.cookie('delivery'));
+    sessionStorage.setItem("delivery", $.cookie('delivery'));
     return summ;
 
 }
