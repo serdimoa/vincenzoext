@@ -682,7 +682,6 @@ $(function () {
             });
 
             $imgs.lazyload({
-                effect: "fadeIn",
                 failure_limit: Math.max($imgs.length - 1, 0),
                 event: 'lazylazy'
             });
