@@ -20,4 +20,5 @@
 //= ../bower_components/jquery.maskedinput/dist/jquery.maskedinput.js
 
 //= parts/iosOverlay.js
+//= parts/blazy.js
 //= parts/main.js
