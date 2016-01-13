@@ -735,7 +735,7 @@ $(function () {
                 // use outer width of grid-sizer for columnWidth
                 columnWidth: '.grid__sizer'
             },
-            transitionDuration: '0.2s'
+            transitionDuration: '0.5s'
         });
 
     }
