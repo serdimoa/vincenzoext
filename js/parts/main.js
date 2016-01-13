@@ -664,16 +664,13 @@ $(function () {
             initEvents();
 
             var $win = $(window);
-            $win.on('scroll', function () {
-                iso.layout();
-            });
-            iso.on( 'layoutComplete',
-            function(){
-                iso.layout();
-            });
+
+
             var bLazy = new Blazy({
-                offset: 400,
+                offset: 200,
                 success:function(){
+                    iso.layout();
+
                 }
             });
 
