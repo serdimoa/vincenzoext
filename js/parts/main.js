@@ -674,18 +674,16 @@ $(function () {
 
             iso.on('layoutComplete', function () {
                 loadVisible($imgs, 'lazylazy');
-                        iso.arrange()
 
             });
 
-            $win.on('scroll', function () {
-                loadVisible($imgs, 'lazylazy');
-                        iso.arrange()
-
-            });
+            //$win.on('scroll', function () {
+            //    loadVisible($imgs, 'lazylazy');
+            //            iso.arrange()
+            //
+            //});
             var bLazy = new Blazy({
                 offset: 100,
-                selector: 'img'
             });
 
 
