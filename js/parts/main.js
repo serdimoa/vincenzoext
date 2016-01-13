@@ -660,7 +660,6 @@ $(function () {
                     var rect = this.getBoundingClientRect();
                     return rect.top >= 0 && rect.top <= window.innerHeight;
                 }).trigger(trigger);
-                        iso.arrange()
 
             }
 
@@ -675,11 +674,13 @@ $(function () {
 
             iso.on('layoutComplete', function () {
                 loadVisible($imgs, 'lazylazy');
+                        iso.arrange()
 
             });
 
             $win.on('scroll', function () {
                 loadVisible($imgs, 'lazylazy');
+                        iso.arrange()
 
             });
 
