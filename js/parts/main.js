@@ -483,6 +483,7 @@ $('#orderNow').click(function (event) {
 });
 
 $('.slider__item').click(function (event) {
+    $("#one_img").removeAttr("src");
     $(".preloader").show();
     $('.popUp').addClass('isUp');
     $.ajax({

@@ -1813,6 +1813,7 @@ h2 small span {
 
 .popUp.isUp {
     opacity: 1;
+    z-index: 999;
     top: 0;
     display: block;
     -webkit-transform: translate3d(0, 0, 0);
@@ -1835,7 +1836,7 @@ h2 small span {
         list-style: none;
     }
     .price {
-        font-size: 6em;
+        font-size: 4vw;
         i {
             font-size: 0.5em;
         }
