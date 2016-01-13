@@ -683,6 +683,8 @@ $(function () {
                         iso.arrange()
 
             });
+            var bLazy = new Blazy({
+            });
 
             $imgs.lazyload({
                 effectspeed: 0,

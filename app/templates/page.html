@@ -181,7 +181,7 @@
                         <div class="slider">
                             <div data-id-item="{{ item[0].id }}" class="slider__item">
                                 {% if item[0].thumbnail %}
-                                    <img data-original ="{{ url_for('static',filename='upload/'+item[0].thumbnail) }}"
+                                    <img  src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src ="{{ url_for('static',filename='upload/'+item[0].thumbnail) }}"
                                          alt="Dummy"/>
                                 {% else %}
                                     <img src="{{ url_for('static',filename='upload/'+item[0].img) }}" alt="Dummy"/>
@@ -361,5 +361,5 @@
     <div class='md-overlay'></div>
 {% endblock %} {% block footer %} {% endblock %}
 {% block script %}
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.lazyload/1.9.1/jquery.lazyload.min.js"></script>
+    <script src="https://raw.githubusercontent.com/dinbror/blazy/master/blazy.min.js"></script>
 {% endblock %}
