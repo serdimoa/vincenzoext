@@ -664,15 +664,12 @@ $(function () {
             initEvents();
 
             var $win = $(window);
-            //$win.on('scroll', function () {
-            //    loadVisible($imgs, 'lazylazy');
-            //            iso.arrange()
-            //
-            //});
+            $win.on('scroll', function () {
+                iso.layout();
+            });
             var bLazy = new Blazy({
                 offset: 100,
                 success:function(){
-                    iso.layout()
                 }
             });
 
