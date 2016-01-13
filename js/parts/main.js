@@ -668,6 +668,8 @@ $(function () {
         // preload images
         if ($('.index_page').length) {
             initIsotope();
+            initEvents();
+
             var $win = $(window),
             $imgs = $(".grid__item .slider .slider__item img");
 
@@ -688,7 +690,6 @@ $(function () {
             });
                 // initFlickity();
 
-                initEvents();
                 delivery_func();
                 classie.remove(grid, 'grid--loading');
 
