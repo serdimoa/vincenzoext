@@ -667,8 +667,12 @@ $(function () {
             $win.on('scroll', function () {
                 iso.layout();
             });
+            iso.on( 'layoutComplete',
+            function(){
+                iso.layout();
+            });
             var bLazy = new Blazy({
-                offset: 100,
+                offset: 400,
                 success:function(){
                 }
             });
