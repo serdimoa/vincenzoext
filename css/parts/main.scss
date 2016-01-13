@@ -1034,7 +1034,12 @@ html,
     display: none;
     clear: left;
 }
-
+h3.swal{
+    font-family: 'NP', sans-serif;
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #FF5252;
+}
 @include mq(md) {
     .seq .seq-title h2,
     .seq .seq-title h3 {
@@ -2077,86 +2082,42 @@ h2 small span {
     .red {
         color: #FF7474;
     }
-    [type="radio"]:not(:checked),
-    [type="radio"]:checked {
-        position: absolute;
-        left: -9999px;
-        visibility: hidden;
+    .cc-selector input{
+        margin:0;padding:0;
+        -webkit-appearance:none;
+        -moz-appearance:none;
+        appearance:none;
     }
-
-    [type="radio"]:not(:checked) + label,
-    [type="radio"]:checked + label {
-        position: relative;
-        padding-left: 35px;
-        cursor: pointer;
-        display: inline-block;
-        height: 25px;
-        line-height: 25px;
-        font-size: 1rem;
-        -webkit-transition: 0.28s ease;
-        -moz-transition: 0.28s ease;
-        -o-transition: 0.28s ease;
-        -ms-transition: 0.28s ease;
-        transition: 0.28s ease;
-        -webkit-user-select: none;
-        /* webkit (safari, chrome) browsers */
-        -moz-user-select: none;
-        /* mozilla browsers */
-        -khtml-user-select: none;
-        /* webkit (konqueror) browsers */
-        -ms-user-select: none;
-        /* IE10+ */
+    .deliveryinhome{background-image:url("/static/delivery/1.png");}
+    .deliveryinhome span{
+        display: block;
     }
-
-    [type="radio"] + label:before,
-    [type="radio"] + label:after {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        margin: 4px;
-        width: 16px;
-        height: 16px;
-        z-index: 0;
-        -webkit-transition: 0.28s ease;
-        -moz-transition: 0.28s ease;
-        -o-transition: 0.28s ease;
-        -ms-transition: 0.28s ease;
-        transition: 0.28s ease;
+    .deliverymyself{background-image:url("/static/delivery/9.png");}
+    .deliveryintime{background-image:url("/static/delivery/5.png");}
+    .deliveryincafe{background-image:url("/static/delivery/4.png");}
+    .cc-selector input:active +.drinkcard-cc{opacity: .9;}
+    .cc-selector input:checked +.drinkcard-cc{
+        -webkit-filter: none;
+           -moz-filter: none;
+                filter: none;
     }
-
-    /* Unchecked styles */
-    [type="radio"]:not(:checked) + label:before {
-        border-radius: 50%;
-        border: 2px solid #5a5a5a;
+    .drinkcard-cc{
+        cursor:pointer;
+        background-size:contain;
+        background-repeat:no-repeat;
+        display:inline-block;
+        width:100px;height:70px;
+        -webkit-transition: all 100ms ease-in;
+           -moz-transition: all 100ms ease-in;
+                transition: all 100ms ease-in;
+        -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
+           -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+                filter: brightness(1.8) grayscale(1) opacity(.7);
     }
-
-    [type="radio"]:not(:checked) + label:after {
-        border-radius: 50%;
-        border: 2px solid #5a5a5a;
-        z-index: -1;
-        -webkit-transform: scale(0);
-        -moz-transform: scale(0);
-        -ms-transform: scale(0);
-        -o-transform: scale(0);
-        transform: scale(0);
-    }
-
-    [type="radio"]:checked + label:before {
-        border-radius: 50%;
-        border: 2px solid transparent;
-    }
-
-    [type="radio"]:checked + label:after {
-        border-radius: 50%;
-        border: 2px solid #388E3C;
-        background-color: #388E3C;
-        z-index: 0;
-        -webkit-transform: scale(1.02);
-        -moz-transform: scale(1.02);
-        -ms-transform: scale(1.02);
-        -o-transform: scale(1.02);
-        transform: scale(1.02);
+    .drinkcard-cc:hover{
+        -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
+           -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+                filter: brightness(1.2) grayscale(.5) opacity(.9);
     }
     .md-close {
         background-color: #FF5252;
@@ -2495,6 +2456,11 @@ div.fancy-select ul.options {
     }
 }
 
+@media all and (min-width: 1600px) {
+    .bgs {
+        height: 900px;
+    }
+}
 .nav-tabs.nav-justified > li > a {
     color: #333;
     &:hover {

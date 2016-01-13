@@ -181,7 +181,9 @@
                         <div class="slider">
                             <div data-id-item="{{ item[0].id }}" class="slider__item">
                                 {% if item[0].thumbnail %}
-                                    <img class="b-lazy"  src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" data-src ="{{ url_for('static',filename='upload/'+item[0].thumbnail) }}"
+                                    <img class="b-lazy"
+                                         src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                                         data-src="{{ url_for('static',filename='upload/'+item[0].thumbnail) }}"
                                          alt="Dummy"/>
                                 {% else %}
                                     <img src="{{ url_for('static',filename='upload/'+item[0].img) }}" alt="Dummy"/>
@@ -204,7 +206,8 @@
                                             "item_category":"{{ item[1].category_name }}"
                                        }' value="{{ item[0].id }}"><i class="fa fa-shopping-cart"></i><span
                                         class="text-hidden">Add to cart</span></button>
-                                <button class="col-md-4 action action--button action--like" value="{{ item[0].id }}"><i
+                                <button class="col-md-4 action action--button action--like haslogin"
+                                        value="{{ item[0].id }}"><i
                                         class="fa
                     {% if likes!=[] %}
                     {% if item[0].id in likes %}
@@ -218,7 +221,7 @@
                             {% endif %}
 
                             {% if not  current_user.is_authenticated %}
-                                <button class="col-md-12 action action--button action--buy items-buy" data-items='{
+                                <button class="col-md-8 action action--button action--buy items-buy" data-items='{
                                             "item_id":"{{ item[0].id }}",
                                             "item_name":"{{ item[0].item_name }}",
                                             "item_price":"{{ item[0].price }}",
@@ -227,6 +230,8 @@
                                             "item_category":"{{ item[1].category_name }}"
                                        }' value="{{ item[0].id }}"><i class="fa fa-shopping-cart"></i><span
                                         class="text-hidden">Add to cart</span></button>
+                                <button class="col-md-4 action action--button action--like like_no_admin"><i
+                                        class="fa fa-heart-o"></i></button>
                             {% endif %}
                         </div>
                     </div>
@@ -327,31 +332,19 @@
                 <h3>Выберите вариант доставки</h3>
             </div>
             <div class='md-body'>
-                <p>
-                    <input value="delivery_home" name="group1" type="radio" id="delivery_home"/>
-                    <label for="delivery_home">Доставка по городу</label>
-                </p>
+                <div class="cc-selector">
+                    <input id="deliveryinhome" type="radio" name="delivery" value="deliveryinhome"/>
+                    <label class="drinkcard-cc deliveryinhome" for="deliveryinhome"><span>hello</span></label>
 
-                <p>
-                    <input value="delivery_out_home" name="group1" type="radio" id="delivery_out_home_order"/>
-                    <label for="delivery_out_home_order">Доставка за пределы города <span
-                            class="red">+10%</span></label>
-                </p>
+                    <input id="deliverymyself" type="radio" name="delivery" value="deliverymyself"/>
+                    <label class="drinkcard-cc deliverymyself" for="deliverymyself"></label>
 
-                <p>
-                    <input value="no_delivery" name="group1" type="radio" id="no_delivery"/>
-                    <label for="no_delivery">Самовывоз <span class="red">-10%</span></label>
-                </p>
+                    <input id="deliveryintime" type="radio" name="delivery" value="deliveryintime"/>
+                    <label class="drinkcard-cc deliveryintime" for="deliveryintime"></label>
 
-                <p>
-                    <input value="in_cafe" name="group1" type="radio" id="in_cafe"/>
-                    <label for="in_cafe">В кафе</label>
-                </p>
-
-                <p>
-                    <input value="delivery_in_time" name="group1" type="radio" id="delivery_in_time"/>
-                    <label for="delivery_in_time">Предзаказ</label>
-                </p>
+                    <input id="deliveryincafe" type="radio" name="delivery" value="deliveryincafe"/>
+                    <label class="drinkcard-cc deliveryincafe" for="deliveryincafe"></label>
+                </div>
 
                 <p>Выбор вы можете изменить в корзине</p>
                 <button class="btn btn-primary md-close">Я выберу позже</button>

@@ -25,7 +25,7 @@ var dataTable = $('#tableOrder').DataTable({
 });
 
 function delivery_func() {
-    if (delivery === undefined) {
+    if (delivery === "undefined" || delivery == null) {
         $("#select_delivery").nifty("show");
 
     } else {
@@ -39,7 +39,7 @@ if ($(".settings, .sale, .aboutus").length) {
 }
 
 if ($(".settings").length) {
-    $.getJSON("/address","",
+    $.getJSON("/address", "",
         function (data) {
             console.log(JSON.parse(data.result));
             localStorage["memos"] = JSON.stringify(JSON.parse(data.result));
@@ -108,14 +108,14 @@ if ($(".settings").length) {
     };
 
     function storeToLocal(key, items) {
-        var allAddress= JSON.stringify(items);
+        var allAddress = JSON.stringify(items);
         localStorage[key] = allAddress;
-        $.post("/address", { addresses : allAddress} )
+        $.post("/address", {addresses: allAddress})
     }
 
     function getFromLocal(key) {
 
-        if (localStorage[key]){
+        if (localStorage[key]) {
             return JSON.parse(localStorage[key]);
         }
         else
@@ -172,14 +172,13 @@ function initIfhaveSession() {
 }
 
 
-
 if ($('.userIsAuch .full_price, .borderLeft .full_price').length) {
 //    var full_price = localStorage.getItem("cart_price");
 //    $('.full_price').text(full_price);
 //    initIfhaveSession();
 //    delivery_func();
     $("#adressAuch").select2({
-          tags: true
+        tags: true
 
         //data: data
     });
@@ -216,7 +215,7 @@ tableOrder.on('mouseenter', 'tr', function () {
     }
 });
 
-$(".action--like").click(function (e) {
+$(".action--like.haslogin").click(function (e) {
     var page = $(this);
     console.log(page);
     $.getJSON('/like_add', {like: $(this).val()},
@@ -319,7 +318,21 @@ tableOrder.on('mouseleave', 'tr', function () {
 function fnGetSelected(oTableLocal) {
     return oTableLocal.$('tr.selected');
 }
-
+$(".like_no_admin").click(function () {
+    swal({
+        title: "Упс!",
+        confirmButtonColor: "#4CAF50",
+        text: "Эта функция доступна только для зарегистрированых пользователей<br> <h3 class='swal'>Зарегистрируйся и получи скидку 10%</h3>",
+        type: "info",
+        html:true,
+        showConfirmButton: true,
+        showCancelButton:true,
+        confirmButtonText: "Регистрация/Авторизация",
+        cancelButtonText: "Закрыть",
+        closeOnConfirm: false
+    },function(){
+        swal("Deleted!", "Your imaginary file has been deleted.", "success"); });
+});
 $('.pw-reset a, #restorePass').click(function () {
     var login = $('#inputPhone');
     if (login.val() != "") {
@@ -349,7 +362,7 @@ function calculateSumm() {
     });
     if (summ != 0) {
 
-        if ( sessionStorage.getItem('delivery') == "no_delivery") {
+        if (sessionStorage.getItem('delivery') == "no_delivery") {
             summ = summ - summ * 10 / 100;
         }
 
@@ -369,7 +382,6 @@ function calculateSumm() {
 
     localStorage.setItem("cart", JSON.stringify(dataFromTable()));
     localStorage.setItem("cart_price", summ);
-    sessionStorage.setItem("delivery", $.cookie('delivery'));
     return summ;
 
 }
@@ -463,15 +475,15 @@ $(".one--buy").click(function () {
 });
 
 jQuery(document).ready(function () {
-        var tableOrder = $('#tableOrder');
-        tableOrder.on('click', '.delete', function (e) {
-            dataTable.row('.selected').remove().draw(false);
-            if ($('.index_page').length) {
-                cartItems.innerHTML = Number(cartItems.innerHTML) - 1;
-            }
-            $('.full span').text(calculateSumm());
+    var tableOrder = $('#tableOrder');
+    tableOrder.on('click', '.delete', function (e) {
+        dataTable.row('.selected').remove().draw(false);
+        if ($('.index_page').length) {
+            cartItems.innerHTML = Number(cartItems.innerHTML) - 1;
+        }
+        $('.full span').text(calculateSumm());
 
-        });
+    });
 
 }); //ready
 
@@ -523,10 +535,12 @@ $('.slider__item').click(function (event) {
                     .text(arrays_one[i])
                     .appendTo($("#one_array"));
             });
-            $("#one_price").html(e.result.price+'<i class="fa fa-rub"></i>');
+            $("#one_price").html(e.result.price + '<i class="fa fa-rub"></i>');
             $("#one_weight").text(e.result.weight);
             $("#one_name").text(e.result.name);
-            setTimeout(function(){$(".preloader").hide()},500 );
+            setTimeout(function () {
+                $(".preloader").hide()
+            }, 500);
 
             //for (var item_resp in e.response) {
             //
@@ -653,7 +667,6 @@ $(function () {
     }
 
 
-
     function init() {
         // preload images
         if ($('.index_page').length) {
@@ -665,35 +678,35 @@ $(function () {
 
             var bLazy = new Blazy({
                 offset: 200,
-                success:function(){
+                success: function () {
                     iso.layout();
 
                 }
             });
 
 
-                // initFlickity();
+            // initFlickity();
 
-                delivery_func();
-                classie.remove(grid, 'grid--loading');
+            delivery_func();
+            classie.remove(grid, 'grid--loading');
 
-                var slider = $('.sliders').anyslider({
-                    interval: 10000,
-                    showBullets: false,
-                    showControls: false
-                });
-                var anyslider = slider.data('anyslider');
+            var slider = $('.sliders').anyslider({
+                interval: 10000,
+                showBullets: false,
+                showControls: false
+            });
+            var anyslider = slider.data('anyslider');
 
-                $(".seq-prev").click(function (e) {
-                    anyslider.prev();
+            $(".seq-prev").click(function (e) {
+                anyslider.prev();
 
-                });
+            });
 
-                $(".seq-next").click(function (e) {
-                    anyslider.next();
-                });
+            $(".seq-next").click(function (e) {
+                anyslider.next();
+            });
 
-                $(".preloader").hide();
+            $(".preloader").hide();
 
 
         }
@@ -701,8 +714,6 @@ $(function () {
 
 
     }
-
-
 
 
     function initFlickity() {
