@@ -529,12 +529,7 @@ $('.slider__item').click(function (event) {
             $("#one_price").html(e.result.price+'<i class="fa fa-rub"></i>');
             $("#one_weight").text(e.result.weight);
             $("#one_name").text(e.result.name);
-            imagesLoaded($("#one_img"),
-                  function() {
-                      $(".preloader").hide();
-
-                  }
-            );
+            setTimeout(function(){$(".preloader").hide()},500 );
 
             //for (var item_resp in e.response) {
             //
