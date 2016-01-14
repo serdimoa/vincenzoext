@@ -2105,7 +2105,6 @@ h2 small span {
         cursor:pointer;
         background-size:contain;
         background-repeat:no-repeat;
-        display:inline-block;
         width:100px;height:70px;
         -webkit-transition: all 100ms ease-in;
            -moz-transition: all 100ms ease-in;
@@ -2129,7 +2128,7 @@ h2 small span {
 div.fancy-select {
     margin-top: 10px;
     line-height: 1;
-    options {
+    option {
         padding-left: 0;
     }
 }
@@ -2211,7 +2210,16 @@ div.fancy-select ul.options {
 .loginBtn {
     width: 100%;
 }
+.deliverybox{
+    display:inline-block;
 
+    span{
+        font-family: NP, sans-serif;
+        text-align: center;
+        margin: 0 auto;
+        display: block;
+    }
+}
 .auch {
     li {
         margin-left: 2em !important;
