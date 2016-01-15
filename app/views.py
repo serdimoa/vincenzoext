@@ -12,7 +12,8 @@ from sqlalchemy import sql, select
 from sqlalchemy_utils.types.locale import babel
 from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
-from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm, ChangeUserPassword
+from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm, ChangeUserPassword, \
+    AuchForm
 from models import User, Category, Items, Like, AnonymousUser, Sale, Adress
 import mandrill
 
@@ -270,7 +271,7 @@ def category_add():
     form = CategoryForm()
     if form.validate_on_submit():
         category_data = Category(category_name=form.category_name.data,
-                                 alias=form.alias.data)
+                                 alias=form.alias.data,sous=form.sous.data,cafe=form.cafe.data)
         db.session.add(category_data)
         db.session.commit()
         flash(u'Категория добавлена', "success")
@@ -321,6 +322,8 @@ def update_category(category_id):
         category = Category.query.get(category_id)
         category.category_name = form.category_name.data
         category.alias = form.alias.data
+        category.sous = form.sous.data
+        category.cafe = form.cafe.data
         db.session.commit()
         flash(u"Категория переименована на " + category.category_name, "info")
         return redirect(url_for("get_category"))
@@ -571,3 +574,33 @@ def registration():
         login_user(registered_user)
         return redirect(url_for('index'))
     return render_template("registration.html", form=form)
+
+
+@app.route('/site_auch', methods=['GET', 'POST'])
+def site_auch():
+    form = RegistrationForm(prefix="form")
+    form_auch = AuchForm(prefix="form_auch")
+    if form.validate_on_submit() and form.is_submitted():
+            user = User(username=form.username.data,
+                        email=form.email.data,
+                        password=form.password.data,
+                        phone=form.phone.data,
+                        authenticated=True)
+            db.session.add(user)
+            db.session.commit()
+            registered_user = User.query.filter_by(phone=form.phone.data, password=form.password.data).first()
+            if registered_user is None:
+                return redirect(url_for('index'))
+            login_user(registered_user)
+            return redirect(url_for('index'))
+
+    if form_auch.validate_on_submit() and form_auch.is_submitted():
+        username = form_auch.login.data
+        password = form_auch.password.data
+        registered_user = User.query.filter_by(phone=username, password=password).first()
+        if registered_user is None:
+            flash(u'Логин либо пароль не верны', 'errors')
+            return redirect("site_auch")
+        login_user(registered_user)
+        return redirect(url_for('index'))
+    return render_template("siteauch.html", form=form, form_auch=form_auch)

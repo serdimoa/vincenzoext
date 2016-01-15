@@ -16,9 +16,27 @@
     <div class="container-fluid header-post">
         <div class="row">
             <div class="container content" style="padding-bottom: 25px;">
-                <h1>Регистрация</h1>
-
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            {% if category == "errors" %}
+                                <div class="alert alert-warning alert-dismissible" role="alert">
+                                    <button type="button" class="close fa fa-close" data-dismiss="alert"
+                                            aria-label="Close"><span
+                                            aria-hidden="true"></span></button>
+                                    <strong>{{ message }}</strong>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
                 <div class="col-md-6">
+                    <h1>Войти на сайт</h1>
+
+                    {{ render_form(form_auch,action_url='', action_text='Войти') }}
+                </div>
+                <div class="col-md-6">
+                    <h1>Регистрация на сайте</h1>
                     {{ render_form(form, action_url='', action_text='Регистрация') }}
                 </div>
             </div>

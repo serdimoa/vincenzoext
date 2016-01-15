@@ -8,8 +8,11 @@ if ($('.index_page').length) {
 }
 var delivery = sessionStorage.getItem('delivery');
 
-if ($("#inputPhone").length) {
+if ($("#inputPhone").length ) {
     $("#inputPhone").mask("+79999999999", {autoclear: false});
+}
+if ($("#form_auch-login").length ) {
+   $("#form_auch-login").mask("+79999999999", {autoclear: false});
 }
 if ($("#form-phone").length) {
     $("#form-phone").mask("+79999999999", {autoclear: false});
@@ -328,10 +331,11 @@ $(".like_no_admin").click(function () {
         showConfirmButton: true,
         showCancelButton:true,
         confirmButtonText: "Регистрация/Авторизация",
-        cancelButtonText: "Закрыть",
+        cancelButtonText: "Позже",
         closeOnConfirm: false
     },function(){
-        swal("Deleted!", "Your imaginary file has been deleted.", "success"); });
+        document.location = "/site_auch"
+         });
 });
 $('.pw-reset a, #restorePass').click(function () {
     var login = $('#inputPhone');

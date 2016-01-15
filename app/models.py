@@ -41,10 +41,14 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category_name = db.Column(db.String(50))
     alias = db.Column(db.String(50))
+    sous = db.Column(db.Boolean, default=False)
+    cafe = db.Column(db.Boolean, default=True)
 
-    def __init__(self, category_name, alias):
+    def __init__(self, category_name, alias, sous, cafe):
         self.category_name = category_name
         self.alias = alias
+        self.sous = sous
+        self.cafe = cafe
 
     def __repr__(self):
         return '<Category %r>' % self.category_name

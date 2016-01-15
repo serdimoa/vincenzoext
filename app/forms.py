@@ -78,10 +78,18 @@ class RegistrationForm(Form):
     username = StringField(u"Ваше имя", validators=[validators.InputRequired(u"Введите Ваше имя")])
     email = EmailField(u"Ваш email", validators=[validators.InputRequired(u"Введите Email"), Unique(
         User, User.email, message=u"Такой email существует")])
-    password = PasswordField(u"Ваш пароль", validators=[validators.InputRequired(u"Введите Ваш пароль")])
+    password = PasswordField(u"Ваш пароль",
+                             validators=[validators.InputRequired(u"Введите Ваш пароль"),
+                                         validators.EqualTo('confirm', message=u'Пароли должны совпадать')])
+    confirm = PasswordField(u'Повторите парль')
     phone = PhoneNumber(u"Ваш телефон", country_code='RU', display_format='e164',
                         validators=[validators.InputRequired(u"Введите Ваш телефон"), Unique(
                             User, User.phone, message=u"Такой телефон существует"), validators.Optional()])
+
+
+class AuchForm(Form):
+    login = PhoneNumber(u"Телефон", validators=[validators.InputRequired(u"Введите Ваш телефон")])
+    password = PasswordField(u"Пароль", validators=[validators.InputRequired(u"Введите Ваш пароль")])
 
 
 class SaleAddForm(Form):
@@ -97,3 +105,5 @@ class SaleAddForm(Form):
 class CategoryForm(Form):
     category_name = StringField(u"Имя категории")
     alias = StringField("alias")
+    sous = BooleanField(u"Покаывать соусы в корзине или нет")
+    cafe = BooleanField(u"Покаывать кнопку купить или нет")
