@@ -102,8 +102,13 @@ class SaleAddForm(Form):
     img = FileField(u"Изображение")
 
 
+class ordernoAuch(Form):
+    name = StringField(u"Ваше имя")
+    phone = PhoneNumber(u"Телефон", validators=[validators.InputRequired(u"Введите Ваш телефон")])
+
+
 class CategoryForm(Form):
     category_name = StringField(u"Имя категории")
-    alias = StringField("alias")
+    alias = StringField("")
     sous = BooleanField(u"Покаывать соусы в корзине или нет")
     cafe = BooleanField(u"Покаывать кнопку купить или нет")

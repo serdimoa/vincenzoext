@@ -17,46 +17,24 @@
                 </table>
                 <hr>
                 <div class="col-sm-6">
-                    <h3>Выберите вариант доставки</h3>
-
-                    <div class="md-body">
-                        <p>
-                            <input value="delivery_home" name="group2" type="radio" id="delivery_home_order"/>
-                            <label for="delivery_home_order">Доставка по городу</label>
-                        </p>
-
-                        <p>
-                            <input value="delivery_out_home" name="group2" type="radio" id="delivery_out_home_order"/>
-                            <label for="delivery_out_home_order">Доставка за пределы города <span
-                                    class="red">+10%</span></label>
-                        </p>
 
 
-                        <p>
-                            <input value="no_delivery" name="group2" type="radio" id="no_delivery_order"/>
-                            <label for="no_delivery_order">Самовывоз <span class="red">-10%</span></label>
-                        </p>
 
-                        <p>
-                            <input value="in_cafe" name="group2" type="radio" id="in_cafe_order"/>
-                            <label for="in_cafe_order">В кафе</label>
-                        </p>
-
-                        <p>
-                            <input value="delivery_in_time" name="group2" type="radio" id="delivery_in_time_order"/>
-                            <label for="delivery_in_time_order">Предзаказ</label>
-                        </p>
-                    </div>
                 </div>
                 <div class="col-md-6 text-right">
+
                     <h2>Всего:</h2>
 
                     <p class="full"><span></span>
                         <small><i class="fa fa-rub"></i></small>
                     </p>
-                    <p>
-                        <button type="button" id="orderNow" class="btn btn-lg btn-success">ЗАКАЗАТЬ</button>
-                    </p>
+
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-lg btn-default" onclick='$("#select_delivery").nifty("show");
+'>Изменить вариант доставки</button>
+                            <button type="button" id="orderNow" class="btn btn-lg btn-success">ЗАКАЗАТЬ</button>
+
+                        </div>
                 </div>
                 <a href="#0" class="closezakazbtn"><span class="og-close"></span></a>
             </div>
@@ -91,7 +69,11 @@
                     </div>
                 </div>
 <p></p>
-                <button class="btn btn-primary md-close">Я выберу позже</button>
+                    <button class="btn btn-success select_it ">Выбрать</button>
+                <br>
+{#                    <button class="btn btn-primary md-close">Я выберу позже</button>#}
+
+
             </div>
         </div>
     </div>

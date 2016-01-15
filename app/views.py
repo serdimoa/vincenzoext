@@ -84,10 +84,11 @@ def user_loader(user_id):
 @app.route('/')
 def index():
     select_sale = Sale.query.all()
+    delivery = request.cookies.get('delivery')
     if current_user.id is None:
         select_category = Category.query.all()
         all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
-        return render_template("page.html", type=select_category, sales=select_sale, items=all_items, title="Vincenzo")
+        return render_template("page.html", type=select_category, sales=select_sale, delivery=delivery, items=all_items, title="Vincenzo")
     else:
         select_category = Category.query.all()
         all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
@@ -95,8 +96,9 @@ def index():
         liked = []
         for likes in likes:
             liked.append(likes.items_id)
+
         return render_template("page.html", type=select_category, sales=select_sale, items=all_items, likes=liked,
-                               title="Vincenzo")
+                               title="Vincenzo", delivery=delivery)
 
 
 @app.route('/settings', methods=['GET', 'POST'])
@@ -325,7 +327,7 @@ def update_category(category_id):
         category.sous = form.sous.data
         category.cafe = form.cafe.data
         db.session.commit()
-        flash(u"Категория переименована на " + category.category_name, "info")
+        flash(u"Категория " + category.category_name+ u" Изменена", "info")
         return redirect(url_for("get_category"))
 
     return render_template("category_edit.html", form=form)
@@ -355,7 +357,8 @@ def get_one_item(item_id):
                                components=select_item[0].item_component,
                                weight=select_item[0].weight,
                                price=select_item[0].price,
-                               category=select_item[1].category_name
+                               category=select_item[1].category_name,
+                               sous=select_item[1].sous
                                )
 
                    )

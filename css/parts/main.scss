@@ -26,8 +26,8 @@
 
 @font-face {
     font-family: 'NP';
-    src: url('fonts/NautilusPompilius.eot');
-    src: url('fonts/NautilusPompilius.eot?#iefix') format('embedded-opentype'), url('fonts/NautilusPompilius.woff') format('woff'), url('fonts/NautilusPompilius.ttf') format('truetype'), url('fonts/NautilusPompilius.otf') format('opentype'), url('fonts/NautilusPompilius.svg#NautilusPompilius-Regular') format('svg');
+    src: url('/static/fonts/NautilusPompilius.eot');
+    src: url('/static/fonts/NautilusPompilius.eot?#iefix') format('embedded-opentype'), url('/static/fonts/NautilusPompilius.woff') format('woff'), url('/static/fonts/NautilusPompilius.ttf') format('truetype'), url('/static/fonts/NautilusPompilius.otf') format('opentype'), url('/static/fonts/NautilusPompilius.svg#NautilusPompilius-Regular') format('svg');
     font-weight: 400;
     font-style: normal;
     font-stretch: normal;
@@ -49,7 +49,9 @@ html {
     background: #333;
 
 }
-
+.overflowbody{
+    overflow: hidden;
+}
 @-webkit-keyframes uil-rolling-anim {
     0% {
         -ms-transform: rotate(0deg);
@@ -1686,6 +1688,7 @@ h2 small span {
     line-height: 15px;
     position: absolute;
     top: 50%;
+    display: none;
     width: 15px;
     height: 15px;
     margin: -16px 0 0 0;

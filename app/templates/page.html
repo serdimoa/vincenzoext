@@ -195,7 +195,9 @@
                             <span class="meta__title">{{ item[0].item_name }}</span>
                             <span class="meta__price">{{ item[0].price }}<i class="fa fa-rub"></i></span>
                         </div>
-                        <div class="actions">
+
+                        <div class="actions" {% if delivery == "deliveryincafe" and item[1].category_name == "Кофе" %} style="display: none" {% endif %}>
+
                             {% if  current_user.is_authenticated %}
                                 <button class="col-md-8 action action--button action--buy items-buy" data-items='{
                                             "item_id":"{{ item[0].id }}",
@@ -203,7 +205,8 @@
                                             "item_price":"{{ item[0].price }}",
                                             "item_component":"{{ item[0].item_component }}",
                                             "item_weight":"{{ item[0].weight }}",
-                                            "item_category":"{{ item[1].category_name }}"
+                                            "item_category":"{{ item[1].category_name }}",
+                                            "sous":"{{ item[1].sous }}"
                                        }' value="{{ item[0].id }}"><i class="fa fa-shopping-cart"></i><span
                                         class="text-hidden">Add to cart</span></button>
                                 <button class="col-md-4 action action--button action--like haslogin"
@@ -227,13 +230,15 @@
                                             "item_price":"{{ item[0].price }}",
                                             "item_component":"{{ item[0].item_component }}",
                                             "item_weight":"{{ item[0].weight }}",
-                                            "item_category":"{{ item[1].category_name }}"
+                                            "item_category":"{{ item[1].category_name }}",
+                                            "sous":"{{ item[1].sous }}"
                                        }' value="{{ item[0].id }}"><i class="fa fa-shopping-cart"></i><span
                                         class="text-hidden">Add to cart</span></button>
                                 <button class="col-md-4 action action--button action--like like_no_admin"><i
                                         class="fa fa-heart-o"></i></button>
                             {% endif %}
                         </div>
+
                     </div>
                 {% endfor %}
             </section>
@@ -254,8 +259,8 @@
                     <p><strong>Вес/Объем:</strong><span id="one_weight"></span>
                     </p>
 
-                    <p id="one_price" class="price">255<i class="fa fa-rub"></i></p>
-                    <button class="action action--button action--buy one--buy" data-items="" value><i
+                    <p id="one_price" class="price"><i class="fa fa-rub"></i></p>
+                    <button class="action action--button action--buy one--buy"  data-items="" value><i
                             class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
                     <a href="#0" class="closebtn"><span class="og-close"></span></a>
                 </div>
