@@ -687,6 +687,7 @@ $(function () {
             grid = document.querySelector('.grid'),
         // isotope instance
             iso,
+            bLazy ,
         // filter ctrls
             filterCtrls = [].slice.call(document.querySelectorAll('.filter > button')),
         // cart
@@ -704,7 +705,7 @@ $(function () {
             var $win = $(window);
 
 
-            var bLazy = new Blazy({
+            bLazy = new Blazy({
                 offset: 200,
                 success: function () {
                     iso.layout();
@@ -785,6 +786,7 @@ $(function () {
                 });
                 recalcFlickities();
                 iso.layout();
+                bLazy.revalidate();
             });
         });
 
