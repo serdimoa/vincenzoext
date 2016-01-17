@@ -694,6 +694,9 @@ $(function () {
             cart = document.querySelector('.cart'),
             cartItems = cart.querySelector('.cart__count');
     }
+    function onArrange() {
+        bLazy.revalidate();
+    }
 
 
     function init() {
@@ -712,6 +715,11 @@ $(function () {
 
                 }
             });
+
+
+
+
+            iso.on( 'arrangeComplete', onArrange );
 
 
             // initFlickity();
