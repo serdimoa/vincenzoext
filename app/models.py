@@ -66,11 +66,12 @@ class Items(db.Model):
     price = db.Column(db.String(50), default=0)
     img = db.Column(db.String(50))
     thumbnail = db.Column(db.String(255))
+    cafe_only = db.Column(db.Boolean)
 
     def __unicode__(self):
         return self.item_name
 
-    def __init__(self, item_name, item_component, category_id, weight, price, img, thumbnail):
+    def __init__(self, item_name, item_component, category_id, weight, price, img, thumbnail, cafe_only):
         self.item_name = item_name
         self.item_component = item_component
         self.category_id = category_id
@@ -78,6 +79,7 @@ class Items(db.Model):
         self.price = price
         self.img = img
         self.thumbnail = thumbnail
+        self.cafe_only = cafe_only
 
     def __repr__(self):
         return '<Item %r>' % self.item_name
@@ -125,6 +127,38 @@ class Sale(db.Model):
     show_url = db.Column(db.Boolean)
     end_sale = db.Column(db.Date)
     img = db.Column(db.String(50))
+
+    def __init__(self, sale_name, price_if_have, to_slider, about_sale, show_url, end_sale, img):
+        self.sale_name = sale_name
+        self.price_if_have = price_if_have
+        self.to_slider = to_slider
+        self.about_sale = about_sale
+        self.show_url = show_url
+        self.end_sale = end_sale
+        self.img = img
+
+
+class SaleoOnTime(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    sale_name = db.Column(db.String(255))
+    down_sale = db.Column(db.String(20))
+    date_sale_on = db.Column(db.String(255))
+    time_start = db.Column(db.Time)
+    time_end = db.Column(db.Time)
+
+    def __init__(self, sale_name, down_sale, date_sale_on, time_start, time_end):
+        self.sale_name = sale_name
+        self.down_sale = down_sale
+        self.date_sale_on = date_sale_on
+        self.time_start = time_start
+        self.time_end = time_end
+
+    def to_json(self):
+        return dict(sale_name=self.sale_name,
+                    down_sale=self.down_sale,
+                    date_sale_on=self.date_sale_on,
+                    time_start=self.time_start,
+                    time_end=self.time_end)
 
 
 class AnonymousUser(AnonymousUserMixin):

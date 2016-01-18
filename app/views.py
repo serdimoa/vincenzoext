@@ -13,8 +13,8 @@ from sqlalchemy_utils.types.locale import babel
 from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
 from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm, ChangeUserPassword, \
-    AuchForm
-from models import User, Category, Items, Like, AnonymousUser, Sale, Adress
+    AuchForm, SaleOnTimeForm
+from models import User, Category, Items, Like, AnonymousUser, Sale, Adress, SaleoOnTime
 import mandrill
 
 lm.anonymous_user = AnonymousUser
@@ -88,7 +88,8 @@ def index():
     if current_user.id is None:
         select_category = Category.query.all()
         all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
-        return render_template("page.html", type=select_category, sales=select_sale, delivery=delivery, items=all_items, title="Vincenzo")
+        return render_template("page.html", type=select_category, sales=select_sale, delivery=delivery, items=all_items,
+                               title="Vincenzo")
     else:
         select_category = Category.query.all()
         all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
@@ -185,6 +186,40 @@ def get_order():
     return jsonify(response=response_order)
 
 
+@app.route('/panel/sale_time_add', methods=['GET', 'POST'])
+def sale_time_add():
+    form = SaleOnTimeForm()
+    if form.validate_on_submit():
+        sale_data = SaleoOnTime(sale_name=form.sale_name.data, down_sale=form.down_sale.data,
+                                date_sale_on=str(form.date_sale_on.data), time_start=form.time_start.data,
+                                time_end=form.time_end.data)
+        db.session.add(sale_data)
+        db.session.commit()
+        flash("Добавлена новая акция", "success")
+        return redirect(url_for('sale_time'))
+    return render_template('sales_with_time.html', form=form, btn=u"Добавить")
+
+
+@app.route('/get_sales', methods=['GET'])
+def get_sales():
+    return jsonify({"result":SaleoOnTime.query.all()}) #todo: edit this
+
+
+@app.route('/panel/sale_time_edit/<int:sale_id>', methods=['GET', 'POST'])
+def sale_time_edit(sale_id):
+    select_item = SaleoOnTime.query.filter_by(id=sale_id).first()
+    form = SaleOnTimeForm(obj=select_item)
+    if form.validate_on_submit():
+        sale_data = SaleoOnTime(sale_name=form.sale_name.data, down_sale=form.down_sale.data,
+                                date_sale_on=str(form.date_sale_on.data), time_start=form.time_start.data,
+                                time_end=form.time_end.data)
+        db.session.add(sale_data)
+        db.session.commit()
+        flash("Добавлена новая акция", "success")
+        return redirect(url_for('sale'))
+    return render_template('sales_with_time.html', form=form, btn=u"Изменить")
+
+
 @app.route('/panel/sale/add', methods=["GET", "POST"])
 def sale_add():
     form = SaleAddForm()
@@ -216,6 +251,12 @@ def sale_add():
             flash("Добавлена новая акция", "success")
             return redirect(url_for('sale'))
     return render_template('sales_add.html', form=form)
+
+
+@app.route('/panel/sales_time', methods=["GET"])
+def sale_time():
+    all_sales = db.session.query(SaleoOnTime).all()
+    return render_template("sales_time.html", items=all_sales)
 
 
 @app.route('/panel/sales', methods=["GET"])
@@ -273,7 +314,7 @@ def category_add():
     form = CategoryForm()
     if form.validate_on_submit():
         category_data = Category(category_name=form.category_name.data,
-                                 alias=form.alias.data,sous=form.sous.data,cafe=form.cafe.data)
+                                 alias=form.alias.data, sous=form.sous.data, cafe=form.cafe.data)
         db.session.add(category_data)
         db.session.commit()
         flash(u'Категория добавлена', "success")
@@ -327,7 +368,7 @@ def update_category(category_id):
         category.sous = form.sous.data
         category.cafe = form.cafe.data
         db.session.commit()
-        flash(u"Категория " + category.category_name+ u" Изменена", "info")
+        flash(u"Категория " + category.category_name + u" Изменена", "info")
         return redirect(url_for("get_category"))
 
     return render_template("category_edit.html", form=form)
@@ -357,6 +398,7 @@ def get_one_item(item_id):
                                components=select_item[0].item_component,
                                weight=select_item[0].weight,
                                price=select_item[0].price,
+                               cafe_only=select_item[0].cafe_only,
                                category=select_item[1].category_name,
                                sous=select_item[1].sous
                                )
@@ -394,6 +436,7 @@ def item_add():
             category_id=form.category_id.data,
             weight=form.weight.data,
             price=form.price.data,
+            cafe_only=form.cafe_only.data,
             img=form.item_name.data + filename,
             thumbnail=form.item_name.data + "thumbnail" + thumbnail
 
@@ -425,6 +468,7 @@ def item_edit(item_id):
             item.category_id = form.category_id.data
             item.weight = form.weight.data
             item.price = form.price.data
+            item.cafe_only = form.cafe_only.data
             item.img = form.item_name.data + filename
             item.thumbnail = form.item_name.data + "thumbnail" + thumbnail
             form.img.data.save(basedir + "/static/upload/" + form.item_name.data + filename)
@@ -438,6 +482,7 @@ def item_edit(item_id):
             item.category_id = form.category_id.data
             item.weight = form.weight.data
             item.price = form.price.data
+            item.cafe_only = form.cafe_only.data
             item.img = form.item_name.data + filename
             item.thumbnail = thumb
             form.img.data.save(basedir + "/static/upload/" + form.item_name.data + filename)
@@ -450,6 +495,7 @@ def item_edit(item_id):
             item.category_id = form.category_id.data
             item.weight = form.weight.data
             item.price = form.price.data
+            item.cafe_only = form.cafe_only.data
             item.img = img
             form.thumbnail.data.save(basedir + "/static/upload/" + form.item_name.data + "thumbnail" + thumbnail)
             item.thumbnail = form.item_name.data + "thumbnail" + thumbnail
@@ -462,6 +508,7 @@ def item_edit(item_id):
             item.category_id = form.category_id.data
             item.weight = form.weight.data
             item.price = form.price.data
+            item.cafe_only = form.cafe_only.data
             item.img = img
             item.thumbnail = thumb
             db.session.commit()
@@ -584,18 +631,18 @@ def site_auch():
     form = RegistrationForm(prefix="form")
     form_auch = AuchForm(prefix="form_auch")
     if form.validate_on_submit() and form.is_submitted():
-            user = User(username=form.username.data,
-                        email=form.email.data,
-                        password=form.password.data,
-                        phone=form.phone.data,
-                        authenticated=True)
-            db.session.add(user)
-            db.session.commit()
-            registered_user = User.query.filter_by(phone=form.phone.data, password=form.password.data).first()
-            if registered_user is None:
-                return redirect(url_for('index'))
-            login_user(registered_user)
+        user = User(username=form.username.data,
+                    email=form.email.data,
+                    password=form.password.data,
+                    phone=form.phone.data,
+                    authenticated=True)
+        db.session.add(user)
+        db.session.commit()
+        registered_user = User.query.filter_by(phone=form.phone.data, password=form.password.data).first()
+        if registered_user is None:
             return redirect(url_for('index'))
+        login_user(registered_user)
+        return redirect(url_for('index'))
 
     if form_auch.validate_on_submit() and form_auch.is_submitted():
         username = form_auch.login.data

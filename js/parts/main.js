@@ -1,6 +1,7 @@
 /**
  * Created by serdimoa on 02.11.15.
  */
+
 if ($('.index_page').length) {
     var cart = window.document.querySelector('.cart');
 
@@ -8,11 +9,11 @@ if ($('.index_page').length) {
 }
 var delivery = sessionStorage.getItem('delivery');
 
-if ($("#inputPhone").length ) {
+if ($("#inputPhone").length) {
     $("#inputPhone").mask("+79999999999", {autoclear: false});
 }
-if ($("#form_auch-login").length ) {
-   $("#form_auch-login").mask("+79999999999", {autoclear: false});
+if ($("#form_auch-login").length) {
+    $("#form_auch-login").mask("+79999999999", {autoclear: false});
 }
 if ($("#form-phone").length) {
     $("#form-phone").mask("+79999999999", {autoclear: false});
@@ -26,7 +27,47 @@ var dataTable = $('#tableOrder').DataTable({
         "emptyTable": "Корзина пуста"
     }
 });
+var cache_for_datatable;
+var thiss;
+function uniqId() {
+  return "uniqId"+Math.round(new Date().getTime() + (Math.random() * 1000));
+}
+$(".sous_select_box a").click(function (e) {
+    var data_name = $(this).data("text");
+    sous_select(data_name);
+    $("#select_sous").nifty('hide');
 
+});
+function sous_select(name) {
+    var data_items = cache_for_datatable;
+    var ids = uniqId();
+    dataTable.row.add([
+        "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
+        "<select id='"+ids+"' class='basic' ><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
+        "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+        "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
+        "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
+    ]).draw(false);
+
+    $('.basic').fancySelect().on('change.fs', function () {
+        localStorage.setItem("cart", JSON.stringify(dataFromTable()));
+    });
+    thiss = $(this);
+    $('#'+ids+' :contains(' + name + ')').prop("selected", true);
+
+    $(".checkOut input[type=number]").on("change", function (e) {
+        $('.full span').text(calculateSumm());
+
+    });
+    $('.full span').text(calculateSumm());
+    iosOverlay({
+        text: "Добавлено!",
+        duration: 2e3,
+        icon: "/static/img/check.png"
+    });
+    $('.basic').trigger('update.fs');
+
+}
 function delivery_func() {
     if (delivery === "undefined" || delivery == null) {
         $("#select_delivery").nifty("show");
@@ -149,24 +190,26 @@ function initIfhaveSession() {
 
                     $('.full span').text(calculateSumm());
                 } else {
+                    var ids = uniqId();
+
                     dataTable.row.add([
                         entry.row[0],
-                        "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
-                        "<input type='number' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                        "<select id='"+ids+"' class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
+                        "<input  type='number' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
                         "<span class='cena'>" + entry.row[3] + " <i class='fa fa-rub'></i></span>",
                         "<a href='#0' id='" + entry.row[4] + "' class='delete'><i class='fa fa-times'></i></a>"
                     ]).draw(false);
 
-                    $('.basic').fancySelect().on('change.fs', function() {
-                                localStorage.setItem("cart", JSON.stringify(dataFromTable()));
+                    $('.basic').fancySelect().on('change.fs', function () {
+                        localStorage.setItem("cart", JSON.stringify(dataFromTable()));
                     });
 
-                    $('.fancified').on("change", function(){
+                    $('.fancified').on("change", function () {
                         localStorage.setItem("cart", JSON.stringify(dataFromTable()));
                         console.log("basic change ");
 
                     });
-                    $('.fancified :contains(' + entry.row[1] + ')').prop("selected", true);
+                    $('#'+ids+' :contains(' + entry.row[1] + ')').prop("selected", true);
 
                     $(".checkOut input[type=number]").on("change", function (e) {
                         $('.full span').text(calculateSumm());
@@ -304,10 +347,10 @@ $('#auch-menu-btn').click(function (event) {
 });
 
 
-
-$(".select_it").click(function(){
-    $.cookie('delivery',$('input:radio[name=delivery]:checked').val());
-    sessionStorage.setItem('delivery',$('input:radio[name=delivery]:checked').val());
+$(".select_it").click(function () {
+    $.cookie('delivery', $('input:radio[name=delivery]:checked').val());
+    sessionStorage.setItem('delivery', $('input:radio[name=delivery]:checked').val());
+    $.cookie("localLinkClicked", true);
 
     window.location.reload();
 });
@@ -326,19 +369,19 @@ function fnGetSelected(oTableLocal) {
 }
 $(".like_no_admin").click(function () {
     swal({
-        title: "Упс!",
+        title: "Эта функция доступна только для зарегистрированых пользователей<br> <h3 class='swal'>Зарегистрируйся и получи скидку 10%</h3>",
         confirmButtonColor: "#4CAF50",
-        text: "Эта функция доступна только для зарегистрированых пользователей<br> <h3 class='swal'>Зарегистрируйся и получи скидку 10%</h3>",
+        text: "",
         type: "info",
-        html:true,
+        html: true,
         showConfirmButton: true,
-        showCancelButton:true,
+        showCancelButton: true,
         confirmButtonText: "Регистрация/Авторизация",
         cancelButtonText: "Позже",
         closeOnConfirm: false
-    },function(){
+    }, function () {
         document.location = "/site_auch"
-         });
+    });
 });
 $('.pw-reset a, #restorePass').click(function () {
     var login = $('#inputPhone');
@@ -435,24 +478,9 @@ $(document).keyup(function (e) {
 $(".one--buy").click(function () {
     var data_items = jQuery.parseJSON($(this).attr("data-items"));
     if (data_items['sous'] == true) { // todo: set name
-        dataTable.row.add([
-            "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
-            "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
-            "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
-            "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
-            "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
-        ]).draw(false);
-        $('.basic').fancySelect();
-        $(".checkOut input[type=number]").on("change", function (e) {
-            $('.full span').text(calculateSumm());
+        cache_for_datatable = data_items;
 
-        });
-        $('select.fancified' ).change(function(){
-            localStorage.setItem("cart", JSON.stringify(dataFromTable()));
-            console.log("basic change ");
-
-        });
-        $('.full span').text(calculateSumm());
+        $("#select_sous").nifty("show")
 
 
     } else {
@@ -468,13 +496,14 @@ $(".one--buy").click(function () {
 
         });
         $('.full span').text(calculateSumm());
-    }
-    cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
-    iosOverlay({
+        iosOverlay({
         text: "Добавлено!",
         duration: 2e3,
         icon: "static/img/check.png"
     });
+    }
+    cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
+
 });
 
 jQuery(document).ready(function () {
@@ -491,17 +520,17 @@ jQuery(document).ready(function () {
 }); //ready
 
 $('#orderNow').click(function (event) {
-    if(calculateSumm()<500){
+    if (calculateSumm() < 500) {
         swal({
             title: "Ой!",
             text: "Для доставки минимальная сумма заказа составляет 500 рублей",
             type: "error",
-            html:true,
+            html: true,
             showConfirmButton: true,
             confirmButtonText: "Я понял"
         })
     }
-    else{
+    else {
         window.location.href = "/order";
     }
 });
@@ -556,10 +585,10 @@ $('.slider__item').click(function (event) {
             $("#one_price").html(e.result.price + '<i class="fa fa-rub"></i>');
             $("#one_weight").text(e.result.weight);
             $("#one_name").text(e.result.name);
-            if(e.result.category=="Кофе" && $.cookie("delivery")=="deliveryincafe"){
-                $(".aboutProduct .action--buy").hide();
-            }else{
+            if ($.cookie("delivery") == "deliveryincafe" || e.result.cafe_only != true) {
                 $(".aboutProduct .action--buy").show();
+            } else {
+                $(".aboutProduct .action--buy").hide();
             }
             setTimeout(function () {
                 $(".preloader").hide()
@@ -590,6 +619,7 @@ $('.cart, .showCart, .userIsAuch h2,.borderLeft h2').click(function (event) {
             icon: "/static/img/cross.png"
         });
     } else {
+
         $('.full span').text(calculateSumm());
         $('html').toggleClass('overflowbody');
 
@@ -600,7 +630,7 @@ $('.cart, .showCart, .userIsAuch h2,.borderLeft h2').click(function (event) {
 
 $('.closezakazbtn').click(function (event) {
     $('.checkOut').removeClass('isUp');
-        $('html').toggleClass('overflowbody');
+    $('html').toggleClass('overflowbody');
 
 
 });
@@ -632,6 +662,33 @@ $(function () {
 });
 
 
+window.localLinkClicked = false;
+
+
+function warning() {
+    if ($.cookie('localLinkClicked')) {
+        console.log("window page"); //you can put your code here.
+        $.removeCookie("localLinkClicked");
+
+    } else {
+        console.log("window reload"); //you can put your code here.
+
+        $.removeCookie("localLinkClicked");
+
+        $("#select_delivery").nifty("show");
+    }
+}
+window.onload = warning;
+
+$("a").on("click", function () {
+    var url = $(this).attr("href");
+
+    // check if the link is relative or to your domain
+    if (!/^http?:\/\/./.test(url) || /http?:\/\/127.0.0.1\:5000/.test(url)) {
+        $.cookie("localLinkClicked", true);
+
+    }
+});
 (function (window) {
 
     'use strict';
@@ -687,7 +744,7 @@ $(function () {
             grid = document.querySelector('.grid'),
         // isotope instance
             iso,
-            bLazy ,
+            bLazy,
         // filter ctrls
             filterCtrls = [].slice.call(document.querySelectorAll('.filter > button')),
         // cart
@@ -717,9 +774,7 @@ $(function () {
             });
 
 
-
-
-            iso.on( 'arrangeComplete', onArrange );
+            iso.on('arrangeComplete', onArrange);
 
 
             // initFlickity();
@@ -814,23 +869,10 @@ $(function () {
 
     function addToCart() {
         var data_items = jQuery.parseJSON($(this).attr("data-items"));
-        if (data_items['sous'] == "True") { // todo: set name
-            dataTable.row.add([
-                "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
-                "<select class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
-                "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
-                "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
-                "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
-            ]).draw(false);
-            $('.basic').fancySelect().on('change.fs', function() {
-                  localStorage.setItem("cart", JSON.stringify(dataFromTable()));
-            });
+        if (data_items['sous'] == "True") {
+            cache_for_datatable = data_items;
 
-            $(".checkOut input[type=number]").on("change", function (e) {
-                $('.full span').text(calculateSumm());
-
-            });
-            $('.full span').text(calculateSumm());
+            $("#select_sous").nifty("show")
 
 
         } else {
@@ -846,23 +888,22 @@ $(function () {
 
             });
             $('.full span').text(calculateSumm());
-
+            iosOverlay({
+                text: "Добавлено!",
+                duration: 2e3,
+                icon: "static/img/check.png"
+            });
+            classie.add(cart, 'cart--animate');
+            setTimeout(function () {
+                cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
+            }, 200);
+            onEndAnimation(cartItems, function () {
+                classie.remove(cart, 'cart--animate');
+            });
 
         }
-        iosOverlay({
-            text: "Добавлено!",
-            duration: 2e3,
-            icon: "static/img/check.png"
-        });
 
 
-        classie.add(cart, 'cart--animate');
-        setTimeout(function () {
-            cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
-        }, 200);
-        onEndAnimation(cartItems, function () {
-            classie.remove(cart, 'cart--animate');
-        });
     }
 
     function recalcFlickities() {

@@ -72,17 +72,26 @@ $(function () {
 });
 
 $(window).load(function () {
-
+    if ($('.salessss').length) {
+        $('select').multipleSelect();
+    }
     $(".delete_item").click(function () {
         var is_delete = confirm("Точно удалить?");
         if (is_delete == true) {
             window.location.href = "/panel/item_delete/" + parseInt(this.name)
         }
     });
+
     $(".delete_sales").click(function () {
         var is_delete = confirm("Точно удалить?");
         if (is_delete == true) {
             window.location.href = "/panel/sales_delete/" + parseInt(this.name)
+        }
+    });
+    $(".delete_sales_time").click(function () {
+        var is_delete = confirm("Точно удалить?");
+        if (is_delete == true) {
+            window.location.href = "/panel/sales_delete_time/" + parseInt(this.name)
         }
     })
 

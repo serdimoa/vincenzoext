@@ -49,9 +49,11 @@ html {
     background: #333;
 
 }
-.overflowbody{
+
+.overflowbody {
     overflow: hidden;
 }
+
 @-webkit-keyframes uil-rolling-anim {
     0% {
         -ms-transform: rotate(0deg);
@@ -1036,12 +1038,18 @@ html,
     display: none;
     clear: left;
 }
-h3.swal{
-    font-family: 'NP', sans-serif;
-    font-size: 1.4em;
-    font-weight: 700;
-    color: #FF5252;
+
+.sweet-alert h2 {
+    font-size: 20px;
+    line-height: normal;
+    h3.swal {
+        font-family: 'NP', sans-serif;
+        font-size: 1.3em;
+        font-weight: 700;
+        color: #FF5252;
+    }
 }
+
 @include mq(md) {
     .seq .seq-title h2,
     .seq .seq-title h3 {
@@ -1482,7 +1490,7 @@ h2 small span {
 
 .actions {
     position: absolute;
-    bottom: -42px;
+    bottom: -35px;
     right: 0;
     width: 100%;
     opacity: 0;
@@ -1495,7 +1503,7 @@ h2 small span {
 }
 
 .action {
-    font-size: 1.5em;
+    font-size: 1.2em;
     position: relative;
     overflow: hidden;
     margin: 0;
@@ -1801,6 +1809,21 @@ h2 small span {
     }
 }
 
+.sous_select_box {
+    h3 {
+        font-family: 'NP', sans-serif;
+        line-height: normal;
+        margin: 0;
+        padding: 0;
+    }
+
+}
+
+hr {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
 .popUp {
     height: 100%;
     width: 100%;
@@ -2085,41 +2108,53 @@ h2 small span {
     .red {
         color: #FF7474;
     }
-    .cc-selector input{
-        margin:0;padding:0;
-        -webkit-appearance:none;
-        -moz-appearance:none;
-        appearance:none;
+    .cc-selector input {
+        margin: 0;
+        padding: 0;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
     }
-    .deliveryinhome{background-image:url("/static/delivery/1.png");}
-    .deliveryinhome span{
+    .deliveryinhome {
+        background-image: url("/static/delivery/1.png");
+    }
+    .deliveryinhome span {
         display: block;
     }
-    .deliverymyself{background-image:url("/static/delivery/9.png");}
-    .deliveryintime{background-image:url("/static/delivery/5.png");}
-    .deliveryincafe{background-image:url("/static/delivery/4.png");}
-    .cc-selector input:active +.drinkcard-cc{opacity: .9;}
-    .cc-selector input:checked +.drinkcard-cc{
+    .deliverymyself {
+        background-image: url("/static/delivery/9.png");
+    }
+    .deliveryintime {
+        background-image: url("/static/delivery/5.png");
+    }
+    .deliveryincafe {
+        background-image: url("/static/delivery/4.png");
+    }
+    .cc-selector input:active + .drinkcard-cc {
+        opacity: .9;
+    }
+    .cc-selector input:checked + .drinkcard-cc {
         -webkit-filter: none;
-           -moz-filter: none;
-                filter: none;
+        -moz-filter: none;
+        filter: none;
     }
-    .drinkcard-cc{
-        cursor:pointer;
-        background-size:contain;
-        background-repeat:no-repeat;
-        width:100px;height:70px;
+    .drinkcard-cc {
+        cursor: pointer;
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 100px;
+        height: 70px;
         -webkit-transition: all 100ms ease-in;
-           -moz-transition: all 100ms ease-in;
-                transition: all 100ms ease-in;
+        -moz-transition: all 100ms ease-in;
+        transition: all 100ms ease-in;
         -webkit-filter: brightness(1.8) grayscale(1) opacity(.7);
-           -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
-                filter: brightness(1.8) grayscale(1) opacity(.7);
+        -moz-filter: brightness(1.8) grayscale(1) opacity(.7);
+        filter: brightness(1.8) grayscale(1) opacity(.7);
     }
-    .drinkcard-cc:hover{
+    .drinkcard-cc:hover {
         -webkit-filter: brightness(1.2) grayscale(.5) opacity(.9);
-           -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
-                filter: brightness(1.2) grayscale(.5) opacity(.9);
+        -moz-filter: brightness(1.2) grayscale(.5) opacity(.9);
+        filter: brightness(1.2) grayscale(.5) opacity(.9);
     }
     .md-close {
         background-color: #FF5252;
@@ -2213,16 +2248,18 @@ div.fancy-select ul.options {
 .loginBtn {
     width: 100%;
 }
-.deliverybox{
-    display:inline-block;
 
-    span{
+.deliverybox {
+    display: inline-block;
+
+    span {
         font-family: NP, sans-serif;
         text-align: center;
         margin: 0 auto;
         display: block;
     }
 }
+
 .auch {
     li {
         margin-left: 2em !important;
@@ -2472,6 +2509,7 @@ div.fancy-select ul.options {
         height: 900px;
     }
 }
+
 .nav-tabs.nav-justified > li > a {
     color: #333;
     &:hover {

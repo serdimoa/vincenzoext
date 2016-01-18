@@ -1,13 +1,17 @@
 # coding=utf-8
 from flask.ext.wtf import Form
 from flask.ext.wtf.file import FileField
-from wtforms import StringField, BooleanField, SelectField, IntegerField, PasswordField, SubmitField, TextAreaField
+from wtforms import StringField, BooleanField, SelectField, IntegerField, PasswordField, SubmitField, TextAreaField, \
+    SelectMultipleField
 from wtforms.fields.html5 import EmailField, DateField
 from wtforms.validators import Required
 from wtforms import validators
 from models import User
 from wtforms.validators import ValidationError
-from wtforms_components import PhoneNumberField
+from wtforms_components import PhoneNumberField, TimeField
+
+weaks = [('0', u'Воскресенье'), ('1', u'Понедельник'), ('2', u'Вторник'), ('3', u'Среда'), ('4', u'Четверг'),
+         ('5', u'Пятница'), ('6', u'Суббота')]
 
 
 class PhoneNumber(PhoneNumberField):
@@ -59,6 +63,7 @@ class ItemForm(Form):
     category_id = SelectField(u"Категория", coerce=int)
     weight = StringField(u"Вес/Объем")
     price = IntegerField(u"Цена")
+    cafe_only = BooleanField(u"Только в кафе?")
     img = FileField(u"Изображение")
     thumbnail = FileField(u"Миниатюра")
 
@@ -66,7 +71,8 @@ class ItemForm(Form):
 class UserEdit(Form):
     username = StringField(u"Ваше имя")
     phone = PhoneNumber(u"Ваш телефон", country_code='RU', display_format='e164',
-                        validators=[validators.Optional(), Unique(User, User.phone, message=u"Такой телефон существует")])
+                        validators=[validators.Optional(),
+                                    Unique(User, User.phone, message=u"Такой телефон существует")])
 
 
 class ChangeUserPassword(Form):
@@ -112,3 +118,11 @@ class CategoryForm(Form):
     alias = StringField("")
     sous = BooleanField(u"Покаывать соусы в корзине или нет")
     cafe = BooleanField(u"Покаывать кнопку купить или нет")
+
+
+class SaleOnTimeForm(Form):
+    sale_name = StringField(u"Описание")
+    down_sale = StringField(u"Скидка в %")
+    date_sale_on = SelectMultipleField(u"Дни недели когда активна акция", choices=weaks)
+    time_start = TimeField(u"Начало акции(время)")
+    time_end = TimeField(u"Конец акции(время)")

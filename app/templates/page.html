@@ -196,7 +196,7 @@
                             <span class="meta__price">{{ item[0].price }}<i class="fa fa-rub"></i></span>
                         </div>
 
-                        <div class="actions" {% if delivery == "deliveryincafe" and item[1].category_name == "Кофе" %} style="display: none" {% endif %}>
+                        <div class="actions" {% if delivery != "deliveryincafe" and item[0].cafe_only == True %} style="display: none" {% endif %}>
 
                             {% if  current_user.is_authenticated %}
                                 <button class="col-md-8 action action--button action--buy items-buy" data-items='{

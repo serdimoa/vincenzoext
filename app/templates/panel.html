@@ -17,6 +17,8 @@
           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css"
           crossorigin="anonymous">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/multiple-select/1.2.0/multiple-select.min.css">
+
     <style>
         #alias {
             display: none;
@@ -24,6 +26,13 @@
 
         div.mce-fullscreen {
             z-index: 9999;
+        }
+        .ms-parent{
+            width: 100% !important;
+        }
+        .ms-parent.form-control{
+            border: none;
+            padding: 0;
         }
     </style>
     <!-- Custom styles for this template -->
@@ -73,8 +82,10 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Акции <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{ url_for("sale") }}">Все акции</a></li>
-                        <li><a href="{{ url_for("sale_add") }}">Добавить новую акцию</a></li>
+                        <li><a href="{{ url_for("sale") }}">Акции для слайдера</a></li>
+                        <li><a href="{{ url_for("sale_add") }}">Добавить новую акцию для слайдера</a></li>
+                        <li><a href="{{ url_for("sale_time") }}">Акции со временем</a></li>
+                        <li><a href="{{ url_for("sale_time_add") }}">Добавить новую акцию для корзины</a></li>
                     </ul>
                 </li>
 
@@ -117,6 +128,7 @@
         crossorigin="anonymous"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/multiple-select/1.2.0/multiple-select.min.js"></script>
 <script src="{{ url_for('static', filename='admin.js') }}"></script>
 </body>
 </html>
