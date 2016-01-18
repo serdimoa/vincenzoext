@@ -115,6 +115,7 @@ class SaleAddForm(Form):
 
 b = datetime.timedelta(hours=2, minutes=30)
 
+
 class ordernoAuch(Form):
     name = StringField(u"Ваше имя*", validators=[validators.InputRequired(u"Введите Ваше имя")])
     phone = PhoneNumber(u"Телефон*", validators=[validators.InputRequired(u"Введите Ваш телефон")])
@@ -127,7 +128,7 @@ class ordernoAuch(Form):
     floor = StringField(u"Этаж*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     delivery = DateField(u"Заказ на дату", default=datetime.date.today())
-    delivery_time = TimeField(u"Заказ на время", default=datetime.datetime.now())
+    delivery_time = TimeField(u"Заказ на время", default=datetime.datetime.now()+b)
 
 
 class CategoryForm(Form):
