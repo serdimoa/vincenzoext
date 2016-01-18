@@ -14,6 +14,10 @@ import datetime
 weaks = [('0', u'Воскресенье'), ('1', u'Понедельник'), ('2', u'Вторник'), ('3', u'Среда'), ('4', u'Четверг'),
          ('5', u'Пятница'), ('6', u'Суббота')]
 
+delivery_price = [('500', u'По городу'), ('800', u'Пром.зона'), ('800', u'Старый Вартовск (район Энтузиастов'),
+                  ('1000', u'Старый Вартовск (район "Горбатый")'), ('1200', u'Старый Вартовск (район "ЛПХ"и далее)'),
+                  ('1500', u'Излучинск')]
+
 
 class PhoneNumber(PhoneNumberField):
     """
@@ -112,7 +116,7 @@ class SaleAddForm(Form):
 class ordernoAuch(Form):
     name = StringField(u"Ваше имя*", validators=[validators.InputRequired(u"Введите Ваше имя")])
     phone = PhoneNumber(u"Телефон*", validators=[validators.InputRequired(u"Введите Ваш телефон")])
-    select_region = SelectField(u"Выберите ")
+    select_region = SelectField(u"Выберите раен доставки", choices=delivery_price)
     street = StringField(u"Улица*", validators=[validators.InputRequired(u"Введите Вашу улицу")])
     home = StringField(u"Дом*", validators=[validators.InputRequired(u"Введите Ваш дом")])
     home_corp = StringField(u"Корпус/строение")
@@ -121,8 +125,7 @@ class ordernoAuch(Form):
     floor = StringField(u"Этаж*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     delivery = DateField(u"Заказ на дату", default=datetime.date.today())
-    delivery_time = TimeField(u"Заказ на время")
-
+    delivery_time = TimeField(u"Заказ на время", default=datetime.datetime.now())
 
 
 class CategoryForm(Form):
