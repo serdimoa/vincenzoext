@@ -113,6 +113,8 @@ class SaleAddForm(Form):
     img = FileField(u"Изображение")
 
 
+b = datetime.timedelta(hours=2, minutes=30)
+
 class ordernoAuch(Form):
     name = StringField(u"Ваше имя*", validators=[validators.InputRequired(u"Введите Ваше имя")])
     phone = PhoneNumber(u"Телефон*", validators=[validators.InputRequired(u"Введите Ваш телефон")])
