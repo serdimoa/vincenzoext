@@ -347,6 +347,7 @@ $('#auch-menu-btn').click(function (event) {
 });
 
 
+
 $(".select_it").click(function () {
     $.cookie('delivery', $('input:radio[name=delivery]:checked').val());
     sessionStorage.setItem('delivery', $('input:radio[name=delivery]:checked').val());
@@ -688,6 +689,13 @@ $("a").on("click", function () {
         $.cookie("localLinkClicked", true);
 
     }
+});
+
+$(".logoa").click(function (e) {
+
+    window.location.reload();
+    $.removeCookie("localLinkClicked");
+
 });
 (function (window) {
 

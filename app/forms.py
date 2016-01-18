@@ -9,6 +9,7 @@ from wtforms import validators
 from models import User
 from wtforms.validators import ValidationError
 from wtforms_components import PhoneNumberField, TimeField
+import datetime
 
 weaks = [('0', u'Воскресенье'), ('1', u'Понедельник'), ('2', u'Вторник'), ('3', u'Среда'), ('4', u'Четверг'),
          ('5', u'Пятница'), ('6', u'Суббота')]
@@ -109,8 +110,19 @@ class SaleAddForm(Form):
 
 
 class ordernoAuch(Form):
-    name = StringField(u"Ваше имя")
-    phone = PhoneNumber(u"Телефон", validators=[validators.InputRequired(u"Введите Ваш телефон")])
+    name = StringField(u"Ваше имя*", validators=[validators.InputRequired(u"Введите Ваше имя")])
+    phone = PhoneNumber(u"Телефон*", validators=[validators.InputRequired(u"Введите Ваш телефон")])
+    select_region = SelectField(u"Выберите ")
+    street = StringField(u"Улица*", validators=[validators.InputRequired(u"Введите Вашу улицу")])
+    home = StringField(u"Дом*", validators=[validators.InputRequired(u"Введите Ваш дом")])
+    home_corp = StringField(u"Корпус/строение")
+    porch = StringField(u"Подъезд*", validators=[validators.InputRequired(u"Введите Ваш подъезд")])
+    domofon = StringField(u"Домофон*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
+    floor = StringField(u"Этаж*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
+    kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
+    delivery = DateField(u"Заказ на дату", default=datetime.date.today())
+    delivery_time = TimeField(u"Заказ на время")
+
 
 
 class CategoryForm(Form):

@@ -1,4 +1,5 @@
-{% extends "base.html" %} {% block head %}
+{% extends "base.html" %} {% from 'form_gen.html' import render_form %}
+{% block head %}
     <link rel="stylesheet" type="text/css"
           href="{{ url_for('static', filename='fonts/pixelfabric-clothes/style.css') }}"/>
     <link rel="stylesheet" type="text/css"
@@ -82,50 +83,8 @@
 
                                 <h4>Для выполнения заказа необходимо заполнить форму ниже</h4>
 
-                                <form class="form-horizontal">
-                                    <div class="form-group">
-                                        <label for="userName" class="col-sm-3 control-label">Имя</label>
+                                {{ render_form(form, action_url='', action_text='ЗАКАЗАТЬ') }}
 
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="userName" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="userPhone" class="col-sm-3 control-label">Телефон</label>
-
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="userPhone" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="userAddres" class="col-sm-3 control-label">Адрес</label>
-
-                                        <div class="col-sm-9">
-                                            <input type="text" class="form-control" id="userAddres" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="money" class="col-sm-6 control-label"> Сдача с суммы в руб.</label>
-
-                                        <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="money" placeholder="">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                            <div class="col-sm-12">
-
-                                                <label for="text-area-form" class="col-sm-12  text-left adressAuch">
-                                                    Комментарии к заказу</label>
-                                                <textarea id="text-area-form" class="form-control" rows="3"></textarea>
-                                            </div>
-                                        </div>
-                                    <div class="form-group">
-                                        <div class="col-md-offset-9 col-sm-3">
-                                            <button type="submit" id="sendAuchNone" class="btn btn-success">Заказать
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
                             {% endif %}
                         </div>
                     </div>

@@ -2,7 +2,6 @@ from app import db
 from flask.ext.login import UserMixin, AnonymousUserMixin
 from sqlalchemy_utils import PhoneNumberType
 
-
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(80))

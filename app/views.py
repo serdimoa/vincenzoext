@@ -6,6 +6,8 @@ from jinja2.filters import environmentfilter
 import os
 import ast
 import json
+import datetime
+from time import gmtime, strftime, mktime
 from flask import render_template, flash, redirect, session, url_for, request, g, jsonify, make_response, Response
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from sqlalchemy import sql, select
@@ -13,13 +15,21 @@ from sqlalchemy_utils.types.locale import babel
 from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
 from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm, ChangeUserPassword, \
-    AuchForm, SaleOnTimeForm
+    AuchForm, SaleOnTimeForm, ordernoAuch
 from models import User, Category, Items, Like, AnonymousUser, Sale, Adress, SaleoOnTime
 import mandrill
 
 lm.anonymous_user = AnonymousUser
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+
+
+class DateTimeEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.time().isoformat()
+
+        return json.JSONEncoder.default(self, o)
 
 
 @app.template_filter()
@@ -202,7 +212,15 @@ def sale_time_add():
 
 @app.route('/get_sales', methods=['GET'])
 def get_sales():
-    return jsonify({"result":SaleoOnTime.query.all()}) #todo: edit this
+    keys = ['id', 'sale_name', 'down_sale', 'date_sale_on', 'time_start', 'time_end']
+    orders = SaleoOnTime.query.all()
+    response_order = list()
+    # response_order = [dict(zip(keys, row)) for row in orders]
+    for row in orders:
+        if row.time_start < datetime.datetime.now() < row.time_end:
+            response_order.append(row.id)
+
+    return response_order
 
 
 @app.route('/panel/sale_time_edit/<int:sale_id>', methods=['GET', 'POST'])
@@ -244,7 +262,6 @@ def sale_add():
                              about_sale=form.about_sale.data,
                              show_url=form.show_url.data,
                              to_slider=form.to_slider.data
-
                              )
             db.session.add(sale_data)
             db.session.commit()
@@ -380,11 +397,12 @@ def order():
         return render_template("order.html")
     else:
         if current_user.id is None:
-            return render_template("order.html", title="Vincenzo")
+            form = ordernoAuch()
+            return render_template("order.html", form=form, title="Vincenzo")
         else:
             user_address = Adress.query.filter_by(user_id=current_user.id).first()
             addreses = eval(user_address.address)
-            return render_template("order.html", title="Vincenzo", addreses=addreses)
+            return render_template("order.html",  title="Vincenzo", addreses=addreses)
 
 
 @app.route('/get_one_item/<int:item_id>', methods=['GET', 'POST'])
