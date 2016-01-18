@@ -2,7 +2,7 @@
 from flask.ext.wtf import Form
 from flask.ext.wtf.file import FileField
 from wtforms import StringField, BooleanField, SelectField, IntegerField, PasswordField, SubmitField, TextAreaField, \
-    SelectMultipleField
+    SelectMultipleField, HiddenField
 from wtforms.fields.html5 import EmailField, DateField
 from wtforms.validators import Required
 from wtforms import validators
@@ -127,8 +127,9 @@ class ordernoAuch(Form):
     domofon = StringField(u"Домофон*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     floor = StringField(u"Этаж*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
-    delivery = DateField(u"Заказ на дату", default=datetime.date.today())
-    delivery_time = TimeField(u"Заказ на время", default=datetime.datetime.now()+b)
+    delivery = DateField(u"Заказ на дату")
+    delivery_time = TimeField(u"Заказ на время")
+    hiden_zdacha = HiddenField(u"Здача")
 
 
 class CategoryForm(Form):
