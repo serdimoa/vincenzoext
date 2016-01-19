@@ -396,58 +396,40 @@ def update_category(category_id):
 
 @app.route('/order', methods=['GET', 'POST'])
 def order():
-    prefix_form1 = "form1"
-    prefix_form2 = "form2"
-    prefix_form3 = "form3"
-    form1 = OrdernoAuchForForDeliveryInCafe(prefix=prefix_form1)
-    form2 = OrdernoAuchForForDeliveryMySelf(prefix=prefix_form2)
-    form3 = OrdernoAuchForDeliveryInHome(prefix=prefix_form3)
+    form1 = OrdernoAuchForForDeliveryInCafe()
+    form2 = OrdernoAuchForForDeliveryMySelf()
+    form3 = OrdernoAuchForDeliveryInHome()
     delivery = request.cookies.get('delivery')
+
     if delivery == "deliveryincafe":
         global_sale = 0
-        prefix_form = prefix_form1
         form = form1
-
     elif delivery == "deliverymyself":
-        prefix_form = prefix_form2
         form = form2
         global_sale = 10
-
     elif delivery == "deliveryinhome":
         global_sale = 0
         form = form3
-        prefix_form = prefix_form3
-
     else:
         form = form3
-        prefix_form = prefix_form3
         global_sale = 0
-    if request.method == "POST":
-        if form.validate_on_submit() and form.is_submitted():
-            flash(u'Заказ оформлен1', 'success')
-            return redirect(url_for("order"))
-        elif form.validate_on_submit() and form2.is_submitted():
-            flash(u'Заказ оформлен2', 'success')
-            return redirect(url_for("order"))
-        elif form.validate_on_submit() and form3.is_submitted():
-            flash(json.loads(request.cookies.get('cart')), 'info')
-            flash(u"Заказ оформлен",'success')
-            return redirect(url_for("index"))
-        else:
-            flash(str(form.validate_on_submit()))
-            return redirect(url_for("order"))
-
+    if current_user.id is None:
+        settings_it = [str("delete_buy_button"), str(delivery)]
+        return render_template("order.html", url_form='/' + str(delivery), form=form, title="Vincenzo",
+                               settings_order=settings_it, global_sale=global_sale)
     else:
-        if current_user.id is None:
-            settings_it = [str("delete_buy_button"),str(delivery)]
+        user_address = Adress.query.filter_by(user_id=current_user.id).first()
+        addreses = eval(user_address.address)
+        return render_template("order.html", title="Vincenzo", addreses=addreses, global_sale=global_sale)
 
-            return render_template("order.html", prefix_forms=prefix_form, form=form, title="Vincenzo",
-                                   settings_order=settings_it,
-                                   global_sale=global_sale)
-        else:
-            user_address = Adress.query.filter_by(user_id=current_user.id).first()
-            addreses = eval(user_address.address)
-            return render_template("order.html", title="Vincenzo", addreses=addreses, global_sale=global_sale)
+
+@app.route('/deliveryinhome', methods=["POST","GET"])
+def post_deliveryinhome():
+    form = OrdernoAuchForDeliveryInHome()
+    if form.validate():
+        flash(u"Заказ оформлен deliveryinhome", 'success')
+        return redirect(url_for('order'))
+    return redirect(url_for('order'))
 
 
 @app.route('/get_one_item/<int:item_id>', methods=['GET', 'POST'])

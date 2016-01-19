@@ -90,7 +90,7 @@
                                         <p>{{ message }}</p>
                                     </div>
                                 {% endfor %}
-                                {{ render_form(form,action_url='',prefix_form=form._prefix, action_text='ЗАКАЗАТЬ') }}
+                                {{ render_form(form,action_url=url_form, action_text='ЗАКАЗАТЬ') }}
 
                             {% endif %}
                         </div>
