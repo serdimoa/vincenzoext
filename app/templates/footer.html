@@ -161,3 +161,14 @@
     </div>
 </div>
 <div class='md-overlay'></div>
+
+{% block script %}
+    <script>
+        var global_sale = {{ global_sale }};
+        var settingsr ={% if settings_order %}
+                    {{ settings_order | safe }}
+                    {% else %}
+                    0
+                {% endif %} ;
+    </script>
+{% endblock %}

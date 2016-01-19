@@ -88,10 +88,19 @@ def user_loader(user_id):
 def index():
     select_sale = Sale.query.all()
     delivery = request.cookies.get('delivery')
+    if delivery == "deliveryincafe":
+        global_sale = 0
+    elif delivery == "deliverymyself":
+        global_sale = 10
+    elif delivery == "deliveryinhome":
+        global_sale = 0
+    else:
+        global_sale = 0
     if current_user.id is None:
         select_category = Category.query.all()
         all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
-        return render_template("page.html", type=select_category, sales=select_sale, delivery=delivery, items=all_items,
+        return render_template("page.html", type=select_category, global_sale=global_sale, sales=select_sale,
+                               delivery=delivery, items=all_items,
                                title="Vincenzo")
     else:
         select_category = Category.query.all()
@@ -101,7 +110,8 @@ def index():
         for likes in likes:
             liked.append(likes.items_id)
 
-        return render_template("page.html", type=select_category, sales=select_sale, items=all_items, likes=liked,
+        return render_template("page.html", type=select_category, global_sale=global_sale, sales=select_sale,
+                               items=all_items, likes=liked,
                                title="Vincenzo", delivery=delivery)
 
 
@@ -386,50 +396,57 @@ def update_category(category_id):
 
 @app.route('/order', methods=['GET', 'POST'])
 def order():
+    prefix_form1 = "form1"
+    prefix_form2 = "form2"
+    prefix_form3 = "form3"
+    form1 = OrdernoAuchForForDeliveryInCafe(prefix=prefix_form1)
+    form2 = OrdernoAuchForForDeliveryMySelf(prefix=prefix_form2)
+    form3 = OrdernoAuchForDeliveryInHome(prefix=prefix_form3)
     delivery = request.cookies.get('delivery')
-    form1 = OrdernoAuchForForDeliveryInCafe()
-    form2 = OrdernoAuchForForDeliveryMySelf()
-    form3 = OrdernoAuchForDeliveryInHome()
+    if delivery == "deliveryincafe":
+        global_sale = 0
+        prefix_form = prefix_form1
+        form = form1
 
-    if form1.validate_on_submit() and form1.is_submitted():
-        if form1.validate():
-            flash(u'Заказ оформлен', 'errors')
-            return redirect(url_for("order"))
-        else:
-            flash(u'Заказ не', 'errors')
+    elif delivery == "deliverymyself":
+        prefix_form = prefix_form2
+        form = form2
+        global_sale = 10
 
-    elif form2.validate_on_submit() and form2.is_submitted():
-        if form2.validate():
-            flash(u'Заказ оформлен', 'errors')
+    elif delivery == "deliveryinhome":
+        global_sale = 0
+        form = form3
+        prefix_form = prefix_form3
+
+    else:
+        form = form3
+        prefix_form = prefix_form3
+        global_sale = 325
+    if request.method == "POST":
+        if form.validate_on_submit() and form1.is_submitted():
+            flash(u'Заказ оформлен1', 'success')
             return redirect(url_for("order"))
-    elif form3.validate_on_submit() and form3.is_submitted():
-        if form3.validate():
-            flash(u"Заказ оформлен",'error')
+        elif form.validate_on_submit() and form2.is_submitted():
+            flash(u'Заказ оформлен2', 'success')
             return redirect(url_for("order"))
+        elif form.validate_on_submit() and form3.is_submitted():
+            flash(json.loads(request.cookies.get('cart')), 'info')
+            flash(u"Заказ оформлен",'success')
+            return redirect(url_for("index"))
         else:
-            flash(u'Заказ не', 'errors')
+            return redirect(url_for("order"))
 
     else:
         if current_user.id is None:
-            settings_it = [str("delete_buy_button")]
-            if delivery == "deliveryincafe":
-                form = form1
-                global_sale = 0
-            elif delivery == "deliverymyself":
-                form = form2
-                global_sale = 10
-            elif delivery == "deliveryinhome":
-                form = form3
-                global_sale = 0
-            else:
-                form = form3
-                global_sale = 0
+            settings_it = [str("delete_buy_button"),str(delivery)]
 
-            return render_template("order.html", form=form, title="Vincenzo", settings_order=settings_it, global_sale=global_sale)
+            return render_template("order.html", prefix_forms=prefix_form, form=form, title="Vincenzo",
+                                   settings_order=settings_it,
+                                   global_sale=global_sale)
         else:
             user_address = Adress.query.filter_by(user_id=current_user.id).first()
             addreses = eval(user_address.address)
-            return render_template("order.html", title="Vincenzo", addreses=addreses)
+            return render_template("order.html", title="Vincenzo", addreses=addreses, global_sale=global_sale)
 
 
 @app.route('/get_one_item/<int:item_id>', methods=['GET', 'POST'])
@@ -454,18 +471,45 @@ def get_one_item(item_id):
 @app.route('/sales', methods=['GET', 'POST'])
 def sales():
     select_sales = Sale.query.all()
-    return render_template('sale.html', sales=select_sales)
+    delivery = request.cookies.get('delivery')
+    if delivery == "deliveryincafe":
+        global_sale = 0
+    elif delivery == "deliverymyself":
+        global_sale = 10
+    elif delivery == "deliveryinhome":
+        global_sale = 0
+    else:
+        global_sale = 0
+    return render_template('sale.html', sales=select_sales, global_sale=global_sale)
 
 
 @app.route('/one_sale/<int:sale_id>', methods=['GET', 'POST'])
 def one_sale(sale_id):
+    delivery = request.cookies.get('delivery')
+    if delivery == "deliveryincafe":
+        global_sale = 0
+    elif delivery == "deliverymyself":
+        global_sale = 10
+    elif delivery == "deliveryinhome":
+        global_sale = 0
+    else:
+        global_sale = 0
     one_sales = db.session.query(Sale).filter_by(id=sale_id).first()
-    return render_template('one_sale.html', sale=one_sales)
+    return render_template('one_sale.html', sale=one_sales, global_sale=global_sale)
 
 
 @app.route('/aboutus', methods=['GET', 'POST'])
 def about_us():
-    return render_template("aboutus.html", title="О нас")
+    delivery = request.cookies.get('delivery')
+    if delivery == "deliveryincafe":
+        global_sale = 0
+    elif delivery == "deliverymyself":
+        global_sale = 10
+    elif delivery == "deliveryinhome":
+        global_sale = 0
+    else:
+        global_sale = 0
+    return render_template("aboutus.html", title="О нас", global_sale=global_sale)
 
 
 @app.route('/panel/item_add', methods=['GET', 'POST'])
@@ -655,6 +699,15 @@ def pwreset():
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     form = RegistrationForm()
+    delivery = request.cookies.get('delivery')
+    if delivery == "deliveryincafe":
+        global_sale = 0
+    elif delivery == "deliverymyself":
+        global_sale = 10
+    elif delivery == "deliveryinhome":
+        global_sale = 0
+    else:
+        global_sale = 0
     if form.validate_on_submit():
         user = User(username=form.username.data,
                     email=form.email.data,
@@ -663,7 +716,8 @@ def registration():
                     authenticated=True)
         db.session.add(user)
         db.session.commit()
-        registered_user = User.query.filter_by(phone=form.phone.data, password=form.password.data).first()
+        registered_user = User.query.filter_by(phone=form.phone.data, global_sale=global_sale,
+                                               password=form.password.data).first()
         if registered_user is None:
             return redirect(url_for('index'))
         login_user(registered_user)

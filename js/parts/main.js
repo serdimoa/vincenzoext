@@ -7,12 +7,13 @@ if ($('.index_page').length) {
 
     var cartItems = cart.querySelector('.cart__count');
 }
+if (settingsr){
 if ( $.inArray('delete_buy_button', settingsr) > -1 ) {
     $('#orderNow').hide();
-
 }
 else{
 }
+    }
 
 var delivery = sessionStorage.getItem('delivery');
 
@@ -427,7 +428,8 @@ function calculateSumm() {
     if ($('.borderLeft .full_price').length) {
         $('.full_price').text(summ);
     }
-
+    $.cookie("cart",JSON.stringify(dataFromTable()));
+    $.cookie("cart_price",summ);
     localStorage.setItem("cart", JSON.stringify(dataFromTable()));
     localStorage.setItem("cart_price", summ);
     return summ;

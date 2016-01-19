@@ -90,7 +90,7 @@
                                         <p>{{ message }}</p>
                                     </div>
                                 {% endfor %}
-                                {{ render_form(form, action_url='', action_text='ЗАКАЗАТЬ') }}
+                                {{ render_form(form,action_url='',prefix_form=form._prefix, action_text='ЗАКАЗАТЬ') }}
 
                             {% endif %}
                         </div>
@@ -135,10 +135,4 @@
 
 {% endblock %} {% block footer %}
     {% include "footer.html" %}
-{% endblock %} {% block script %}
-    <script>
-        var global_sale = {{ global_sale }};
-        var settingsr ={{ settings_order | safe }};
-    </script>
-
 {% endblock %}
