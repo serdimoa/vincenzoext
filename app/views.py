@@ -423,7 +423,7 @@ def order():
         prefix_form = prefix_form3
         global_sale = 0
     if request.method == "POST":
-        if form.validate_on_submit() and form1.is_submitted():
+        if form.validate_on_submit() and form.is_submitted():
             flash(u'Заказ оформлен1', 'success')
             return redirect(url_for("order"))
         elif form.validate_on_submit() and form2.is_submitted():
@@ -434,6 +434,7 @@ def order():
             flash(u"Заказ оформлен",'success')
             return redirect(url_for("index"))
         else:
+            flash(str(form.validate_on_submit()))
             return redirect(url_for("order"))
 
     else:

@@ -92,22 +92,22 @@
             {% for sale in sales %}
                 <div class="slider-item">
                     {% if sale.img!=None %}
-                        <div class="col-sm-6 about-sale-img">
-                            <h2>{{ sale.sale_name }}</h2>
-                            {% if sale.price_if_have %}
-                                <h2>Цена по акции:{{ sale.price_if_have }} <i class="fa fa-rub"></i></h2>
-                            {% endif %}
-                            <div class="seq-prev"><</div>
-                            <div class="seq-next">></div>
-                            {% if sale.about_sale != "" %}
-                                <div class="seq-full">
-                                    <a href="{{ url_for('one_sale',sale_id=sale.id) }}">Подробнее</a>
-                                </div>
-                            {% endif %}
+{#                        <div class="col-sm-6 about-sale-img">#}
+{#                            <h2>{{ sale.sale_name }}</h2>#}
+{#                            {% if sale.price_if_have %}#}
+{#                                <h2>Цена по акции:{{ sale.price_if_have }} <i class="fa fa-rub"></i></h2>#}
+{#                            {% endif %}#}
+{#                            <div class="seq-prev"><</div>#}
+{#                            <div class="seq-next">></div>#}
+{#                            {% if sale.about_sale != "" %}#}
+{#                                <div class="seq-full">#}
+{#                                    <a href="{{ url_for('one_sale',sale_id=sale.id) }}">Подробнее</a>#}
+{#                                </div>#}
+{#                            {% endif %}#}
+{##}
+{#                        </div>#}
 
-                        </div>
-
-                        <div class="col-sm-6 slider-img">
+                        <div class="col-sm-12 slider-img">
                             <img class="img-responsive " src="{{ url_for('static',filename='upload/'+sale.img) }}"
                                  alt=""></div>
                     {% else %}
