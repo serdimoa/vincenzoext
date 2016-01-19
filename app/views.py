@@ -15,21 +15,14 @@ from sqlalchemy_utils.types.locale import babel
 from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
 from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm, ChangeUserPassword, \
-    AuchForm, SaleOnTimeForm, ordernoAuch
+    AuchForm, SaleOnTimeForm, OrdernoAuchForForDeliveryInCafe, OrdernoAuchForDeliveryInHome, \
+    OrdernoAuchForForDeliveryMySelf
 from models import User, Category, Items, Like, AnonymousUser, Sale, Adress, SaleoOnTime
 import mandrill
 
 lm.anonymous_user = AnonymousUser
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-
-
-class DateTimeEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, datetime):
-            return o.time().isoformat()
-
-        return json.JSONEncoder.default(self, o)
 
 
 @app.template_filter()
@@ -393,16 +386,50 @@ def update_category(category_id):
 
 @app.route('/order', methods=['GET', 'POST'])
 def order():
-    if request.method == 'POST':
-        return render_template("order.html")
+    delivery = request.cookies.get('delivery')
+    form1 = OrdernoAuchForForDeliveryInCafe()
+    form2 = OrdernoAuchForForDeliveryMySelf()
+    form3 = OrdernoAuchForDeliveryInHome()
+
+    if form1.validate_on_submit() and form1.is_submitted():
+        if form1.validate():
+            flash(u'Заказ оформлен', 'errors')
+            return redirect(url_for("order"))
+        else:
+            flash(u'Заказ не', 'errors')
+
+    elif form2.validate_on_submit() and form2.is_submitted():
+        if form2.validate():
+            flash(u'Заказ оформлен', 'errors')
+            return redirect(url_for("order"))
+    elif form3.validate_on_submit() and form3.is_submitted():
+        if form3.validate():
+            flash(u"Заказ оформлен",'error')
+            return redirect(url_for("order"))
+        else:
+            flash(u'Заказ не', 'errors')
+
     else:
         if current_user.id is None:
-            form = ordernoAuch()
-            return render_template("order.html", form=form, title="Vincenzo")
+            settings_it = [str("delete_buy_button")]
+            if delivery == "deliveryincafe":
+                form = form1
+                global_sale = 0
+            elif delivery == "deliverymyself":
+                form = form2
+                global_sale = 10
+            elif delivery == "deliveryinhome":
+                form = form3
+                global_sale = 0
+            else:
+                form = form3
+                global_sale = 0
+
+            return render_template("order.html", form=form, title="Vincenzo", settings_order=settings_it, global_sale=global_sale)
         else:
             user_address = Adress.query.filter_by(user_id=current_user.id).first()
             addreses = eval(user_address.address)
-            return render_template("order.html",  title="Vincenzo", addreses=addreses)
+            return render_template("order.html", title="Vincenzo", addreses=addreses)
 
 
 @app.route('/get_one_item/<int:item_id>', methods=['GET', 'POST'])
