@@ -18,6 +18,8 @@
 //= ../bower_components/sweetalert/dist/sweetalert.min.js
 //= ../bower_components/FitText.js/jquery.fittext.js
 //= ../bower_components/jquery.maskedinput/dist/jquery.maskedinput.js
+//= ../bower_components/moment/min/moment-with-locales.min.js
+//= ../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
 
 //= parts/iosOverlay.js
 //= parts/blazy.js

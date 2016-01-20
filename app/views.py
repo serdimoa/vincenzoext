@@ -2,6 +2,9 @@
 from __future__ import unicode_literals
 import random
 import string
+import urllib
+import urllib2
+import simplejson as simplejson
 from jinja2.filters import environmentfilter
 import os
 import ast
@@ -183,20 +186,11 @@ def get_category():
 
 @app.route('/get_order', methods=['GET', 'POST'])
 def get_order():
-    order_detail = request.data
-    order_convert = ast.literal_eval(order_detail)
-    order_convert = map(int, order_convert)
-    keys = ['id', 'item_name', 'item_component', 'price', 'weight']
+    get_order_order = request.cookies.get("cart")
 
-    orders = db.session.execute(
-        select(
-            [Items.id, Items.item_name, Items.item_component, Items.price, Items.weight],
-            Items.id.in_(order_convert)
-        )
-    ).fetchall()
-    response_order = [dict(zip(keys, row)) for row in orders]
-
-    return jsonify(response=response_order)
+    orders = simplejson.loads(get_order_order)
+    orderis = ast.literal_eval(orders)
+    return orders
 
 
 @app.route('/panel/sale_time_add', methods=['GET', 'POST'])
@@ -400,7 +394,7 @@ def order():
     form2 = OrdernoAuchForForDeliveryMySelf()
     form3 = OrdernoAuchForDeliveryInHome()
     delivery = request.cookies.get('delivery')
-
+    carts = request.cookies.get("cart")
     if delivery == "deliveryincafe":
         global_sale = 0
         form = form1
@@ -413,14 +407,44 @@ def order():
     else:
         form = form3
         global_sale = 0
-    if current_user.id is None:
-        settings_it = [str("delete_buy_button"), str(delivery)]
-        return render_template("order.html", url_form='/' + str(delivery), form=form, title="Vincenzo",
-                               settings_order=settings_it, global_sale=global_sale)
+    if form.validate_on_submit():
+        if form.hidden_type.data == "deliveryinhome":
+            flash(u"Заказ оформлен deliveryinhome", 'success')
+            return redirect(url_for('order'))
+        if form.hidden_type.data == "deliveryincafe":
+            flash(u"Заказ оформлен deliveryincafe", 'success')
+            return redirect(url_for('order'))
+        if form.hidden_type.data == "deliverymyself":
+            flash(form.delivery_time.data, 'success')
+            try:
+                mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                message = {
+                    'auto_html': None,
+                    'auto_text': None,
+                    'from_email': 'sir.vincenzo.office@gmail.com',
+                    'from_name': 'Sir Vincenzo ',
+                    'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                    'html': '<div>Ваш Заказ с сайта: ' +carts.decode('utf8')  + '</div>',
+                    'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                    'to': [{'email': "serdimoa@gmail.com",
+                            'name': "serdimoa",
+                            'type': 'to'}]
+                    }
+
+                result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+                return jsonify(result=result[0]['status'])
+
+            except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+               return jsonify(result=2)
     else:
-        user_address = Adress.query.filter_by(user_id=current_user.id).first()
-        addreses = eval(user_address.address)
-        return render_template("order.html", title="Vincenzo", addreses=addreses, global_sale=global_sale)
+        if current_user.id is None:
+            settings_it = [str("delete_buy_button"), str(delivery)]
+            return render_template("order.html",  form=form, title="Vincenzo",
+                                   settings_order=settings_it, global_sale=global_sale)
+        else:
+            user_address = Adress.query.filter_by(user_id=current_user.id).first()
+            addreses = eval(user_address.address)
+            return render_template("order.html", title="Vincenzo", addreses=addreses, global_sale=global_sale)
 
 
 @app.route('/deliveryinhome', methods=["POST","GET"])
