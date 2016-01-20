@@ -2,6 +2,7 @@ from app import db
 from flask.ext.login import UserMixin, AnonymousUserMixin
 from sqlalchemy_utils import PhoneNumberType
 
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(80))
@@ -34,6 +35,19 @@ class User(db.Model, UserMixin):
         # def is_anonymous(self):
         #     """False, as anonymous users aren't supported."""
         #     return False
+
+
+class TeaCategory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tea_category_name = db.Column(db.String(50))
+    tea_img = db.Column(db.String(50))
+
+    def __init__(self, tea_category_name, tea_img):
+        self.tea_category_name = tea_category_name
+        self.tea_img = tea_img
+
+    def __unicode__(self):
+        return self.tea_category_name
 
 
 class Category(db.Model):
@@ -158,6 +172,24 @@ class SaleoOnTime(db.Model):
                     date_sale_on=self.date_sale_on,
                     time_start=self.time_start,
                     time_end=self.time_end)
+
+
+class Tea(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    tea_category_id = db.Column(db.Integer, db.ForeignKey('teacategory.id'))
+    tea_name = db.Column(db.String(20))
+    tea_about = db.Column(db.String(255))
+    tea_price_400 = db.Column(db.Integer)
+    tea_price_800 = db.Column(db.Integer)
+    tea_price_1000 = db.Column(db.Integer)
+
+    def __init__(self, tea_name, tea_category_id, tea_about, tea_price_400, tea_price_800, tea_price_1000):
+        self.tea_category_id = tea_category_id
+        self.tea_name = tea_name
+        self.tea_about = tea_about
+        self.tea_price_400 = tea_price_400
+        self.tea_price_800 = tea_price_800
+        self.tea_price_1000 = tea_price_1000
 
 
 class AnonymousUser(AnonymousUserMixin):

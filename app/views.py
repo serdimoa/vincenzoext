@@ -21,8 +21,8 @@ from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
 from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm, ChangeUserPassword, \
     AuchForm, SaleOnTimeForm, OrdernoAuchForForDeliveryInCafe, OrdernoAuchForDeliveryInHome, \
-    OrdernoAuchForForDeliveryMySelf
-from models import User, Category, Items, Like, AnonymousUser, Sale, Adress, SaleoOnTime
+    OrdernoAuchForForDeliveryMySelf, TeaCategoryForm
+from models import User, Category, Items, Like, AnonymousUser, Sale, Adress, SaleoOnTime, TeaCategory
 import mandrill
 
 lm.anonymous_user = AnonymousUser
@@ -174,6 +174,16 @@ def address():
             return redirect(url_for("index"))
     else:
         return redirect(url_for("index"))
+
+
+@app.route('/panel/tea_category', methods=['GET', 'POST'])
+def get_tea_category():
+    """
+    Берем все категории или добавляем новую
+    :rtype : json
+    """
+    select_category = TeaCategory.query.all()
+    return render_template("teacategory.html", category=select_category)
 
 
 @app.route('/panel/category', methods=['GET', 'POST'])
@@ -335,6 +345,20 @@ def category_add():
         flash(u'Категория добавлена', "success")
         return redirect(url_for('get_category'))
     return render_template('category_add.html', form=form)
+
+
+@app.route('/panel/category/tea_category_add', methods=['GET', 'POST'])
+def tea_category_add():
+    form = TeaCategoryForm()
+    if form.validate_on_submit():
+        filename = secure_filename(form.img.data.filename)
+        category_data = TeaCategory(tea_category_name=form.tea_category_name.data, tea_img=form.tea_category_name.data + filename)
+        form.img.data.save(basedir + "/static/upload/" + form.tea_category_name.data + filename)
+        db.session.add(category_data)
+        db.session.commit()
+        flash(u'Категория добавлена', "success")
+        return redirect(url_for('get_category'))
+    return render_template('tea_category_add.html', form=form)
 
 
 @app.route('/like_add', methods=['GET', 'POST'])

@@ -87,7 +87,7 @@
 
     </div>
     <div class="bgs">
-        <div class="container sliders ">
+        <div class="container-fluid  sliders paddingNone">
 
             {% for sale in sales %}
                 <div class="slider-item">
@@ -107,7 +107,7 @@
                         {##}
                         {#                        </div>#}
 
-                        <div class="col-sm-12 slider-img">
+                        <div class="col-sm-12 slider-img paddingNone">
                             {% if sale.about_sale != "" %}
                                 <a href="{{ url_for('one_sale',sale_id=sale.id) }}">
                                     <img class="img-responsive "

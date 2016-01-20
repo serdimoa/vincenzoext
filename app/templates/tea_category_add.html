@@ -1,0 +1,9 @@
+{% extends "panel.html" %}
+{% from 'form_gen.html' import render_form_file %}
+
+{% block body %}
+
+    {{ render_form_file(form, action_url='', action_text='Добавить') }}<br>
+    <a href="#" class="btn btn-default" onclick="window.history.back()">Назад</a>
+
+{% endblock %}

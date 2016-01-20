@@ -73,6 +73,20 @@ class ItemForm(Form):
     thumbnail = FileField(u"Миниатюра")
 
 
+class TeaCategoryForm(Form):
+    tea_category_name = StringField(u"Наименование")
+    img = FileField(u"Изображение")
+
+
+class TeaForm(Form):
+    tea_category_id = SelectField(u"Категория чая", coerce=int)
+    tea_name = StringField(u"Наименование")
+    tea_about = StringField(u"О чае(кратко)")
+    tea_price_400 = IntegerField(u"Цена 400мл")
+    tea_price_800 = IntegerField(u"Цена 800мл")
+    tea_price_1000 = IntegerField(u"Цена 1000мл")
+
+
 class UserEdit(Form):
     username = StringField(u"Ваше имя")
     phone = PhoneNumber(u"Ваш телефон", country_code='RU', display_format='e164',

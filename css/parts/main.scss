@@ -2162,7 +2162,9 @@ hr {
         box-shadow: none;
     }
 }
-
+.paddingNone{
+    padding: 0;
+}
 div.fancy-select {
     margin-top: 10px;
     line-height: 1;
@@ -2430,8 +2432,9 @@ div.fancy-select ul.options {
     position: relative;
     -ms-touch-action: pan-y;
     touch-action: pan-y;
+    padding: 0;
     .slider-item {
-        margin-top: 230px;
+        margin-top: 130px;
         .about-sale-img h2 {
             font-family: NP, sans-serif;
             font-size: 36px; /* Some tweener fallback that doesn't look awful */
