@@ -119,7 +119,7 @@ b = datetime.timedelta(hours=2, minutes=30)
 # No Auch
 class DeliveryNoAuch(Form):
     name = StringField(u"Ваше имя*", validators=[validators.InputRequired(u"Введите Ваше имя")])
-    phone = PhoneNumber(u"Телефон*", validators=[validators.InputRequired(u"Введите Ваш телефон")])
+    phone = PhoneNumber(u"Телефон*",country_code='RU', display_format='e164', validators=[validators.InputRequired(u"Введите Ваш телефон")])
 
 
 # Samovivoz no auch
@@ -152,7 +152,7 @@ class OrdernoAuchForDeliveryInHome(DeliveryNoAuch):
     person = StringField(u"Количество персон(приборов)")
     pey_method = RadioField(u"Способ оплаты", choices=[("cash", u"Оплата наличными"), ("card", u"Оплата картой")],
                             validators=[validators.InputRequired(u"Данное поле обязательно для заполнения")])
-    hiden_sdacha = HiddenField(u"Cдача с суммы в руб.", )
+    hiden_sdacha = StringField(u"Cдача с суммы в руб.", )
     some_info = TextAreaField(u"Дополнительная информация")
     hidden_type = HiddenField(default="deliveryinhome")
 

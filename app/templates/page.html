@@ -19,8 +19,8 @@
         <div class="row">
             <ul id="menu">
                 <li>
-                    <a  class="logoa"><img src="{{ url_for('static', filename='img/Sir2.png') }}" class="img-responsive"
-                                     alt=""></a>
+                    <a class="logoa"><img src="{{ url_for('static', filename='img/Sir2.png') }}" class="img-responsive"
+                                          alt=""></a>
                 </li>
                 <li><a href="{{ url_for('index') }}">Главная</a></li>
                 <li><a href="{{ url_for('sales') }}">Акции</a></li>
@@ -92,24 +92,34 @@
             {% for sale in sales %}
                 <div class="slider-item">
                     {% if sale.img!=None %}
-{#                        <div class="col-sm-6 about-sale-img">#}
-{#                            <h2>{{ sale.sale_name }}</h2>#}
-{#                            {% if sale.price_if_have %}#}
-{#                                <h2>Цена по акции:{{ sale.price_if_have }} <i class="fa fa-rub"></i></h2>#}
-{#                            {% endif %}#}
-{#                            <div class="seq-prev"><</div>#}
-{#                            <div class="seq-next">></div>#}
-{#                            {% if sale.about_sale != "" %}#}
-{#                                <div class="seq-full">#}
-{#                                    <a href="{{ url_for('one_sale',sale_id=sale.id) }}">Подробнее</a>#}
-{#                                </div>#}
-{#                            {% endif %}#}
-{##}
-{#                        </div>#}
+                        {#                        <div class="col-sm-6 about-sale-img">#}
+                        {#                            <h2>{{ sale.sale_name }}</h2>#}
+                        {#                            {% if sale.price_if_have %}#}
+                        {#                                <h2>Цена по акции:{{ sale.price_if_have }} <i class="fa fa-rub"></i></h2>#}
+                        {#                            {% endif %}#}
+                        {#                            <div class="seq-prev"><</div>#}
+                        {#                            <div class="seq-next">></div>#}
+                        {#                            {% if sale.about_sale != "" %}#}
+                        {#                                <div class="seq-full">#}
+                        {#                                    <a href="{{ url_for('one_sale',sale_id=sale.id) }}">Подробнее</a>#}
+                        {#                                </div>#}
+                        {#                            {% endif %}#}
+                        {##}
+                        {#                        </div>#}
 
                         <div class="col-sm-12 slider-img">
-                            <img class="img-responsive " src="{{ url_for('static',filename='upload/'+sale.img) }}"
-                                 alt=""></div>
+                            {% if sale.about_sale != "" %}
+                                <a href="{{ url_for('one_sale',sale_id=sale.id) }}">
+                                    <img class="img-responsive "
+                                         src="{{ url_for('static',filename='upload/'+sale.img) }}"
+                                         alt="">
+                                </a>
+                            {% else %}
+                                <img class="img-responsive " src="{{ url_for('static',filename='upload/'+sale.img) }}"
+                                     alt="">
+                            {% endif %}
+                        </div>
+
                     {% else %}
                         <div class="col-sm-12 about-sale-img ">
                             <h2 class="noImg">{{ sale.sale_name }}</h2>
@@ -142,12 +152,14 @@
     <div class="row" id="allCatalog" style="position: relative;">
         <div id="bar" class="bar col-md-2">
             <div class="filter">
-                <button id="fulls" class="action filter__item filter__item--selected" data-filter="*">Все</button>
                 {% if current_user.is_authenticated %}
-                    <br>
-                    <button class="action filter__item" data-filter=".favorite"><i class="icon"></i><span
-                            class="action__text">Избранное</span></button>
+
+                    <button style="color:#FF5252;" class="action filter__item" data-filter=".favorite"><i
+                            class="fa fa-star"></i> <span
+                            class="action__text"> Избранное</span></button><br>
                 {% endif %}
+                <button id="fulls" class="action filter__item filter__item--selected" data-filter="*">Все</button>
+
                 <br> {% for field in type %}
                 <button class="action filter__item" data-filter=".{{ field.alias }}"><i
                         class="icon icon--{{ field.alias }}"></i><span
@@ -196,7 +208,8 @@
                             <span class="meta__price">{{ item[0].price }}<i class="fa fa-rub"></i></span>
                         </div>
 
-                        <div class="actions" {% if delivery != "deliveryincafe" and item[0].cafe_only == True %} style="display: none" {% endif %}>
+                        <div class="actions" {% if delivery != "deliveryincafe" and item[0].cafe_only == True %}
+                             style="display: none" {% endif %}>
 
                             {% if  current_user.is_authenticated %}
                                 <button class="col-md-8 action action--button action--buy items-buy" data-items='{
@@ -260,7 +273,7 @@
                     </p>
 
                     <p id="one_price" class="price"><i class="fa fa-rub"></i></p>
-                    <button class="action action--button action--buy one--buy"  data-items="" value><i
+                    <button class="action action--button action--buy one--buy" data-items="" value><i
                             class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
                     <a href="#0" class="closebtn"><span class="og-close"></span></a>
                 </div>
@@ -269,7 +282,7 @@
     </div>
 
 {% endblock %} {% block footer %}
-{% include "footer.html" %}{% endblock %}
+    {% include "footer.html" %}{% endblock %}
 {% block script %}
 
 {% endblock %}

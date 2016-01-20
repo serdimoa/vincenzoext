@@ -432,8 +432,7 @@ function calculateSumm() {
     if ($('.borderLeft .full_price').length) {
         $('.full_price').text(summ);
     }
-    $.cookie.json = true;
-    $.cookie("cart",dataFromTable());
+    $.cookie("cart",JSON.stringify(dataFromTable()));
     $.cookie("cart_price",summ);
     localStorage.setItem("cart", JSON.stringify(dataFromTable()));
     localStorage.setItem("cart_price", summ);

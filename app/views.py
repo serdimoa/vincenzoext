@@ -1,4 +1,5 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
+
 from __future__ import unicode_literals
 import random
 import string
@@ -7,11 +8,12 @@ import urllib2
 import simplejson as simplejson
 from jinja2.filters import environmentfilter
 import os
+import chardet
 import ast
 import json
 import datetime
 from time import gmtime, strftime, mktime
-from flask import render_template, flash, redirect, session, url_for, request, g, jsonify, make_response, Response
+from flask import Markup, render_template, flash, redirect, session, url_for, request, g, jsonify, make_response, Response
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from sqlalchemy import sql, select
 from sqlalchemy_utils.types.locale import babel
@@ -188,8 +190,7 @@ def get_category():
 def get_order():
     get_order_order = request.cookies.get("cart")
 
-    orders = simplejson.loads(get_order_order)
-    orderis = ast.literal_eval(orders)
+    orders = get_order_order.encode("utf-8")
     return orders
 
 
@@ -409,22 +410,31 @@ def order():
         global_sale = 0
     if form.validate_on_submit():
         if form.hidden_type.data == "deliveryinhome":
-            flash(u"Заказ оформлен deliveryinhome", 'success')
-            return redirect(url_for('order'))
-        if form.hidden_type.data == "deliveryincafe":
-            flash(u"Заказ оформлен deliveryincafe", 'success')
-            return redirect(url_for('order'))
-        if form.hidden_type.data == "deliverymyself":
-            flash(form.delivery_time.data, 'success')
+            flash(u"Заказ оформлен", 'success')
             try:
                 mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
                 message = {
-                    'auto_html': None,
+                    'auto_html': True,
                     'auto_text': None,
                     'from_email': 'sir.vincenzo.office@gmail.com',
                     'from_name': 'Sir Vincenzo ',
                     'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                    'html': '<div>Ваш Заказ с сайта: ' +carts.decode('utf8')  + '</div>',
+                    'html': '<div>Ваш Заказ с сайта. на дом :'+form.name.data+
+                            '<br> '+str(form.phone.data)+
+                            '<br> '+form.select_region.data+
+                            '<br> '+form.street.data+
+                            '<br> '+form.home.data+
+                            '<br> '+form.home_corp.data+
+                            '<br> '+form.porch.data+
+                            '<br> '+form.domofon.data+
+                            '<br> '+form.floor.data+
+                            '<br> '+form.kvartira.data+
+                            '<br> '+form.person.data+
+                            '<br> '+form.pey_method.data+
+                            '<br> '+form.hiden_sdacha.data+
+                            '<br> '+form.delivery_time.data+
+                            '<br>'+form.some_info.data+"<br>"
+                            + str(carts) + '</div>',
                     'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                     'to': [{'email': "serdimoa@gmail.com",
                             'name': "serdimoa",
@@ -432,7 +442,57 @@ def order():
                     }
 
                 result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
-                return jsonify(result=result[0]['status'])
+                return redirect(url_for('order'))
+
+            except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+               return jsonify(result=2)
+
+        if form.hidden_type.data == "deliveryincafe":
+            flash(u"Заказ оформлен", 'success')
+            try:
+                mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                message = {
+                    'auto_html': True,
+                    'auto_text': None,
+                    'from_email': 'sir.vincenzo.office@gmail.com',
+                    'from_name': 'Sir Vincenzo ',
+                    'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                    'html': '<div>Ваш Заказ с сайта. в кафе :'+form.name.data+'<br> '+str(form.phone.data)+
+                            '<br> '+form.delivery_time.data+'<br>'+form.some_info.data+"<br>"
+                            + str(carts) + '</div>',
+                    'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                    'to': [{'email': "serdimoa@gmail.com",
+                            'name': "serdimoa",
+                            'type': 'to'}]
+                    }
+
+                result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+                return redirect(url_for('order'))
+
+            except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+               return jsonify(result=2)
+
+        if form.hidden_type.data == "deliverymyself":
+            flash(form.delivery_time.data, 'success')
+            try:
+                mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                message = {
+                    'auto_html': True,
+                    'auto_text': None,
+                    'from_email': 'sir.vincenzo.office@gmail.com',
+                    'from_name': 'Sir Vincenzo ',
+                    'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                    'html': '<div>Ваш Заказ с сайта. в кафе :'+form.name.data+'<br> '+str(form.phone.data)+
+                            '<br> '+form.delivery_time.data+'<br>'+form.some_info.data+"<br>"
+                            + str(carts) + '</div>',
+                    'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                    'to': [{'email': "serdimoa@gmail.com",
+                            'name': "serdimoa",
+                            'type': 'to'}]
+                    }
+
+                result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+                return redirect(url_for('order'))
 
             except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
                return jsonify(result=2)
@@ -760,3 +820,9 @@ def site_auch():
         login_user(registered_user)
         return redirect(url_for('index'))
     return render_template("siteauch.html", form=form, form_auch=form_auch)
+
+
+@app.route('/tea', methods=['GET', 'POST'])
+def tea():
+
+    render_template("tea.html")
