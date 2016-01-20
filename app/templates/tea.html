@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% block head %}
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='fonts/pixelfabric-clothes/style.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="{{ url_for('static', filename='modernizer.custom.js') }}"></script>
+    <!-- GOOGLE FONTS -->
+    <link href='https://fonts.googleapis.com/css?family=Exo+2:400,100,200,300,500,700,600,800&subset=latin,cyrillic'
+          rel='stylesheet' type='text/css'> {% endblock %}
+{% block navigation %}
+
+    {% include "navigation.html" %}
+{% endblock %}
+{% block body %}
+    <div class="bg sale"></div>
+    <div class="container-fluid header-post">
+        <div class="row">
+            <div class="container content">
+                <div class="page-header">
+                    <h1>Наша карта чаев</h1>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="row">
+                            <img src="" alt="" class="img-responsive">
+                        </div>
+                        <div class="row">
+
+                        </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block footer %}
+{% include "footer.html" %}{% endblock %}

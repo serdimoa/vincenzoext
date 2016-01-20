@@ -1,14 +1,19 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
+
 from __future__ import unicode_literals
 import random
 import string
+import urllib
+import urllib2
+import simplejson as simplejson
 from jinja2.filters import environmentfilter
 import os
+import chardet
 import ast
 import json
 import datetime
 from time import gmtime, strftime, mktime
-from flask import render_template, flash, redirect, session, url_for, request, g, jsonify, make_response, Response
+from flask import Markup, render_template, flash, redirect, session, url_for, request, g, jsonify, make_response, Response
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from sqlalchemy import sql, select
 from sqlalchemy_utils.types.locale import babel
@@ -183,20 +188,10 @@ def get_category():
 
 @app.route('/get_order', methods=['GET', 'POST'])
 def get_order():
-    order_detail = request.data
-    order_convert = ast.literal_eval(order_detail)
-    order_convert = map(int, order_convert)
-    keys = ['id', 'item_name', 'item_component', 'price', 'weight']
+    get_order_order = request.cookies.get("cart")
 
-    orders = db.session.execute(
-        select(
-            [Items.id, Items.item_name, Items.item_component, Items.price, Items.weight],
-            Items.id.in_(order_convert)
-        )
-    ).fetchall()
-    response_order = [dict(zip(keys, row)) for row in orders]
-
-    return jsonify(response=response_order)
+    orders = get_order_order.encode("utf-8")
+    return orders
 
 
 @app.route('/panel/sale_time_add', methods=['GET', 'POST'])
@@ -396,58 +391,129 @@ def update_category(category_id):
 
 @app.route('/order', methods=['GET', 'POST'])
 def order():
-    prefix_form1 = "form1"
-    prefix_form2 = "form2"
-    prefix_form3 = "form3"
-    form1 = OrdernoAuchForForDeliveryInCafe(prefix=prefix_form1)
-    form2 = OrdernoAuchForForDeliveryMySelf(prefix=prefix_form2)
-    form3 = OrdernoAuchForDeliveryInHome(prefix=prefix_form3)
+    form1 = OrdernoAuchForForDeliveryInCafe()
+    form2 = OrdernoAuchForForDeliveryMySelf()
+    form3 = OrdernoAuchForDeliveryInHome()
     delivery = request.cookies.get('delivery')
+    carts = request.cookies.get("cart")
     if delivery == "deliveryincafe":
         global_sale = 0
-        prefix_form = prefix_form1
         form = form1
-
     elif delivery == "deliverymyself":
-        prefix_form = prefix_form2
         form = form2
         global_sale = 10
-
     elif delivery == "deliveryinhome":
         global_sale = 0
         form = form3
-        prefix_form = prefix_form3
-
     else:
         form = form3
-        prefix_form = prefix_form3
         global_sale = 0
-    if request.method == "POST":
-        if form.validate_on_submit() and form.is_submitted():
-            flash(u'Заказ оформлен1', 'success')
-            return redirect(url_for("order"))
-        elif form.validate_on_submit() and form2.is_submitted():
-            flash(u'Заказ оформлен2', 'success')
-            return redirect(url_for("order"))
-        elif form.validate_on_submit() and form3.is_submitted():
-            flash(json.loads(request.cookies.get('cart')), 'info')
-            flash(u"Заказ оформлен",'success')
-            return redirect(url_for("index"))
-        else:
-            flash(str(form.validate_on_submit()))
-            return redirect(url_for("order"))
+    if form.validate_on_submit():
+        if form.hidden_type.data == "deliveryinhome":
+            flash(u"Заказ оформлен", 'success')
+            try:
+                mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                message = {
+                    'auto_html': True,
+                    'auto_text': None,
+                    'from_email': 'sir.vincenzo.office@gmail.com',
+                    'from_name': 'Sir Vincenzo ',
+                    'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                    'html': '<div>Ваш Заказ с сайта. на дом :'+form.name.data+
+                            '<br> '+str(form.phone.data)+
+                            '<br> '+form.select_region.data+
+                            '<br> '+form.street.data+
+                            '<br> '+form.home.data+
+                            '<br> '+form.home_corp.data+
+                            '<br> '+form.porch.data+
+                            '<br> '+form.domofon.data+
+                            '<br> '+form.floor.data+
+                            '<br> '+form.kvartira.data+
+                            '<br> '+form.person.data+
+                            '<br> '+form.pey_method.data+
+                            '<br> '+form.hiden_sdacha.data+
+                            '<br> '+form.delivery_time.data+
+                            '<br>'+form.some_info.data+"<br>"
+                            + str(carts) + '</div>',
+                    'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                    'to': [{'email': "serdimoa@gmail.com",
+                            'name': "serdimoa",
+                            'type': 'to'}]
+                    }
 
+                result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+                return redirect(url_for('order'))
+
+            except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+               return jsonify(result=2)
+
+        if form.hidden_type.data == "deliveryincafe":
+            flash(u"Заказ оформлен", 'success')
+            try:
+                mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                message = {
+                    'auto_html': True,
+                    'auto_text': None,
+                    'from_email': 'sir.vincenzo.office@gmail.com',
+                    'from_name': 'Sir Vincenzo ',
+                    'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                    'html': '<div>Ваш Заказ с сайта. в кафе :'+form.name.data+'<br> '+str(form.phone.data)+
+                            '<br> '+form.delivery_time.data+'<br>'+form.some_info.data+"<br>"
+                            + str(carts) + '</div>',
+                    'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                    'to': [{'email': "serdimoa@gmail.com",
+                            'name': "serdimoa",
+                            'type': 'to'}]
+                    }
+
+                result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+                return redirect(url_for('order'))
+
+            except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+               return jsonify(result=2)
+
+        if form.hidden_type.data == "deliverymyself":
+            flash(form.delivery_time.data, 'success')
+            try:
+                mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                message = {
+                    'auto_html': True,
+                    'auto_text': None,
+                    'from_email': 'sir.vincenzo.office@gmail.com',
+                    'from_name': 'Sir Vincenzo ',
+                    'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                    'html': '<div>Ваш Заказ с сайта. в кафе :'+form.name.data+'<br> '+str(form.phone.data)+
+                            '<br> '+form.delivery_time.data+'<br>'+form.some_info.data+"<br>"
+                            + str(carts) + '</div>',
+                    'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                    'to': [{'email': "serdimoa@gmail.com",
+                            'name': "serdimoa",
+                            'type': 'to'}]
+                    }
+
+                result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+                return redirect(url_for('order'))
+
+            except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+               return jsonify(result=2)
     else:
         if current_user.id is None:
-            settings_it = [str("delete_buy_button"),str(delivery)]
-
-            return render_template("order.html", prefix_forms=prefix_form, form=form, title="Vincenzo",
-                                   settings_order=settings_it,
-                                   global_sale=global_sale)
+            settings_it = [str("delete_buy_button"), str(delivery)]
+            return render_template("order.html",  form=form, title="Vincenzo",
+                                   settings_order=settings_it, global_sale=global_sale)
         else:
             user_address = Adress.query.filter_by(user_id=current_user.id).first()
             addreses = eval(user_address.address)
             return render_template("order.html", title="Vincenzo", addreses=addreses, global_sale=global_sale)
+
+
+@app.route('/deliveryinhome', methods=["POST","GET"])
+def post_deliveryinhome():
+    form = OrdernoAuchForDeliveryInHome()
+    if form.validate():
+        flash(u"Заказ оформлен deliveryinhome", 'success')
+        return redirect(url_for('order'))
+    return redirect(url_for('order'))
 
 
 @app.route('/get_one_item/<int:item_id>', methods=['GET', 'POST'])
@@ -754,3 +820,9 @@ def site_auch():
         login_user(registered_user)
         return redirect(url_for('index'))
     return render_template("siteauch.html", form=form, form_auch=form_auch)
+
+
+@app.route('/tea', methods=['GET', 'POST'])
+def tea():
+
+    render_template("tea.html")

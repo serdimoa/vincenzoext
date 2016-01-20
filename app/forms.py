@@ -8,7 +8,7 @@ from wtforms.validators import Required
 from wtforms import validators
 from models import User
 from wtforms.validators import ValidationError
-from wtforms_components import PhoneNumberField, TimeField
+from wtforms_components import PhoneNumberField, TimeField, DateTimeField
 import datetime
 
 weaks = [('0', u'Воскресенье'), ('1', u'Понедельник'), ('2', u'Вторник'), ('3', u'Среда'), ('4', u'Четверг'),
@@ -119,21 +119,23 @@ b = datetime.timedelta(hours=2, minutes=30)
 # No Auch
 class DeliveryNoAuch(Form):
     name = StringField(u"Ваше имя*", validators=[validators.InputRequired(u"Введите Ваше имя")])
-    phone = PhoneNumber(u"Телефон*", validators=[validators.InputRequired(u"Введите Ваш телефон")])
+    phone = PhoneNumber(u"Телефон*",country_code='RU', display_format='e164', validators=[validators.InputRequired(u"Введите Ваш телефон")])
 
 
 # Samovivoz no auch
 class OrdernoAuchForForDeliveryMySelf(DeliveryNoAuch):
-    delivery = DateField(u"Заказ на дату")
-    delivery_time = TimeField(u"Заказ на время")
+    delivery_time = StringField(u"Заказ на дату/время")
+    # delivery_time = TimeField(u"Заказ на время", default=datetime.datetime.now())
     some_info = TextAreaField(u"Дополнительная информация")
+    hidden_type = HiddenField(default="deliverymyself")
 
 
-# in Cafe no auch
+# in Cafe no auchsdsd
 class OrdernoAuchForForDeliveryInCafe(DeliveryNoAuch):
-    delivery = DateField(u"Заказ на дату")
-    delivery_time = TimeField(u"Заказ на время")
+    delivery_time = StringField(u"Заказ на дату/время")
     some_info = TextAreaField(u"Дополнительная информация")
+    hidden_type = HiddenField(default="deliveryincafe")
+
 
 
 # Dostavka domoy no auch
@@ -146,13 +148,13 @@ class OrdernoAuchForDeliveryInHome(DeliveryNoAuch):
     domofon = StringField(u"Домофон*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     floor = StringField(u"Этаж*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
-    delivery = DateField(u"Заказ на дату", default=datetime.datetime.today())
-    delivery_time = TimeField(u"Заказ на время", default=datetime.datetime.now())
+    delivery_time = StringField(u"Заказ на дату/время")
     person = StringField(u"Количество персон(приборов)")
     pey_method = RadioField(u"Способ оплаты", choices=[("cash", u"Оплата наличными"), ("card", u"Оплата картой")],
                             validators=[validators.InputRequired(u"Данное поле обязательно для заполнения")])
-    hiden_sdacha = HiddenField(u"Cдача с суммы в руб.", )
+    hiden_sdacha = StringField(u"Cдача с суммы в руб.", )
     some_info = TextAreaField(u"Дополнительная информация")
+    hidden_type = HiddenField(default="deliveryinhome")
 
 
 class CategoryForm(Form):

@@ -37,6 +37,7 @@
     "FitText.js": "~1.2.0",
     "inputmask-multi": "~1.0.2",
     "jquery.maskedinput": "~1.4.1",
-    "anyslider": "~2.1.0"
+    "anyslider": "~2.1.0",
+    "eonasdan-bootstrap-datetimepicker": "~4.17.37"
   }
 }

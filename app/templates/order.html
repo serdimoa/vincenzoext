@@ -7,7 +7,8 @@
     <script src="{{ url_for('static', filename='modernizer.custom.js') }}"></script>
     <!-- GOOGLE FONTS -->
     <link href='https://fonts.googleapis.com/css?family=Exo+2:400,100,200,300,500,700,600,800&subset=latin,cyrillic'
-          rel='stylesheet' type='text/css'> {% endblock %} {% block navigation %} {% endblock %}
+          rel='stylesheet' type='text/css'>
+    {% endblock %} {% block navigation %} {% endblock %}
 {% block slider %} {% endblock %} {% block body %}
     <div class="bg sale"></div>
 
@@ -90,7 +91,7 @@
                                         <p>{{ message }}</p>
                                     </div>
                                 {% endfor %}
-                                {{ render_form(form,action_url='',prefix_form=form._prefix, action_text='ЗАКАЗАТЬ') }}
+                                {{ render_form(form,action_url="", action_text='ЗАКАЗАТЬ') }}
 
                             {% endif %}
                         </div>
@@ -135,4 +136,8 @@
 
 {% endblock %} {% block footer %}
     {% include "footer.html" %}
+{% endblock %}
+
+{% block script %}
+
 {% endblock %}

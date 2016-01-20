@@ -240,11 +240,15 @@ if ($('.userIsAuch .full_price, .borderLeft .full_price').length) {
 //    $('.full_price').text(full_price);
 //    initIfhaveSession();
 //    delivery_func();
-    $("#adressAuch").select2({
-        tags: true
+        $('#delivery_time').datetimepicker({
+            sideBySide: true,
+            locale: 'ru',
+            useCurrent : false,
+            widgetPositioning:{   vertical: 'bottom'}
 
-        //data: data
-    });
+        });
+
+
 }
 $('.userIsAuch h2, .borderLeft  h2 ').click(function () {
     $('.checkOut').addClass('isUp');
