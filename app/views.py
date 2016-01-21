@@ -197,14 +197,6 @@ def get_category():
     return render_template("category.html", category=select_category)
 
 
-@app.route('/get_order', methods=['GET', 'POST'])
-def get_order():
-    get_order_order = request.cookies.get("cart")
-
-    orders = get_order_order.encode("utf-8")
-    return orders
-
-
 @app.route('/panel/sale_time_add', methods=['GET', 'POST'])
 def sale_time_add():
     form = SaleOnTimeForm()
@@ -909,7 +901,7 @@ def registration():
             return redirect(url_for('index'))
         login_user(registered_user)
         return redirect(url_for('index'))
-    return render_template("registration.html", form=form)
+    return render_template("registration.html", form=form, global_sale=global_sale)
 
 
 @app.route('/site_auch', methods=['GET', 'POST'])
@@ -976,3 +968,18 @@ def tea_one(category_id):
     select_item = db.session.query(Tea).filter_by(tea_category_id=category_id).all()
     return render_template("teaone.html", select_category=select_category, tea_select=select_item,
                            global_sale=global_sale, delivery=delivery, title="Vincenzo")
+
+
+@app.route('/ordercomplete', methods=['GET'])
+def ordercomplete():
+    delivery = request.cookies.get('delivery')
+    if delivery == "deliveryincafe":
+        global_sale = 0
+    elif delivery == "deliverymyself":
+        global_sale = 10
+    elif delivery == "deliveryinhome":
+        global_sale = 0
+    else:
+        global_sale = 0
+    return render_template("order_complete.html", title="Vincenzo",  global_sale=global_sale)
+

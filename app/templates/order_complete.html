@@ -1,0 +1,50 @@
+{% extends "base.html" %} {% from 'form_gen.html' import render_form %}
+{% block head %}
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='fonts/pixelfabric-clothes/style.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="{{ url_for('static', filename='modernizer.custom.js') }}"></script>
+    <!-- GOOGLE FONTS -->
+    <link href='https://fonts.googleapis.com/css?family=Exo+2:400,100,200,300,500,700,600,800&subset=latin,cyrillic'
+          rel='stylesheet' type='text/css'>
+{% endblock %} {% block navigation %} {% endblock %}
+{% block slider %} {% endblock %} {% block body %}
+    <div class="bg sale"></div>
+
+    <div class="order">
+        <div class="container ">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <a href="{{ url_for('index') }}"><img src="{{ url_for('static',filename='img/Sir2.png') }}" alt=""></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 col-sm-offset-0 col-sm-12 loginOrNo">
+                    <div class="row good_order showSweetAlert" data-animation="pop">
+                        <div class="sa-icon sa-success" style="">
+                            <span class="sa-line sa-tip"></span>
+                            <span class="sa-line sa-long"></span>
+
+                            <div class="sa-placeholder"></div>
+                            <div class="sa-fix"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h1 class="text-center card-title">Ваш заказ оформлен</h1>
+                    </div>
+                    <div class="row">
+                        <a href="{{ url_for('index') }}" class="btn btn-success col-md-offset-4 col-md-4">Вернутся на домашнюю страницу</a>
+                    </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+{% endblock %} {% block footer %}
+    {% include "footer.html" %}
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}
