@@ -1897,7 +1897,7 @@ hr {
     position: absolute;
     width: 100%;
     top: 50%;
-    height: 1px;
+    height: 4px;
     background: #888;
     -webkit-transform: rotate(45deg);
     -moz-transform: rotate(45deg);
@@ -1906,7 +1906,7 @@ hr {
   .og-close:hover::before,
   .og-close:hover::after {
     background: #333;
-    height: 2px;
+    height: 6px;
   }
   .og-close::after {
     -webkit-transform: rotate(-45deg);
