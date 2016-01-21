@@ -1,0 +1,80 @@
+{% extends "base.html" %} {% block head %}
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='fonts/pixelfabric-clothes/style.css') }}"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <script src="{{ url_for('static', filename='modernizer.custom.js') }}"></script>
+    <!-- GOOGLE FONTS -->
+    <link href='https://fonts.googleapis.com/css?family=Exo+2:400,100,200,300,500,700,600,800&subset=latin,cyrillic'
+          rel='stylesheet' type='text/css'> {% endblock %}
+{% block navigation %}
+
+    {% include "navigation.html" %}
+{% endblock %}
+{% block body %}
+    <div class="bg sale"></div>
+    <div class="container-fluid header-post">
+        <div class="row">
+            <div class="container content">
+                <div class="page-header" onclick="window.history.back()">
+                    <h1>Наша чайная карта
+                        <small>({{ select_category.tea_category_name }})</small>
+                    </h1>
+                </div>
+                <div class="row">
+                    <div class="hidden-sm col-md-2">
+                        <div class="thumbnail">
+                            <img class="img-responsive "
+                                 src="{{ url_for('static',filename='upload/'+select_category.tea_img) }}"
+                                 alt="">
+
+                            <div class="caption">
+                                <h3>{{ select_category.tea_category_name }}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-10 card_this">
+
+                        {% for tea in tea_select | shuffle %}
+                            <div class="">
+                                <div class="card blue-grey darken-1">
+                                    <div class="card-content white-text">
+                                        <span class="card-title">{{ tea.tea_name }}</span>
+
+                                        <p>{{ tea.tea_about }}</p>
+                                    </div>
+                                    <div class="card-action">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>400мл</th>
+                                                <th>800мл</th>
+                                                <th>1000мл</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ tea.tea_price_400 }} <i class="fa fa-rub"></i></td>
+                                                <td>{{ tea.tea_price_800 }} <i class="fa fa-rub"></i></td>
+                                                <td>{{ tea.tea_price_1000 }} <i class="fa fa-rub"></i></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block footer %}
+    {% include "footer.html" %}{% endblock %}

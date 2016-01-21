@@ -13,7 +13,8 @@ import ast
 import json
 import datetime
 from time import gmtime, strftime, mktime
-from flask import Markup, render_template, flash, redirect, session, url_for, request, g, jsonify, make_response, Response
+from flask import Markup, render_template, flash, redirect, session, url_for, request, g, jsonify, make_response, \
+    Response
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from sqlalchemy import sql, select
 from sqlalchemy_utils.types.locale import babel
@@ -21,8 +22,8 @@ from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
 from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm, ChangeUserPassword, \
     AuchForm, SaleOnTimeForm, OrdernoAuchForForDeliveryInCafe, OrdernoAuchForDeliveryInHome, \
-    OrdernoAuchForForDeliveryMySelf, TeaCategoryForm
-from models import User, Category, Items, Like, AnonymousUser, Sale, Adress, SaleoOnTime, TeaCategory
+    OrdernoAuchForForDeliveryMySelf, TeaCategoryForm, TeaForm
+from models import User, Category, Items, Like, AnonymousUser, Sale, Adress, SaleoOnTime, TeaCategory, Tea
 import mandrill
 
 lm.anonymous_user = AnonymousUser
@@ -352,7 +353,8 @@ def tea_category_add():
     form = TeaCategoryForm()
     if form.validate_on_submit():
         filename = secure_filename(form.img.data.filename)
-        category_data = TeaCategory(tea_category_name=form.tea_category_name.data, tea_img=form.tea_category_name.data + filename)
+        category_data = TeaCategory(tea_category_name=form.tea_category_name.data,
+                                    tea_img=form.tea_category_name.data + filename)
         form.img.data.save(basedir + "/static/upload/" + form.tea_category_name.data + filename)
         db.session.add(category_data)
         db.session.commit()
@@ -413,6 +415,51 @@ def update_category(category_id):
     return render_template("category_edit.html", form=form)
 
 
+@app.route('/update_tea_category/<int:category_id>', methods=['GET', 'POST'])
+def update_tea_category(category_id):
+    """
+    Переименовуем категорию
+    :rtype : flash
+    """
+    select_item = TeaCategory.query.filter_by(id=category_id).first()
+    img = select_item.tea_img
+
+    form = TeaCategoryForm(obj=TeaCategory.query.filter_by(id=category_id).first())
+    if form.validate_on_submit():
+        filename = secure_filename(form.img.data.filename)
+
+        if filename:
+            item = TeaCategory.query.get(category_id)
+            item.tea_category_name = form.tea_category_name.data
+            item.tea_img = form.img.tea_category_name + filename
+            form.img.data.save(basedir + "/static/upload/" + form.tea_category_name.data + filename)
+            db.session.commit()
+        else:
+            item = TeaCategory.query.get(category_id)
+            item.tea_category_name = form.tea_category_name.data
+            item.tea_img = img
+            db.session.commit()
+
+        flash(u"Категория " + select_item.tea_category_name + u" Изменена", "info")
+        return redirect(url_for("get_tea_category"))
+
+    return render_template("tea_category_edit.html", form=form, img=img)
+
+
+@app.route('/delete_tea_category/<int:category_id>')
+def delete_tea_category(category_id):
+    """
+    Удаляем категорию
+    :rtype : redirect to category page
+    """
+    category = TeaCategory.query.get(category_id)
+    TeaCategory.query.filter_by(id=category_id).delete()
+    db.session.commit()
+    flash("Удалена категория - " + category.category_name, "success")
+
+    return redirect(url_for("get_tea_category"))
+
+
 @app.route('/order', methods=['GET', 'POST'])
 def order():
     form1 = OrdernoAuchForForDeliveryInCafe()
@@ -443,33 +490,33 @@ def order():
                     'from_email': 'sir.vincenzo.office@gmail.com',
                     'from_name': 'Sir Vincenzo ',
                     'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                    'html': '<div>Ваш Заказ с сайта. на дом :'+form.name.data+
-                            '<br> '+str(form.phone.data)+
-                            '<br> '+form.select_region.data+
-                            '<br> '+form.street.data+
-                            '<br> '+form.home.data+
-                            '<br> '+form.home_corp.data+
-                            '<br> '+form.porch.data+
-                            '<br> '+form.domofon.data+
-                            '<br> '+form.floor.data+
-                            '<br> '+form.kvartira.data+
-                            '<br> '+form.person.data+
-                            '<br> '+form.pey_method.data+
-                            '<br> '+form.hiden_sdacha.data+
-                            '<br> '+form.delivery_time.data+
-                            '<br>'+form.some_info.data+"<br>"
+                    'html': '<div>Ваш Заказ с сайта. на дом :' + form.name.data +
+                            '<br> ' + str(form.phone.data) +
+                            '<br> ' + form.select_region.data +
+                            '<br> ' + form.street.data +
+                            '<br> ' + form.home.data +
+                            '<br> ' + form.home_corp.data +
+                            '<br> ' + form.porch.data +
+                            '<br> ' + form.domofon.data +
+                            '<br> ' + form.floor.data +
+                            '<br> ' + form.kvartira.data +
+                            '<br> ' + form.person.data +
+                            '<br> ' + form.pey_method.data +
+                            '<br> ' + form.hiden_sdacha.data +
+                            '<br> ' + form.delivery_time.data +
+                            '<br>' + form.some_info.data + "<br>"
                             + str(carts) + '</div>',
                     'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                     'to': [{'email': "serdimoa@gmail.com",
                             'name': "serdimoa",
                             'type': 'to'}]
-                    }
+                }
 
                 result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
                 return redirect(url_for('order'))
 
             except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
-               return jsonify(result=2)
+                return jsonify(result=2)
 
         if form.hidden_type.data == "deliveryincafe":
             flash(u"Заказ оформлен", 'success')
@@ -481,20 +528,20 @@ def order():
                     'from_email': 'sir.vincenzo.office@gmail.com',
                     'from_name': 'Sir Vincenzo ',
                     'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                    'html': '<div>Ваш Заказ с сайта. в кафе :'+form.name.data+'<br> '+str(form.phone.data)+
-                            '<br> '+form.delivery_time.data+'<br>'+form.some_info.data+"<br>"
+                    'html': '<div>Ваш Заказ с сайта. в кафе :' + form.name.data + '<br> ' + str(form.phone.data) +
+                            '<br> ' + form.delivery_time.data + '<br>' + form.some_info.data + "<br>"
                             + str(carts) + '</div>',
                     'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                     'to': [{'email': "serdimoa@gmail.com",
                             'name': "serdimoa",
                             'type': 'to'}]
-                    }
+                }
 
                 result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
                 return redirect(url_for('order'))
 
             except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
-               return jsonify(result=2)
+                return jsonify(result=2)
 
         if form.hidden_type.data == "deliverymyself":
             flash(form.delivery_time.data, 'success')
@@ -506,24 +553,24 @@ def order():
                     'from_email': 'sir.vincenzo.office@gmail.com',
                     'from_name': 'Sir Vincenzo ',
                     'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                    'html': '<div>Ваш Заказ с сайта. в кафе :'+form.name.data+'<br> '+str(form.phone.data)+
-                            '<br> '+form.delivery_time.data+'<br>'+form.some_info.data+"<br>"
+                    'html': '<div>Ваш Заказ с сайта. в кафе :' + form.name.data + '<br> ' + str(form.phone.data) +
+                            '<br> ' + form.delivery_time.data + '<br>' + form.some_info.data + "<br>"
                             + str(carts) + '</div>',
                     'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                     'to': [{'email': "serdimoa@gmail.com",
                             'name': "serdimoa",
                             'type': 'to'}]
-                    }
+                }
 
                 result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
                 return redirect(url_for('order'))
 
             except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
-               return jsonify(result=2)
+                return jsonify(result=2)
     else:
         if current_user.id is None:
             settings_it = [str("delete_buy_button"), str(delivery)]
-            return render_template("order.html",  form=form, title="Vincenzo",
+            return render_template("order.html", form=form, title="Vincenzo",
                                    settings_order=settings_it, global_sale=global_sale)
         else:
             user_address = Adress.query.filter_by(user_id=current_user.id).first()
@@ -531,7 +578,7 @@ def order():
             return render_template("order.html", title="Vincenzo", addreses=addreses, global_sale=global_sale)
 
 
-@app.route('/deliveryinhome', methods=["POST","GET"])
+@app.route('/deliveryinhome', methods=["POST", "GET"])
 def post_deliveryinhome():
     form = OrdernoAuchForDeliveryInHome()
     if form.validate():
@@ -631,6 +678,49 @@ def item_add():
     return render_template('items_add.html', form=form)
 
 
+@app.route('/panel/tea_item_add', methods=['GET', 'POST'])
+def tea_item_add():
+    form = TeaForm()
+    form.tea_category_id.choices = [(c.id, c.tea_category_name) for c in TeaCategory.query.all()]
+    if request.method == 'POST':
+        item_data = Tea(
+            tea_name=form.tea_name.data,
+            tea_category_id=form.tea_category_id.data,
+            tea_about=form.tea_about.data,
+            tea_price_400=form.tea_price_400.data,
+            tea_price_800=form.tea_price_800.data,
+            tea_price_1000=form.tea_price_1000.data
+        )
+        db.session.add(item_data)
+        db.session.commit()
+
+        flash("Добавлен новый Чай", "success")
+        return redirect(url_for("tea_items"))
+
+    return render_template('tea_items_add.html', form=form)
+
+
+@app.route('/panel/tea_item_edit/<int:item_id>', methods=['GET', 'POST'])
+def tea_item_edit(item_id):
+    select_item = Tea.query.filter_by(id=item_id).first()
+    form = TeaForm(obj=select_item)
+    form.tea_category_id.choices = [(c.id, c.tea_category_name) for c in TeaCategory.query.all()]
+    if form.validate_on_submit():
+        item = Tea.query.get(item_id)
+        item.tea_category_id = form.tea_category_id.data
+        item.tea_name = form.tea_name.data
+        item.tea_about = form.tea_about.data
+        item.tea_price_400 = form.tea_price_400.data
+        item.tea_price_800 = form.tea_price_800.data
+        item.tea_price_1000 = form.tea_price_1000.data
+        db.session.commit()
+
+        flash(u"Изменено", "info")
+        return redirect(url_for("tea_items"))
+
+    return render_template('tea_items_edit.html', form=form)
+
+
 @app.route('/panel/item_edit/<int:item_id>', methods=['GET', 'POST'])
 def item_edit(item_id):
     select_item = Items.query.filter_by(id=item_id).first()
@@ -712,6 +802,12 @@ def item_delete(item_id):
 def items():
     all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
     return render_template("items.html", items=all_items)
+
+
+@app.route('/panel/tea_items', methods=['GET', 'POST'])
+def tea_items():
+    all_items = db.session.query(Tea, TeaCategory).join(TeaCategory, Tea.tea_category_id == TeaCategory.id).all()
+    return render_template("tea_items.html", items=all_items)
 
 
 #
@@ -846,7 +942,37 @@ def site_auch():
     return render_template("siteauch.html", form=form, form_auch=form_auch)
 
 
-@app.route('/tea', methods=['GET', 'POST'])
+@app.route('/tea', methods=['GET'])
 def tea():
+    delivery = request.cookies.get('delivery')
+    if delivery == "deliveryincafe":
+        global_sale = 0
+    elif delivery == "deliverymyself":
+        global_sale = 10
+    elif delivery == "deliveryinhome":
+        global_sale = 0
+    else:
+        global_sale = 0
 
-    render_template("tea.html")
+    select_category = TeaCategory.query.all()
+
+    return render_template("tea.html", tea_category=select_category, global_sale=global_sale,
+                           delivery=delivery, title="Vincenzo")
+
+
+@app.route('/tea/<int:category_id>', methods=['GET'])
+def tea_one(category_id):
+    delivery = request.cookies.get('delivery')
+    if delivery == "deliveryincafe":
+        global_sale = 0
+    elif delivery == "deliverymyself":
+        global_sale = 10
+    elif delivery == "deliveryinhome":
+        global_sale = 0
+    else:
+        global_sale = 0
+
+    select_category = TeaCategory.query.filter_by(id=category_id).one()
+    select_item = db.session.query(Tea).filter_by(tea_category_id=category_id).all()
+    return render_template("teaone.html", select_category=select_category, tea_select=select_item,
+                           global_sale=global_sale, delivery=delivery, title="Vincenzo")

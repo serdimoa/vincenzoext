@@ -80,11 +80,11 @@ class TeaCategoryForm(Form):
 
 class TeaForm(Form):
     tea_category_id = SelectField(u"Категория чая", coerce=int)
-    tea_name = StringField(u"Наименование")
-    tea_about = StringField(u"О чае(кратко)")
-    tea_price_400 = IntegerField(u"Цена 400мл")
-    tea_price_800 = IntegerField(u"Цена 800мл")
-    tea_price_1000 = IntegerField(u"Цена 1000мл")
+    tea_name = StringField(u"Наименование*", validators=[validators.InputRequired(u"Поле обязательно к заполнению")])
+    tea_about = StringField(u"О чае(кратко)*", validators=[validators.InputRequired(u"Поле обязательно к заполнению")])
+    tea_price_400 = IntegerField(u"Цена 400мл*", validators=[validators.InputRequired(u"Поле обязательно к заполнению")])
+    tea_price_800 = IntegerField(u"Цена 800мл*", validators=[validators.InputRequired(u"Поле обязательно к заполнению")])
+    tea_price_1000 = IntegerField(u"Цена 1000мл*", validators=[validators.InputRequired(u"Поле обязательно к заполнению")])
 
 
 class UserEdit(Form):

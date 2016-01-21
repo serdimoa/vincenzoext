@@ -1818,7 +1818,13 @@ h2 small span {
     }
 
 }
-
+.caption h3{
+    text-align: center;
+    font-family: 'NP', sans-serif;
+}
+.card-title{
+    font-family: 'NP', sans-serif;
+}
 hr {
     margin-top: 5px;
     margin-bottom: 5px;
@@ -2423,7 +2429,7 @@ div.fancy-select ul.options {
     background: #D9D9D9 url("img/bg.jpg") no-repeat;
     background-position: 0% 100%;
     background-size: cover;
-    height: 600px;
+    height: 730px;
 }
 
 .sliders {
@@ -2503,13 +2509,13 @@ div.fancy-select ul.options {
 
 @include mq(lg) {
     .bgs {
-        height: 700px;
+        height: 830px;
     }
 }
 
 @media all and (min-width: 1600px) {
     .bgs {
-        height: 900px;
+        height: 1030px;
     }
 }
 

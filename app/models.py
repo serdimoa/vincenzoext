@@ -176,7 +176,7 @@ class SaleoOnTime(db.Model):
 
 class Tea(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    tea_category_id = db.Column(db.Integer, db.ForeignKey('teacategory.id'))
+    tea_category_id = db.Column(db.Integer, db.ForeignKey('tea_category.id'))
     tea_name = db.Column(db.String(20))
     tea_about = db.Column(db.String(255))
     tea_price_400 = db.Column(db.Integer)

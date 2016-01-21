@@ -80,6 +80,14 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">Чайная карта<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for("get_tea_category") }}">Категории</a></li>
+                        <li><a href="{{ url_for("tea_items") }}">Список</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                        aria-expanded="false">Акции <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{{ url_for("sale") }}">Акции для слайдера</a></li>

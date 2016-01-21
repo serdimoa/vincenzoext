@@ -17,23 +17,34 @@
         <div class="row">
             <div class="container content">
                 <div class="page-header">
-                    <h1>Наша карта чаев</h1>
+                    <h1>Наша чайная карта
+                        <small>(выберите категорю чая)</small>
+                    </h1>
+
                 </div>
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="row">
-                            <img src="{{  }}" alt="" class="img-responsive">
+                    {% for category in tea_category %}
+                        <div class="col-sm-6 col-md-4">
+                            <a href="{{ url_for("tea_one",category_id=category.id) }}">
+                                <div class="thumbnail">
+                                    <img class="img-responsive "
+                                         src="{{ url_for('static',filename='upload/'+category.tea_img) }}"
+                                         alt="">
+
+                                    <div class="caption">
+                                        <h3>{{ category.tea_category_name }}</h3>
+
+{#                                        <p><a href="#" class="btn btn-info" role="button">Выбрать</a>#}
+{#                                        </p>#}
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                        <div class="row">
-                        <h2>Зеленый чай</h2>
-                        </div>
-                        <div class="row">
-                            <h3>{{  }}</h3>
-                        </div>
-                    </div>
-                    <div class="col-md-4"></div>
-                    <div class="col-md-4"></div>
+                    {% endfor %}
+
+
                 </div>
+
 
             </div>
         </div>
@@ -41,4 +52,4 @@
 
 {% endblock %}
 {% block footer %}
-{% include "footer.html" %}{% endblock %}
+    {% include "footer.html" %}{% endblock %}

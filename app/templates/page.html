@@ -165,6 +165,9 @@
                         class="icon icon--{{ field.alias }}"></i><span
                         class="action__text">{{ field.category_name }}</span></button>
                 <br> {% endfor %}
+                <button class="action filter__item" onclick="    $.cookie('localLinkClicked', true)
+;window.location.href='/tea'"> <span
+                        class="action__text"> Чай</span></button>
             </div>
             <button class="cart">
                 <i class="cart__icon fa fa-shopping-cart"></i>
@@ -275,7 +278,10 @@
                     <p id="one_price" class="price"><i class="fa fa-rub"></i></p>
                     <button class="action action--button action--buy one--buy" data-items="" value><i
                             class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
+                    <button style="width: 100%" class="action action--button action--like cantbuy" data-items="" value><i
+                            class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
                     <a href="#0" class="closebtn"><span class="og-close"></span></a>
+
                 </div>
             </div>
         </div>
