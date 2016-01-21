@@ -431,7 +431,7 @@ def update_tea_category(category_id):
         if filename:
             item = TeaCategory.query.get(category_id)
             item.tea_category_name = form.tea_category_name.data
-            item.tea_img = form.img.data + filename
+            item.tea_img = form.tea_category_name.data + filename
             form.img.data.save(basedir + "/static/upload/" + form.tea_category_name.data + filename)
             db.session.commit()
         else:
