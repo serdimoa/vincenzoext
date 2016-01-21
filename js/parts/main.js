@@ -687,10 +687,12 @@ $(function () {
             if (y >= top) {
                 sidebar.addClass('fixed');
                 bodywithsidebar.addClass('col-md-offset-2');
+                bodywithsidebar.addClass('col-sm-offset-2');
                 cart.addClass("cartAbsolute cartPerc")
             } else {
                 sidebar.removeClass('fixed');
                 bodywithsidebar.removeClass('col-md-offset-2');
+                bodywithsidebar.removeClass('col-sm-offset-2');
                 cart.removeClass('cartAbsolute cartPerc');
             }
         });
