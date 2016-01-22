@@ -257,7 +257,6 @@ if ($('.userIsAuch .full_price, .borderLeft .full_price').length) {
 
     });
 
-
 }
 $('.userIsAuch h2, .borderLeft  h2 ').click(function () {
     $('.checkOut').addClass('isUp');
@@ -442,6 +441,8 @@ function calculateSumm() {
     }
     $.cookie("cart", JSON.stringify(dataFromTable()));
     $.cookie("cart_price", summ);
+    $("#hidden_table").val(JSON.stringify(dataFromTable()));
+
     localStorage.setItem("cart", JSON.stringify(dataFromTable()));
     localStorage.setItem("cart_price", summ);
     return summ;

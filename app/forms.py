@@ -133,7 +133,7 @@ b = datetime.timedelta(hours=2, minutes=30)
 # No Auch
 class DeliveryNoAuch(Form):
     name = StringField(u"Ваше имя*", validators=[validators.InputRequired(u"Введите Ваше имя")])
-    phone = PhoneNumber(u"Телефон*",country_code='RU', display_format='e164', validators=[validators.InputRequired(u"Введите Ваш телефон")])
+    phone = PhoneNumber(u"Телефон*", country_code='RU', display_format='e164', validators=[validators.InputRequired(u"Введите Ваш телефон")])
 
 
 # Samovivoz no auch
@@ -142,6 +142,7 @@ class OrdernoAuchForForDeliveryMySelf(DeliveryNoAuch):
     # delivery_time = TimeField(u"Заказ на время", default=datetime.datetime.now())
     some_info = TextAreaField(u"Дополнительная информация")
     hidden_type = HiddenField(default="deliverymyself")
+    hidden_table = HiddenField()
 
 
 # in Cafe no auchsdsd
@@ -149,7 +150,6 @@ class OrdernoAuchForForDeliveryInCafe(DeliveryNoAuch):
     delivery_time = StringField(u"Заказ на дату/время")
     some_info = TextAreaField(u"Дополнительная информация")
     hidden_type = HiddenField(default="deliveryincafe")
-
 
 
 # Dostavka domoy no auch

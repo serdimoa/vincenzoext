@@ -452,13 +452,27 @@ def delete_tea_category(category_id):
     return redirect(url_for("get_tea_category"))
 
 
+def jsontostr(table):
+    table = json.loads(table)
+    new_table = []
+    for item in table:
+        temp_row =[]
+        temp_rows = item['row']
+        temp_row.append(temp_rows[0])
+        temp_row.append(temp_rows[1])
+        temp_row.append(temp_rows[2])
+        temp_row.append(temp_rows[3])
+        new_table.append(temp_row)
+
+    return json.dumps(new_table,ensure_ascii=False)
+
+
 @app.route('/order', methods=['GET', 'POST'])
 def order():
     form1 = OrdernoAuchForForDeliveryInCafe()
     form2 = OrdernoAuchForForDeliveryMySelf()
     form3 = OrdernoAuchForDeliveryInHome()
     delivery = request.cookies.get('delivery')
-    carts = request.cookies.get("cart")
     if delivery == "deliveryincafe":
         global_sale = 0
         form = form1
@@ -496,8 +510,9 @@ def order():
                             '<br> ' + form.pey_method.data +
                             '<br> ' + form.hiden_sdacha.data +
                             '<br> ' + form.delivery_time.data +
-                            '<br>' + form.some_info.data + "<br>"
-                            + str(carts) + '</div>',
+                            '<br>' + form.some_info.data +
+                            '<br>' + form.hidden_table.data +
+                            '</div>',
                     'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                     'to': [{'email': "serdimoa@gmail.com",
                             'name': "serdimoa",
@@ -520,9 +535,12 @@ def order():
                     'from_email': 'sir.vincenzo.office@gmail.com',
                     'from_name': 'Sir Vincenzo ',
                     'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                    'html': '<div>Ваш Заказ с сайта. в кафе :' + form.name.data + '<br> ' + str(form.phone.data) +
-                            '<br> ' + form.delivery_time.data + '<br>' + form.some_info.data + "<br>"
-                            + str(carts) + '</div>',
+                    'html': '<div>Ваш Заказ с сайта. в кафе :' + form.name.data +
+                            '<br> ' + str(form.phone.data) +
+                            '<br> ' + form.delivery_time.data +
+                            '<br>' + form.some_info.data +
+                            '<br>' + form.hidden_table.data +
+                            '</div>',
                     'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                     'to': [{'email': "serdimoa@gmail.com",
                             'name': "serdimoa",
@@ -545,9 +563,12 @@ def order():
                     'from_email': 'sir.vincenzo.office@gmail.com',
                     'from_name': 'Sir Vincenzo ',
                     'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                    'html': '<div>Ваш Заказ с сайта. в кафе :' + form.name.data + '<br> ' + str(form.phone.data) +
-                            '<br> ' + form.delivery_time.data + '<br>' + form.some_info.data + "<br>"
-                            + str(carts) + '</div>',
+                    'html': '<div>Ваш Заказ с сайта. в кафе :' + form.name.data +
+                            '<br> ' + str(form.phone.data) +
+                            '<br> ' + form.delivery_time.data +
+                            '<br>' + form.some_info.data +
+                            '<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                            '</div>',
                     'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                     'to': [{'email': "serdimoa@gmail.com",
                             'name': "serdimoa",
@@ -895,7 +916,7 @@ def registration():
                     authenticated=True)
         db.session.add(user)
         db.session.commit()
-        registered_user = User.query.filter_by(phone=form.phone.data, global_sale=global_sale,
+        registered_user = User.query.filter_by(phone=form.phone.data,
                                                password=form.password.data).first()
         if registered_user is None:
             return redirect(url_for('index'))
@@ -981,5 +1002,4 @@ def ordercomplete():
         global_sale = 0
     else:
         global_sale = 0
-    return render_template("order_complete.html", title="Vincenzo",  global_sale=global_sale)
-
+    return render_template("order_complete.html", title="Vincenzo", global_sale=global_sale)
