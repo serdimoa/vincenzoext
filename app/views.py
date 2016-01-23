@@ -497,21 +497,21 @@ def order():
                     'from_name': 'Sir Vincenzo ',
                     'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
                     'html': '<div>Ваш Заказ с сайта. на дом :' + form.name.data +
-                            '<br> ' + str(form.phone.data) +
-                            '<br> ' + form.select_region.data +
-                            '<br> ' + form.street.data +
-                            '<br> ' + form.home.data +
-                            '<br> ' + form.home_corp.data +
-                            '<br> ' + form.porch.data +
-                            '<br> ' + form.domofon.data +
-                            '<br> ' + form.floor.data +
-                            '<br> ' + form.kvartira.data +
-                            '<br> ' + form.person.data +
-                            '<br> ' + form.pey_method.data +
-                            '<br> ' + form.hiden_sdacha.data +
-                            '<br> ' + form.delivery_time.data +
-                            '<br>' + form.some_info.data +
-                            '<br>' + form.hidden_table.data +
+                            '<br> Телефон:' + str(form.phone.data) +
+                            '<br> Регион:' + form.select_region.data +
+                            '<br> Улица:' + form.street.data +
+                            '<br> Дом:' + form.home.data +
+                            '<br> Корпус/Строеие' + form.home_corp.data +
+                            '<br> Подъезд: ' + form.porch.data +
+                            '<br> Домофон' + form.domofon.data +
+                            '<br> Этаж:' + form.floor.data +
+                            '<br> Квартира:' + form.kvartira.data +
+                            'Количество персон(приборов)' + form.person.data +
+                            '<br> Способ оплаты' + form.pey_method.data +
+                            '<br> Сдача с суммы' + form.hiden_sdacha.data +
+                            '<br> Заказ на дату/время' + form.delivery_time.data +
+                            '<br> Дополнительная информация' + form.some_info.data +
+                            '<br> Заказ:<br>' + ','.join(jsontostr(form.hidden_table.data)) +
                             '</div>',
                     'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                     'to': [{'email': "serdimoa@gmail.com",
@@ -520,7 +520,7 @@ def order():
                 }
 
                 result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
-                return redirect(url_for('order'))
+                return redirect(url_for('ordercomplete'))
 
             except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
                 return jsonify(result=2)
@@ -536,10 +536,10 @@ def order():
                     'from_name': 'Sir Vincenzo ',
                     'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
                     'html': '<div>Ваш Заказ с сайта. в кафе :' + form.name.data +
-                            '<br> ' + str(form.phone.data) +
-                            '<br> ' + form.delivery_time.data +
-                            '<br>' + form.some_info.data +
-                            '<br>' + form.hidden_table.data +
+                            '<br> Телефон:' + str(form.phone.data) +
+                            '<br> Заказ на дату/время:' + form.delivery_time.data +
+                            '<br> Дополнительная информация:' + form.some_info.data +
+                            '<br> Заказ:<br>' + ','.join(jsontostr(form.hidden_table.data)) +
                             '</div>',
                     'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                     'to': [{'email': "serdimoa@gmail.com",
@@ -548,7 +548,7 @@ def order():
                 }
 
                 result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
-                return redirect(url_for('order'))
+                return redirect(url_for('ordercomplete'))
 
             except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
                 return jsonify(result=2)
@@ -564,10 +564,10 @@ def order():
                     'from_name': 'Sir Vincenzo ',
                     'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
                     'html': '<div>Ваш Заказ с сайта. в кафе :' + form.name.data +
-                            '<br> ' + str(form.phone.data) +
-                            '<br> ' + form.delivery_time.data +
-                            '<br>' + form.some_info.data +
-                            '<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                            '<br> Телефон ' + str(form.phone.data) +
+                            '<br> Заказ на дату/время' + form.delivery_time.data +
+                            '<br> Дополнительная информация' + form.some_info.data +
+                            '<br> Заказ <br>' + ','.join(jsontostr(form.hidden_table.data)) +
                             '</div>',
                     'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                     'to': [{'email': "serdimoa@gmail.com",
@@ -576,7 +576,7 @@ def order():
                 }
 
                 result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
-                return redirect(url_for('order'))
+                return redirect(url_for('ordercomplete'))
 
             except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
                 return jsonify(result=2)
