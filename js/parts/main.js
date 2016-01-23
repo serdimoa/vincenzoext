@@ -186,6 +186,9 @@ if ($(".settings").length) {
 
 }
 
+
+
+
 function initIfhaveSession() {
     var cartValue = localStorage.getItem("cart");
     if (cartValue != null) {

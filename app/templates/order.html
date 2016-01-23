@@ -30,45 +30,17 @@
                                     <h1>Привет, {{ current_user.username }}! </h1>
 
                                     <h2>Заказ на сумму: <span class=full_price></span> <i class="fa fa-rub"></i></h2>
+                                    {% for category, message in get_flashed_messages(with_categories=true) %}
+                                    <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                                        <button type="button" class="close fa fa-close" data-dismiss="alert"
+                                                aria-label="Close"></button>
+
+                                        <p>{{ message }}</p>
+                                    </div>
+                                {% endfor %}
+                                {{ render_form(form,action_url="", action_text='ЗАКАЗАТЬ') }}
 
 
-                                    <form method="POST" class="form-horizontal">
-
-                                        <div class="form-group">
-                                            <label for="moneyAuch" class="col-sm-5 control-label"> Сдача с суммы в
-                                                руб.</label>
-
-                                            <div class="col-sm-7">
-                                                <input type="number" class="form-control" id="moneyAuch" placeholder="">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-12">
-                                                <label for="adressAuch" class="col-sm-12  text-left adressAuch">
-                                                    Выберите адрес, либо напишите новый</label>
-                                                <select id="adressAuch" title="Выберите адрес"
-                                                        style="width: 100%">
-                                                    {% for address in addreses %}
-                                                        <option>{{ address }}</option>
-                                                    {% endfor %}
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-sm-12">
-
-                                                <label for="text-area-form" class="col-sm-12  text-left adressAuch">
-                                                    Комментарии к заказу</label>
-                                                <textarea id="text-area-form" class="form-control" rows="3"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="col-md-offset-9 col-sm-3">
-                                                <button type="submit" class="btn btn-success">Заказать</button>
-                                            </div>
-                                        </div>
-                                    </form>
                                 </div>
                             {% else %}
                                 <div class="auchUsers">

@@ -22,7 +22,8 @@ from werkzeug.utils import secure_filename
 from app import app, db, lm, oid
 from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm, ChangeUserPassword, \
     AuchForm, SaleOnTimeForm, OrdernoAuchForForDeliveryInCafe, OrdernoAuchForDeliveryInHome, \
-    OrdernoAuchForForDeliveryMySelf, TeaCategoryForm, TeaForm
+    OrdernoAuchForForDeliveryMySelf, TeaCategoryForm, TeaForm, OrderAuchForForDeliveryInCafe, \
+    OrderAuchForForDeliveryMySelf, OrderAuchForDeliveryInHome
 from models import User, Category, Items, Like, AnonymousUser, Sale, Adress, SaleoOnTime, TeaCategory, Tea
 import mandrill
 
@@ -456,22 +457,30 @@ def jsontostr(table):
     table = json.loads(table)
     new_table = []
     for item in table:
-        temp_row =[]
+        temp_row = []
         temp_rows = item['row']
-        temp_row.append(temp_rows[0])
-        temp_row.append(temp_rows[1])
-        temp_row.append(temp_rows[2])
-        temp_row.append(temp_rows[3])
+        temp_row.append(temp_rows[0] + '<br>Соус:' + temp_rows[1] + '<br>Количество:' + temp_rows[2] + '<tr>')
         new_table.append(temp_row)
 
-    return json.dumps(new_table,ensure_ascii=False)
+    return json.dumps(new_table, ensure_ascii=False)
 
 
 @app.route('/order', methods=['GET', 'POST'])
 def order():
-    form1 = OrdernoAuchForForDeliveryInCafe()
-    form2 = OrdernoAuchForForDeliveryMySelf()
-    form3 = OrdernoAuchForDeliveryInHome()
+    select_item = None
+    if current_user.id is None:
+        form1 = OrdernoAuchForForDeliveryInCafe()
+        form2 = OrdernoAuchForForDeliveryMySelf()
+        form3 = OrdernoAuchForDeliveryInHome()
+    else:
+        select_item = Adress.query.filter_by(user_id=current_user.id).first()
+        form1 = OrderAuchForForDeliveryInCafe()
+        form2 = OrderAuchForForDeliveryMySelf()
+        form3 = OrderAuchForDeliveryInHome(obj=select_item)
+        # is_choise = [(g.address, g.address) for g in Adress.query.order_by('address')]
+        # is_choise.insert(0, (0,u"Выберите адресс/Либо заполните поля ниже"))
+        # form3.select_from_address.choices = is_choise
+
     delivery = request.cookies.get('delivery')
     if delivery == "deliveryincafe":
         global_sale = 0
@@ -485,110 +494,231 @@ def order():
     else:
         form = form3
         global_sale = 0
+
     if form.validate_on_submit():
-        if form.hidden_type.data == "deliveryinhome":
-            flash(u"Заказ оформлен", 'success')
-            try:
-                mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
-                message = {
-                    'auto_html': True,
-                    'auto_text': None,
-                    'from_email': 'sir.vincenzo.office@gmail.com',
-                    'from_name': 'Sir Vincenzo ',
-                    'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                    'html': '<div>Ваш Заказ с сайта. на дом :' + form.name.data +
-                            '<br> Телефон:' + str(form.phone.data) +
-                            '<br> Регион:' + form.select_region.data +
-                            '<br> Улица:' + form.street.data +
-                            '<br> Дом:' + form.home.data +
-                            '<br> Корпус/Строеие' + form.home_corp.data +
-                            '<br> Подъезд: ' + form.porch.data +
-                            '<br> Домофон' + form.domofon.data +
-                            '<br> Этаж:' + form.floor.data +
-                            '<br> Квартира:' + form.kvartira.data +
-                            'Количество персон(приборов)' + form.person.data +
-                            '<br> Способ оплаты' + form.pey_method.data +
-                            '<br> Сдача с суммы' + form.hiden_sdacha.data +
-                            '<br> Заказ на дату/время' + form.delivery_time.data +
-                            '<br> Дополнительная информация' + form.some_info.data +
-                            '<br> Заказ:<br>' + ','.join(jsontostr(form.hidden_table.data)) +
-                            '</div>',
-                    'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-                    'to': [{'email': "serdimoa@gmail.com",
-                            'name': "serdimoa",
-                            'type': 'to'}]
-                }
+        if current_user.id == None:
+            if form.hidden_type.data == "deliveryinhome":
+                try:
+                    mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                    message = {
+                        'auto_html': True,
+                        'auto_text': None,
+                        'from_email': 'sir.vincenzo.office@gmail.com',
+                        'from_name': 'Sir Vincenzo ',
+                        'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                        'html': '<div>Заказ с сайта. на дом :' + form.name.data +
+                                '<br> Телефон:' + str(form.phone.data) +
+                                '<br> Регион:' + form.select_region.data +
+                                '<br> Улица:' + form.street.data +
+                                '<br> Дом:' + form.home.data +
+                                '<br> Корпус/Строеие' + form.home_corp.data +
+                                '<br> Подъезд: ' + form.porch.data +
+                                '<br> Домофон' + form.domofon.data +
+                                '<br> Этаж:' + form.floor.data +
+                                '<br> Квартира:' + form.kvartira.data +
+                                'Количество персон(приборов)' + form.person.data +
+                                '<br> Способ оплаты' + form.pey_method.data +
+                                '<br> Сдача с суммы' + form.hiden_sdacha.data +
+                                '<br> Заказ на дату/время' + form.delivery_time.data +
+                                '<br> Дополнительная информация' + form.some_info.data +
+                                '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                '</div>',
+                        'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                        'to': [{'email': "serdimoa@gmail.com",
+                                'name': "serdimoa",
+                                'type': 'to'}]
+                    }
 
-                result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
-                return redirect(url_for('ordercomplete'))
+                    result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+                    return redirect(url_for('ordercomplete'))
 
-            except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
-                return jsonify(result=2)
+                except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+                    return jsonify(result=2)
 
-        if form.hidden_type.data == "deliveryincafe":
-            flash(u"Заказ оформлен", 'success')
-            try:
-                mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
-                message = {
-                    'auto_html': True,
-                    'auto_text': None,
-                    'from_email': 'sir.vincenzo.office@gmail.com',
-                    'from_name': 'Sir Vincenzo ',
-                    'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                    'html': '<div>Ваш Заказ с сайта. в кафе :' + form.name.data +
-                            '<br> Телефон:' + str(form.phone.data) +
-                            '<br> Заказ на дату/время:' + form.delivery_time.data +
-                            '<br> Дополнительная информация:' + form.some_info.data +
-                            '<br> Заказ:<br>' + ','.join(jsontostr(form.hidden_table.data)) +
-                            '</div>',
-                    'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-                    'to': [{'email': "serdimoa@gmail.com",
-                            'name': "serdimoa",
-                            'type': 'to'}]
-                }
+            if form.hidden_type.data == "deliveryincafe":
+                try:
+                    mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                    message = {
+                        'auto_html': True,
+                        'auto_text': None,
+                        'from_email': 'sir.vincenzo.office@gmail.com',
+                        'from_name': 'Sir Vincenzo ',
+                        'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                        'html': '<div>Заказ с сайта. в кафе :' + form.name.data +
+                                '<br> Телефон:' + str(form.phone.data) +
+                                '<br> Заказ на дату/время:' + form.delivery_time.data +
+                                '<br> Дополнительная информация:' + form.some_info.data +
+                                '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                '</div>',
+                        'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                        'to': [{'email': "serdimoa@gmail.com",
+                                'name': "serdimoa",
+                                'type': 'to'}]
+                    }
 
-                result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
-                return redirect(url_for('ordercomplete'))
+                    result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+                    return redirect(url_for('ordercomplete'))
 
-            except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
-                return jsonify(result=2)
+                except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+                    return jsonify(result=2)
 
-        if form.hidden_type.data == "deliverymyself":
-            flash(form.delivery_time.data, 'success')
-            try:
-                mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
-                message = {
-                    'auto_html': True,
-                    'auto_text': None,
-                    'from_email': 'sir.vincenzo.office@gmail.com',
-                    'from_name': 'Sir Vincenzo ',
-                    'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                    'html': '<div>Ваш Заказ с сайта. в кафе :' + form.name.data +
-                            '<br> Телефон ' + str(form.phone.data) +
-                            '<br> Заказ на дату/время' + form.delivery_time.data +
-                            '<br> Дополнительная информация' + form.some_info.data +
-                            '<br> Заказ <br>' + ','.join(jsontostr(form.hidden_table.data)) +
-                            '</div>',
-                    'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-                    'to': [{'email': "serdimoa@gmail.com",
-                            'name': "serdimoa",
-                            'type': 'to'}]
-                }
+            if form.hidden_type.data == "deliverymyself":
+                try:
+                    mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                    message = {
+                        'auto_html': True,
+                        'auto_text': None,
+                        'from_email': 'sir.vincenzo.office@gmail.com',
+                        'from_name': 'Sir Vincenzo ',
+                        'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                        'html': '<div>Заказ с сайта. в самовывоз :' + form.name.data +
+                                '<br> Телефон ' + str(form.phone.data) +
+                                '<br> Заказ на дату/время' + form.delivery_time.data +
+                                '<br> Дополнительная информация' + form.some_info.data +
+                                '<br> Заказ <br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                '</div>',
+                        'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                        'to': [{'email': "serdimoa@gmail.com",
+                                'name': "serdimoa",
+                                'type': 'to'}]
+                    }
 
-                result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
-                return redirect(url_for('ordercomplete'))
+                    result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+                    return redirect(url_for('ordercomplete'))
 
-            except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
-                return jsonify(result=2)
+                except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+                    return jsonify(result=2)
+
+        elif current_user.id != None:
+            if form.hidden_type.data == "deliveryinhome":
+                try:
+                    mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                    message = {
+                        'auto_html': True,
+                        'auto_text': None,
+                        'from_email': 'sir.vincenzo.office@gmail.com',
+                        'from_name': 'Sir Vincenzo ',
+                        'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                        'html': '<div>Зарегистрированный пользователь.<br>Заказ с сайта. на дом :' + current_user.username +
+                                '<br> Телефон:' + str(current_user.phone) +
+                                '<br> Регион:' + form.select_region.data +
+                                '<br> Улица:' + form.street.data +
+                                '<br> Дом:' + form.home.data +
+                                '<br> Корпус/Строеие' + form.home_corp.data +
+                                '<br> Подъезд: ' + form.porch.data +
+                                '<br> Домофон' + form.domofon.data +
+                                '<br> Этаж:' + form.floor.data +
+                                '<br> Квартира:' + form.kvartira.data +
+                                '<br> Количество персон(приборов)' + form.person.data +
+                                '<br> Способ оплаты' + form.pey_method.data +
+                                '<br> Сдача с суммы' + form.hiden_sdacha.data +
+                                '<br> Заказ на дату/время' + form.delivery_time.data +
+                                '<br> Дополнительная информация' + form.some_info.data +
+                                '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                '</div>',
+                        'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                        'to': [{'email': "serdimoa@gmail.com",
+                                'name': "serdimoa",
+                                'type': 'to'}]
+                    }
+                    user_address = Adress.query.filter_by(user_id=current_user.id).first()
+                    if user_address is None:
+                        address_data = Adress(
+                            user_id=current_user.id,
+                            select_region=form.select_region.data,
+                            street=form.street.data,
+                            home=form.home.data,
+                            home_corp=form.home_corp.data,
+                            porch=form.porch.data,
+                            domofon=form.domofon.data,
+                            floor=form.floor.data,
+                            kvartira=form.kvartira.data
+                        )
+                        db.session.add(address_data)
+                        db.session.commit()
+                    else:
+                        db.session.query(Adress).filter(Adress.user_id == current_user.id).update(
+                            {'select_region': form.select_region.data,
+                             'street': form.street.data,
+                             'home': form.home.data,
+                             'home_corp': form.home_corp.data,
+                             'porch': form.porch.data,
+                             'domofon': form.domofon.data,
+                             'floor': form.floor.data,
+                             'kvartira': form.kvartira.data
+                             })
+                        db.session.commit()
+
+                    result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+
+                    return redirect(url_for('ordercomplete'))
+
+                except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+                    return jsonify(result=2)
+
+            if form.hidden_type.data == "deliveryincafe":
+                try:
+                    mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                    message = {
+                        'auto_html': True,
+                        'auto_text': None,
+                        'from_email': 'sir.vincenzo.office@gmail.com',
+                        'from_name': 'Sir Vincenzo ',
+                        'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                        'html': '<div>Заказ с сайта. в кафе :' + form.name.data +
+                                '<br> Телефон:' + str(form.phone.data) +
+                                '<br> Заказ на дату/время:' + form.delivery_time.data +
+                                '<br> Дополнительная информация:' + form.some_info.data +
+                                '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                '</div>',
+                        'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                        'to': [{'email': "serdimoa@gmail.com",
+                                'name': "serdimoa",
+                                'type': 'to'}]
+                    }
+
+                    result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+                    return redirect(url_for('ordercomplete'))
+
+                except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+                    return jsonify(result=2)
+
+            if form.hidden_type.data == "deliverymyself":
+                try:
+                    mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                    message = {
+                        'auto_html': True,
+                        'auto_text': None,
+                        'from_email': 'sir.vincenzo.office@gmail.com',
+                        'from_name': 'Sir Vincenzo ',
+                        'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                        'html': '<div>Заказ с сайта. в самовывоз :' + form.name.data +
+                                '<br> Телефон ' + str(form.phone.data) +
+                                '<br> Заказ на дату/время' + form.delivery_time.data +
+                                '<br> Дополнительная информация' + form.some_info.data +
+                                '<br> Заказ <br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                '</div>',
+                        'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                        'to': [{'email': "serdimoa@gmail.com",
+                                'name': "serdimoa",
+                                'type': 'to'}]
+                    }
+
+                    result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+                    return redirect(url_for('ordercomplete'))
+
+                except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+                    return jsonify(result=2)
+
     else:
         if current_user.id is None:
             settings_it = [str("delete_buy_button"), str(delivery)]
             return render_template("order.html", form=form, title="Vincenzo",
                                    settings_order=settings_it, global_sale=global_sale)
         else:
-            user_address = Adress.query.filter_by(user_id=current_user.id).first()
-            addreses = eval(user_address.address)
-            return render_template("order.html", title="Vincenzo", addreses=addreses, global_sale=global_sale)
+            settings_it = [str("delete_buy_button"), str(delivery)]
+            return render_template("order.html", form=form, title="Vincenzo",
+                                   global_sale=global_sale)
 
 
 @app.route('/deliveryinhome', methods=["POST", "GET"])
@@ -1003,3 +1133,98 @@ def ordercomplete():
     else:
         global_sale = 0
     return render_template("order_complete.html", title="Vincenzo", global_sale=global_sale)
+
+
+
+
+
+    # elif form.hidden_type.data == "deliveryinhome" and form.select_from_address.data == 0 and current_user.id is not None:
+    #     if form.validate_on_submit():
+    #         try:
+    #             mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+    #             message = {
+    #                 'auto_html': True,
+    #                 'auto_text': None,
+    #                 'from_email': 'sir.vincenzo.office@gmail.com',
+    #                 'from_name': 'Sir Vincenzo ',
+    #                 'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+    #                 'html': '<div>Заказ с сайта. на дом :' + form.name.data +
+    #                         '<br> Телефон:' + str(form.phone.data) +
+    #                         '<br> Регион:' + form.select_region.data +
+    #                         '<br> Улица:' + form.street.data +
+    #                         '<br> Дом:' + form.home.data +
+    #                         '<br> Корпус/Строеие' + form.home_corp.data +
+    #                         '<br> Подъезд: ' + form.porch.data +
+    #                         '<br> Домофон' + form.domofon.data +
+    #                         '<br> Этаж:' + form.floor.data +
+    #                         '<br> Квартира:' + form.kvartira.data +
+    #                         'Количество персон(приборов)' + form.person.data +
+    #                         '<br> Способ оплаты' + form.pey_method.data +
+    #                         '<br> Сдача с суммы' + form.hiden_sdacha.data +
+    #                         '<br> Заказ на дату/время' + form.delivery_time.data +
+    #                         '<br> Дополнительная информация' + form.some_info.data +
+    #                         '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+    #                         '</div>',
+    #                 'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+    #                 'to': [{'email': "serdimoa@gmail.com",
+    #                         'name': "serdimoa",
+    #                         'type': 'to'}]
+    #             }
+    #             result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+    #             return redirect(url_for('ordercomplete'))
+    #         except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+    #             return jsonify(result=2)
+    #
+    # # elif request.method=='POST' and form.hidden_type.data == "deliveryinhome" and form.select_from_address.data != 0 and current_user.id is not None:
+    # #         flash(form.select_from_address.data,category='info')
+    # #         return redirect(url_for('order'))
+    #
+    # elif form.validate_on_submit() and form.hidden_type.data != "deliveryinhome" and current_user.id is not None:
+    #     if form.hidden_type.data == "deliveryincafe":
+    #         try:
+    #             mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+    #             message = {
+    #                 'auto_html': True,
+    #                 'auto_text': None,
+    #                 'from_email': 'sir.vincenzo.office@gmail.com',
+    #                 'from_name': 'Sir Vincenzo ',
+    #                 'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+    #                 'html': '<div>Заказ с сайта. в кафе :' + form.name.data +
+    #                         '<br> Телефон:' + str(form.phone.data) +
+    #                         '<br> Заказ на дату/время:' + form.delivery_time.data +
+    #                         '<br> Дополнительная информация:' + form.some_info.data +
+    #                         '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+    #                         '</div>',
+    #                 'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+    #                 'to': [{'email': "serdimoa@gmail.com",
+    #                         'name': "serdimoa",
+    #                         'type': 'to'}]
+    #             }
+    #             result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+    #             return redirect(url_for('ordercomplete'))
+    #         except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+    #             return jsonify(result=2)
+    #     if form.hidden_type.data == "deliverymyself":
+    #         try:
+    #             mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+    #             message = {
+    #                 'auto_html': True,
+    #                 'auto_text': None,
+    #                 'from_email': 'sir.vincenzo.office@gmail.com',
+    #                 'from_name': 'Sir Vincenzo ',
+    #                 'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+    #                 'html': '<div>Заказ с сайта. в самовывоз :' + form.name.data +
+    #                         '<br> Телефон ' + str(form.phone.data) +
+    #                         '<br> Заказ на дату/время' + form.delivery_time.data +
+    #                         '<br> Дополнительная информация' + form.some_info.data +
+    #                         '<br> Заказ <br>' + ''.join(jsontostr(form.hidden_table.data)) +
+    #                         '</div>',
+    #                 'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+    #                 'to': [{'email': "serdimoa@gmail.com",
+    #                         'name': "serdimoa",
+    #                         'type': 'to'}]
+    #             }
+    #             result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+    #             return redirect(url_for('ordercomplete'))
+    #         except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+    #             return jsonify(result=2)

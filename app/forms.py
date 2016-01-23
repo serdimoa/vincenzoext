@@ -150,6 +150,7 @@ class OrdernoAuchForForDeliveryInCafe(DeliveryNoAuch):
     delivery_time = StringField(u"Заказ на дату/время")
     some_info = TextAreaField(u"Дополнительная информация")
     hidden_type = HiddenField(default="deliveryincafe")
+    hidden_table = HiddenField()
 
 
 # Dostavka domoy no auch
@@ -164,11 +165,51 @@ class OrdernoAuchForDeliveryInHome(DeliveryNoAuch):
     kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     delivery_time = StringField(u"Заказ на дату/время")
     person = StringField(u"Количество персон(приборов)")
-    pey_method = RadioField(u"Способ оплаты", choices=[("cash", u"Оплата наличными"), ("card", u"Оплата картой")],
-                            validators=[validators.InputRequired(u"Данное поле обязательно для заполнения")])
+    pey_method = RadioField(u"Способ оплаты",coerce=unicode,
+                            choices=[(u"Оплата наличными", u"Оплата наличными"), (u"Оплата картой", u"Оплата картой")],
+                            validators=[validators.InputRequired(u"Необходимо выбрать способ оплаты")])
     hiden_sdacha = StringField(u"Cдача с суммы в руб.", )
     some_info = TextAreaField(u"Дополнительная информация")
     hidden_type = HiddenField(default="deliveryinhome")
+    hidden_table = HiddenField()
+
+
+class OrderAuchForForDeliveryMySelf(Form):
+    delivery_time = StringField(u"Заказ на дату/время")
+    # delivery_time = TimeField(u"Заказ на время", default=datetime.datetime.now())
+    some_info = TextAreaField(u"Дополнительная информация")
+    hidden_type = HiddenField(default="deliverymyself")
+    hidden_table = HiddenField()
+
+
+# in Cafe no auchsdsd
+class OrderAuchForForDeliveryInCafe(Form):
+    delivery_time = StringField(u"Заказ на дату/время")
+    some_info = TextAreaField(u"Дополнительная информация")
+    hidden_type = HiddenField(default="deliveryincafe")
+    hidden_table = HiddenField()
+
+
+# Dostavka domoy no auch
+class OrderAuchForDeliveryInHome(Form):
+    # select_from_address = SelectField(u"Выберите адресс/Либо заполните поля ниже", coerce=str)
+    select_region = SelectField(u"Выберите раен доставки", choices=delivery_price)
+    street = StringField(u"Улица*", validators=[validators.InputRequired(u"Введите Вашу улицу")])
+    home = StringField(u"Дом*", validators=[validators.InputRequired(u"Введите Ваш дом")])
+    home_corp = StringField(u"Корпус/строение")
+    porch = StringField(u"Подъезд*", validators=[validators.InputRequired(u"Введите Ваш подъезд")])
+    domofon = StringField(u"Домофон*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
+    floor = StringField(u"Этаж*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
+    kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
+    delivery_time = StringField(u"Заказ на дату/время")
+    person = StringField(u"Количество персон(приборов)")
+    pey_method = RadioField(u"Способ оплаты*",coerce=unicode,
+                            choices=[(u"Оплата наличными", u"Оплата наличными"), (u"Оплата картой", u"Оплата картой")],
+                            validators=[validators.InputRequired(u"Необходимо выбрать способ оплаты")])
+    hiden_sdacha = StringField(u"Cдача с суммы в руб.", )
+    some_info = TextAreaField(u"Дополнительная информация")
+    hidden_type = HiddenField(default="deliveryinhome")
+    hidden_table = HiddenField()
 
 
 class CategoryForm(Form):
@@ -184,3 +225,4 @@ class SaleOnTimeForm(Form):
     date_sale_on = SelectMultipleField(u"Дни недели когда активна акция", choices=weaks)
     time_start = TimeField(u"Начало акции(время)")
     time_end = TimeField(u"Конец акции(время)")
+

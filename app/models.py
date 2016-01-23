@@ -124,11 +124,26 @@ class Admin(db.Model):
 class Adress(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    address = db.Column(db.Text)
+    # address = db.Column(db.Text)
+    select_region = db.Column(db.String(50))
+    street = db.Column(db.String(50))
+    home = db.Column(db.String(50))
+    home_corp = db.Column(db.String(50))
+    porch = db.Column(db.String(50))
+    domofon = db.Column(db.String(50))
+    floor = db.Column(db.String(50))
+    kvartira = db.Column(db.String(50))
 
-    def __init__(self, user_id, address):
+    def __init__(self, user_id, select_region, street, home, home_corp, porch, domofon, floor, kvartira):
         self.user_id = user_id
-        self.address = address
+        self.select_region = select_region
+        self.street = street
+        self.home = home
+        self.home_corp = home_corp
+        self.porch = porch
+        self.domofon = domofon
+        self.floor = floor
+        self.kvartira = kvartira
 
 
 class Sale(db.Model):

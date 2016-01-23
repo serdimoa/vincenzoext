@@ -50,13 +50,27 @@
         {{ macros.render_radio_field(form.answers) }}
  #}
 {% macro render_radio_field(field) -%}
-    {% for value, label, _ in field.iter_choices() %}
-        <div class="radio">
+
+    <div class="form-group {% if field.errors %}has-error{% endif %} {{ kwargs.pop('class_', '') }}">
+        <label for="{{ field.id }}" class="control-label">{{ field.label }}</label>
+
+        {% for value, label, _ in field.iter_choices() %}
+        <div class="radio ">
             <label>
                 <input type="radio" name="{{ field.id }}" id="{{ field.id }}" value="{{ value }}">{{ label }}
             </label>
         </div>
+
     {% endfor %}
+        {% if field.errors %}
+            {% for e in field.errors %}
+                <p class="help-block">{{ e }}</p>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+
+
 {%- endmacro %}
 
 {# Renders WTForm in bootstrap way. There are two ways to call function:
