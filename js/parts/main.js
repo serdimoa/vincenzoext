@@ -835,8 +835,8 @@ $(".logoa").click(function (e) {
 
             var slider = $('.sliders').anyslider({
                 interval: 10000,
-                showBullets: false,
-                showControls: false
+                showBullets: true,
+                showControls: true
             });
             var anyslider = slider.data('anyslider');
 
