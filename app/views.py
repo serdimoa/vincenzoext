@@ -459,7 +459,9 @@ def jsontostr(table):
     for item in table:
         temp_row = []
         temp_rows = item['row']
-        temp_row.append(temp_rows[0] + '<br>Соус:' + str(temp_rows[1]) + '<br>Количество:' + temp_rows[2] + '<tr>')
+        sous = temp_rows[1] if temp_rows[1]!=None else u''
+        this_row = temp_rows[0] + u'<br>Соус:' + sous + u'<br>Количество:' + temp_rows[2] + u'<tr>'
+        temp_row.append(this_row)
         new_table.append(temp_row)
 
     return json.dumps(new_table, ensure_ascii=False)
