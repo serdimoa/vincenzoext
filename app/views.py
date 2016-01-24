@@ -524,7 +524,7 @@ def order():
                                 '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
                                 '</div>',
                         'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-                        'to': [{'email': "serdimoa@gmail.com",
+                        'to': [{'email': "sir.vincenzo.office@gmail.com",
                                 'name': "serdimoa",
                                 'type': 'to'}]
                     }
@@ -551,7 +551,7 @@ def order():
                                 '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
                                 '</div>',
                         'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-                        'to': [{'email': "serdimoa@gmail.com",
+                        'to': [{'email': "sir.vincenzo.office@gmail.com",
                                 'name': "serdimoa",
                                 'type': 'to'}]
                     }
@@ -578,7 +578,7 @@ def order():
                                 '<br> Заказ <br>' + ''.join(jsontostr(form.hidden_table.data)) +
                                 '</div>',
                         'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-                        'to': [{'email': "serdimoa@gmail.com",
+                        'to': [{'email': "sir.vincenzo.office@gmail.com",
                                 'name': "serdimoa",
                                 'type': 'to'}]
                     }
@@ -617,7 +617,7 @@ def order():
                                 '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
                                 '</div>',
                         'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-                        'to': [{'email': "serdimoa@gmail.com",
+                        'to': [{'email': "sir.vincenzo.office@gmail.com",
                                 'name': "serdimoa",
                                 'type': 'to'}]
                     }
@@ -665,14 +665,14 @@ def order():
                         'from_email': 'sir.vincenzo.office@gmail.com',
                         'from_name': 'Sir Vincenzo ',
                         'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                        'html': '<div>Заказ с сайта. в кафе :' + form.name.data +
-                                '<br> Телефон:' + str(form.phone.data) +
+                        'html': '<div>Зарегистрированный пользователь.<br>Заказ с сайта. в кафе :' + current_user.username +
+                                '<br> Телефон:' + str(current_user.phone) +
                                 '<br> Заказ на дату/время:' + form.delivery_time.data +
                                 '<br> Дополнительная информация:' + form.some_info.data +
                                 '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
                                 '</div>',
                         'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-                        'to': [{'email': "serdimoa@gmail.com",
+                        'to': [{'email': "sir.vincenzo.office@gmail.com",
                                 'name': "serdimoa",
                                 'type': 'to'}]
                     }
@@ -692,14 +692,14 @@ def order():
                         'from_email': 'sir.vincenzo.office@gmail.com',
                         'from_name': 'Sir Vincenzo ',
                         'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                        'html': '<div>Заказ с сайта. в самовывоз :' + form.name.data +
-                                '<br> Телефон ' + str(form.phone.data) +
+                        'html': '<div>Зарегистрированный пользователь.<br>Заказ с сайта. самовывоз :' + current_user.username +
+                                '<br> Телефон:' + str(current_user.phone) +
                                 '<br> Заказ на дату/время' + form.delivery_time.data +
                                 '<br> Дополнительная информация' + form.some_info.data +
                                 '<br> Заказ <br>' + ''.join(jsontostr(form.hidden_table.data)) +
                                 '</div>',
                         'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-                        'to': [{'email': "serdimoa@gmail.com",
+                        'to': [{'email': "sir.vincenzo.office@gmail.com",
                                 'name': "serdimoa",
                                 'type': 'to'}]
                     }
@@ -1166,7 +1166,7 @@ def ordercomplete():
     #                         '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
     #                         '</div>',
     #                 'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-    #                 'to': [{'email': "serdimoa@gmail.com",
+    #                 'to': [{'email': "sir.vincenzo.office@gmail.com",
     #                         'name': "serdimoa",
     #                         'type': 'to'}]
     #             }
@@ -1196,7 +1196,7 @@ def ordercomplete():
     #                         '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
     #                         '</div>',
     #                 'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-    #                 'to': [{'email': "serdimoa@gmail.com",
+    #                 'to': [{'email': "sir.vincenzo.office@gmail.com",
     #                         'name': "serdimoa",
     #                         'type': 'to'}]
     #             }
@@ -1220,7 +1220,7 @@ def ordercomplete():
     #                         '<br> Заказ <br>' + ''.join(jsontostr(form.hidden_table.data)) +
     #                         '</div>',
     #                 'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-    #                 'to': [{'email': "serdimoa@gmail.com",
+    #                 'to': [{'email': "sir.vincenzo.office@gmail.com",
     #                         'name': "serdimoa",
     #                         'type': 'to'}]
     #             }
