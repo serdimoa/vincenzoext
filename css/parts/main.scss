@@ -53,9 +53,11 @@ html {
 .overflowbody {
   overflow: hidden;
 }
-.touch.overflowbody{
+
+.touch.overflowbody {
   overflow: auto;
 }
+
 @-webkit-keyframes uil-rolling-anim {
   0% {
     -ms-transform: rotate(0deg);
@@ -2019,25 +2021,27 @@ hr {
   }
 }
 
-@media (min-width: 768px){
-  .index_page,.otherPage {
-        width: 100%;
+@media (min-width: 768px) {
+  .index_page, .otherPage {
+    width: 100%;
   }
 }
+
 #scrollup {
-position: fixed; /* фиксированная позиция */
-opacity: 0.8; /* прозрачность */
-border-radius: 5px; /* скругление углов */
--webkit-border-radius: 5px;
--moz-border-radius: 5px;
-right: 10px; /* отступ слева */
-bottom: 10px; /* отступ снизу */
-display: none; /* спрятать блок */
-cursor: pointer;
-  img{
+  position: fixed; /* фиксированная позиция */
+  opacity: 0.8; /* прозрачность */
+  border-radius: 5px; /* скругление углов */
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  right: 10px; /* отступ слева */
+  bottom: 10px; /* отступ снизу */
+  display: none; /* спрятать блок */
+  cursor: pointer;
+  img {
     width: 64px;
   }
 }
+
 .checkOut.isUp {
   position: fixed;
   color: #333;
@@ -2459,17 +2463,20 @@ div.fancy-select ul.options {
   background-size: cover;
   height: 550px;
 }
-.carousel{
+
+.carousel {
   background: none;
   padding-top: 130px;
 }
-.carousel .item{
+
+.carousel .item {
   height: 560px;
 }
 
-.carousel-indicators{
+.carousel-indicators {
   bottom: -40px !important;
 }
+
 .carousel-inner > .item > a > img {
   position: absolute;
   top: 0;
@@ -2487,8 +2494,6 @@ div.fancy-select ul.options {
     height: 750px;
   }
 }
-
-
 
 .nav-tabs.nav-justified > li > a {
   color: #333;
@@ -2532,7 +2537,7 @@ div.fancy-select ul.options {
   width: $width;
   border-radius: 5px;
   text-align: center;
-  margin:0 auto;
+  margin: 0 auto;
   overflow: hidden;
   z-index: 99999;
 
