@@ -498,6 +498,8 @@ a:hover {
   margin: 0;
   padding: 0;
   float: left;
+  width: 100%;
+  text-align: center;
   .aboutProfile {
     li {
       &:first-child {
@@ -2018,7 +2020,7 @@ hr {
 }
 
 @media (min-width: 768px){
-  .container {
+  .index_page {
         width: 100%;
   }
 }
