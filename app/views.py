@@ -518,7 +518,7 @@ def order():
                                 '<br> Домофон' + form.domofon.data +
                                 '<br> Этаж:' + form.floor.data +
                                 '<br> Квартира:' + form.kvartira.data +
-                                'Количество персон(приборов)' + form.person.data +
+                                '<br>Количество персон(приборов)' + form.person.data +
                                 '<br> Способ оплаты' + form.pey_method.data +
                                 '<br> Сдача с суммы' + form.hiden_sdacha.data +
                                 '<br> Заказ на дату/время' + form.delivery_time.data +
