@@ -96,6 +96,7 @@ function delivery_func() {
 }
 
 
+
 if ($(".settings, .sale, .aboutus").length) {
     delivery_func();
 }
@@ -286,7 +287,29 @@ function dataFromTable() {
 
 tableOrder.on('mouseenter', 'tr', function () {
     if ($(this).hasClass('selected')) {
-        $(this).removeClass('selected');
+        $(this).removeClass('selected');)
+
+
+@app.route('/tea', methods=['GET'])
+def tea():
+    delivery = request.cookies.get('delivery')
+    if delivery == "deliveryincafe":
+        global_sale = 0
+    elif delivery == "deliverymyself":
+        global_sale = 10
+    elif delivery == "deliveryinhome":
+        global_sale = 0
+    else:
+        global_sale = 0
+
+    select_category = TeaCategory.query.all()
+
+    return render_template("tea.html", tea_category=select_category, global_sale=global_sale,
+                           delivery=delivery, title="Vincenzo")
+
+
+@app.route('/tea/<int:category_id>', methods=['GET'])
+def tea_one(category_id):
     } else {
         dataTable.$('tr.selected').removeClass('selected');
         $(this).addClass('selected');
@@ -403,7 +426,9 @@ $(".like_no_admin").click(function () {
         cancelButtonText: "Позже",
         closeOnConfirm: false
     }, function () {
-        document.location = "/site_auch"
+        $.cookie('localLinkClicked', true);
+
+        document.location = "/site_auch";
     });
 });
 $('.pw-reset a, #restorePass').click(function () {

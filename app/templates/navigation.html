@@ -3,7 +3,8 @@
             <div class="contacts-top">
                 <a class="phone-top" href="tel:253-356"><i class="fa fa-phone"></i> 253-356</a> |
                 <a href="https://vk.com/nv_pizza">Мы в <i class="fa fa-vk"></i></a> |
-                <a href="https://www.instagram.com/sir_vincenzo/">Мы в <i class="fa fa-instagram"></i></a>
+                <a href="https://www.instagram.com/sir_vincenzo/">Мы в <i class="fa fa-instagram"></i></a> |
+                <a href="#" onclick='$("#select_delivery").nifty("show");'>Вариант доставки <i class="fa fa-car"></i></a>
             </div>
         </div>
         <div class="row">
@@ -37,7 +38,8 @@
                             </li>
                             <li>
                                 <button type="button" class="btn btn-info loginBtn"
-                                        onclick="document.location='{{ url_for('registration') }}'">Зарегистрироватся
+                                        onclick="    $.cookie('localLinkClicked', true)
+;document.location='{{ url_for('registration') }}'">Зарегистрироватся
                                 </button>
                             </li>
 

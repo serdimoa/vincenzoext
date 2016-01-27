@@ -1059,6 +1059,15 @@ def registration():
 
 @app.route('/site_auch', methods=['GET', 'POST'])
 def site_auch():
+    delivery = request.cookies.get('delivery')
+    if delivery == "deliveryincafe":
+        global_sale = 0
+    elif delivery == "deliverymyself":
+        global_sale = 10
+    elif delivery == "deliveryinhome":
+        global_sale = 0
+    else:
+        global_sale = 0
     form = RegistrationForm(prefix="form")
     form_auch = AuchForm(prefix="form_auch")
     if form.validate_on_submit() and form.is_submitted():
@@ -1084,7 +1093,7 @@ def site_auch():
             return redirect("site_auch")
         login_user(registered_user)
         return redirect(url_for('index'))
-    return render_template("siteauch.html", form=form, form_auch=form_auch)
+    return render_template("siteauch.html", form=form, form_auch=form_auch,global_sale=global_sale)
 
 
 @app.route('/tea', methods=['GET'])
