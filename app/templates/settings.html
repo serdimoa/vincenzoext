@@ -55,18 +55,7 @@
                             {{ render_form(form_password, action_url='', action_text='Изменить') }}<br>
                         </div>
                         <div role="tabpanel" class="tab-pane fade" id="messages">
-                            <br>
-
-                            <div class="input-group">
-                                <input type="text" id="main-input" class="form-control" placeholder="Напишите адрес сюда">
-                                <span class="input-group-btn">
-                                  <button class="btn btn-success addaddres" id="main-button" type="button">Добавить адрес</button>
-                                </span>
-                            </div>
-                            <br>
-                            <ul class="list-group addrList ">
-                            </ul>
-
+                            {{ render_form(form_address, action_url='', action_text='Изменить') }}<br>
                         </div>
                     </div>
 

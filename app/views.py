@@ -23,7 +23,7 @@ from app import app, db, lm, oid
 from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm, ChangeUserPassword, \
     AuchForm, SaleOnTimeForm, OrdernoAuchForForDeliveryInCafe, OrdernoAuchForDeliveryInHome, \
     OrdernoAuchForForDeliveryMySelf, TeaCategoryForm, TeaForm, OrderAuchForForDeliveryInCafe, \
-    OrderAuchForForDeliveryMySelf, OrderAuchForDeliveryInHome
+    OrderAuchForForDeliveryMySelf, OrderAuchForDeliveryInHome, FormAddress
 from models import User, Category, Items, Like, AnonymousUser, Sale, Adress, SaleoOnTime, TeaCategory, Tea
 import mandrill
 
@@ -127,6 +127,7 @@ def settings():
     if current_user.is_authenticated:
         form = UserEdit(obj=User.query.filter_by(id=current_user.id).first(), prefix="form")
         form_password = ChangeUserPassword(prefix="form_password")
+        form_address = FormAddress(obj=Adress.query.filter_by(user_id=current_user.id).first(), prefix="form_address")
         if form_password.validate_on_submit() and form_password.is_submitted():
             item = User.query.get(current_user.id)
             if item.password == form_password.old_password.data:
@@ -146,34 +147,36 @@ def settings():
             flash(u'Изменено', 'errors')
             return redirect(url_for("settings"))
 
-        return render_template("settings.html", form=form, form_password=form_password)
-    else:
-        return redirect(url_for("index"))
-
-
-@app.route('/address', methods=['GET', 'POST'])
-def address():
-    if current_user.is_authenticated:
-        if request.method == "POST":
+        if form_address.validate_on_submit() and form_address.is_submitted():
             user_address = Adress.query.filter_by(user_id=current_user.id).first()
             if user_address is None:
-                address_data = Adress(user_id=current_user.id, address=request.values.get('addresses'))
+                address_data = Adress(
+                    user_id=current_user.id,
+                    select_region=form_address.select_region.data,
+                    street=form_address.street.data,
+                    home=form_address.home.data,
+                    home_corp=form_address.home_corp.data,
+                    porch=form_address.porch.data,
+                    domofon=form_address.domofon.data,
+                    floor=form_address.floor.data,
+                    kvartira=form_address.kvartira.data
+                )
                 db.session.add(address_data)
                 db.session.commit()
-                return jsonify(result="ok, is None")
             else:
                 db.session.query(Adress).filter(Adress.user_id == current_user.id).update(
-                    {'address': request.values.get('addresses')})
+                    {'select_region': form_address.select_region.data,
+                     'street': form_address.street.data,
+                     'home': form_address.home.data,
+                     'home_corp': form_address.home_corp.data,
+                     'porch': form_address.porch.data,
+                     'domofon': form_address.domofon.data,
+                     'floor': form_address.floor.data,
+                     'kvartira': form_address.kvartira.data
+                     })
                 db.session.commit()
-                return jsonify(result="ok")
 
-        elif request.method == 'GET':
-            user_address = Adress.query.filter_by(user_id=current_user.id).all()
-            addr = user_address[0].address
-            return jsonify(result=addr)
-
-        else:
-            return redirect(url_for("index"))
+        return render_template("settings.html", form_address=form_address, form=form, form_password=form_password)
     else:
         return redirect(url_for("index"))
 
@@ -714,8 +717,9 @@ def order():
 
     else:
         if current_user.id is None:
+            deliverymethod = deliverymethod() # todo: показывать вариант достаки разработать функцию
             settings_it = [str("delete_buy_button"), str(delivery)]
-            return render_template("order.html", form=form, title="Vincenzo",
+            return render_template("order.html",deliverymethod=deliverymethod, form=form, title="Vincenzo",
                                    settings_order=settings_it, global_sale=global_sale)
         else:
             settings_it = [str("delete_buy_button"), str(delivery)]

@@ -2041,7 +2041,12 @@ hr {
         width: 64px;
     }
 }
-
+.backbtn{
+  color: #333333;
+  &:hover{
+    color: #ff5252;
+  }
+}
 .checkOut.isUp {
     position: fixed;
     color: #333;

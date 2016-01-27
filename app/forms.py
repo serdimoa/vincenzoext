@@ -153,6 +153,17 @@ class OrdernoAuchForForDeliveryInCafe(DeliveryNoAuch):
     hidden_table = HiddenField()
 
 
+class FormAddress(Form):
+    select_region = SelectField(u"Выберите район доставки", choices=delivery_price)
+    street = StringField(u"Улица*", validators=[validators.InputRequired(u"Введите Вашу улицу")])
+    home = StringField(u"Дом*", validators=[validators.InputRequired(u"Введите Ваш дом")])
+    home_corp = StringField(u"Корпус/строение")
+    porch = StringField(u"Подъезд*", validators=[validators.InputRequired(u"Введите Ваш подъезд")])
+    domofon = StringField(u"Домофон")
+    floor = StringField(u"Этаж")
+    kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
+
+
 # Dostavka domoy no auch
 class OrdernoAuchForDeliveryInHome(DeliveryNoAuch):
     select_region = SelectField(u"Выберите район доставки", choices=delivery_price)

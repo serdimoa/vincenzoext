@@ -102,11 +102,7 @@ if ($(".settings, .sale, .aboutus").length) {
 }
 
 if ($(".settings").length) {
-    $.getJSON("/address", "",
-        function (data) {
-            console.log(JSON.parse(data.result));
-            localStorage["memos"] = JSON.stringify(JSON.parse(data.result));
-        });
+
 
     var items = getFromLocal('memos');
     var index;
@@ -173,7 +169,6 @@ if ($(".settings").length) {
     function storeToLocal(key, items) {
         var allAddress = JSON.stringify(items);
         localStorage[key] = allAddress;
-        $.post("/address", {addresses: allAddress})
     }
 
     function getFromLocal(key) {
@@ -287,29 +282,7 @@ function dataFromTable() {
 
 tableOrder.on('mouseenter', 'tr', function () {
     if ($(this).hasClass('selected')) {
-        $(this).removeClass('selected');)
-
-
-@app.route('/tea', methods=['GET'])
-def tea():
-    delivery = request.cookies.get('delivery')
-    if delivery == "deliveryincafe":
-        global_sale = 0
-    elif delivery == "deliverymyself":
-        global_sale = 10
-    elif delivery == "deliveryinhome":
-        global_sale = 0
-    else:
-        global_sale = 0
-
-    select_category = TeaCategory.query.all()
-
-    return render_template("tea.html", tea_category=select_category, global_sale=global_sale,
-                           delivery=delivery, title="Vincenzo")
-
-
-@app.route('/tea/<int:category_id>', methods=['GET'])
-def tea_one(category_id):
+        $(this).removeClass('selected');
     } else {
         dataTable.$('tr.selected').removeClass('selected');
         $(this).addClass('selected');

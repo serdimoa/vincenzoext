@@ -28,6 +28,7 @@
 
                                 <div class="userIsAuch">
                                     <h1>Привет, {{ current_user.username }}! </h1>
+                                    <a class="backbtn" href="#">Вернутся напредыдущую страницу</a>
 
                                     <h2>Заказ на сумму: <span class=full_price></span> <i class="fa fa-rub"></i></h2>
                                     {% for category, message in get_flashed_messages(with_categories=true) %}
