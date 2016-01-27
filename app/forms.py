@@ -14,7 +14,7 @@ import datetime
 weaks = [('0', u'Воскресенье'), ('1', u'Понедельник'), ('2', u'Вторник'), ('3', u'Среда'), ('4', u'Четверг'),
          ('5', u'Пятница'), ('6', u'Суббота')]
 
-delivery_price = [('500', u'По городу'), ('800', u'Пром.зона'), ('800', u'Старый Вартовск (район Энтузиастов'),
+delivery_price = [('500', u'По городу'), ('800', u'Пром.зона'), ('800', u'Старый Вартовск (район Энтузиастов)'),
                   ('1000', u'Старый Вартовск (район "Горбатый")'), ('1200', u'Старый Вартовск (район "ЛПХ"и далее)'),
                   ('1500', u'Излучинск')]
 
@@ -155,13 +155,13 @@ class OrdernoAuchForForDeliveryInCafe(DeliveryNoAuch):
 
 # Dostavka domoy no auch
 class OrdernoAuchForDeliveryInHome(DeliveryNoAuch):
-    select_region = SelectField(u"Выберите раен доставки", choices=delivery_price)
+    select_region = SelectField(u"Выберите район доставки", choices=delivery_price)
     street = StringField(u"Улица*", validators=[validators.InputRequired(u"Введите Вашу улицу")])
     home = StringField(u"Дом*", validators=[validators.InputRequired(u"Введите Ваш дом")])
     home_corp = StringField(u"Корпус/строение")
     porch = StringField(u"Подъезд*", validators=[validators.InputRequired(u"Введите Ваш подъезд")])
-    domofon = StringField(u"Домофон*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
-    floor = StringField(u"Этаж*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
+    domofon = StringField(u"Домофон")
+    floor = StringField(u"Этаж")
     kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     delivery_time = StringField(u"Заказ на дату/время")
     person = StringField(u"Количество персон(приборов)")
@@ -193,13 +193,13 @@ class OrderAuchForForDeliveryInCafe(Form):
 # Dostavka domoy no auch
 class OrderAuchForDeliveryInHome(Form):
     # select_from_address = SelectField(u"Выберите адресс/Либо заполните поля ниже", coerce=str)
-    select_region = SelectField(u"Выберите раен доставки", choices=delivery_price)
+    select_region = SelectField(u"Выберите район доставки", choices=delivery_price)
     street = StringField(u"Улица*", validators=[validators.InputRequired(u"Введите Вашу улицу")])
     home = StringField(u"Дом*", validators=[validators.InputRequired(u"Введите Ваш дом")])
     home_corp = StringField(u"Корпус/строение")
     porch = StringField(u"Подъезд*", validators=[validators.InputRequired(u"Введите Ваш подъезд")])
-    domofon = StringField(u"Домофон*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
-    floor = StringField(u"Этаж*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
+    domofon = StringField(u"Домофон")
+    floor = StringField(u"Этаж")
     kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     delivery_time = StringField(u"Заказ на дату/время")
     person = StringField(u"Количество персон(приборов)")

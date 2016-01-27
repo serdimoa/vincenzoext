@@ -567,7 +567,9 @@ $('#orderNow').click(function (event) {
         })
     }
     else {
+        $.cookie("localLinkClicked", true);
         window.location.href = "/order";
+
     }
 });
 
