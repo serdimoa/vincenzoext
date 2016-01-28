@@ -1,7 +1,9 @@
 <div class="checkOut">
     <div class="row">
         <div class="container">
-            <h2>Ваш заказ <small>Винченцо</small></h2>
+            <h2>Ваш заказ
+                <small>Винченцо</small>
+            </h2>
             <table class="table" id="tableOrder" cellspacing="0" width="100%">
                 <thead>
                 <tr>
@@ -17,8 +19,17 @@
             </table>
             <hr>
             <div class="col-sm-6">
-            <h2>Дополнительная информация о заказе:</h2>
-                <p>Выбранный вариант доставки:{{ deliverymethod }}</p>
+                <h3>Дополнительная информация о заказе:</h3>
+
+                <p>Выбранный вариант доставки: <strong>{{ g.deliverymethod }}</strong></p>
+                {% if current_user.is_authenticated %}
+                    {% if current_user.first_order %}
+                        <p>Скидка на первый заказ: <strong>-10%</strong></p>
+                    {% endif %}
+                    {% if g.delivery == "deliverymyself" %}
+                        <p>Скидка на самовывоз:<strong>-10%</strong></p>
+                    {% endif %}
+                {% endif %}
             </div>
             <div class="col-md-6 text-right">
 
@@ -34,6 +45,7 @@
                     </div>
                 </div>
                 <br>
+
                 <div class="btn-group" role="group">
                     <button class="btn btn-lg btn-default" onclick='$("#select_delivery").nifty("show");
 '>Изменить вариант доставки
@@ -165,11 +177,18 @@
 
 {% block script %}
     <script>
-        var global_sale = {{ global_sale }};
+        var global_sale = {{ g.global_sale }}
+                        {% if current_user.is_authenticated %}
+                            {% if current_user.first_order %}
+                                +10
+                            {% endif %}
+                        {% endif %}
+
+                ;
         var settingsr ={% if settings_order %}
                     {{ settings_order | safe }}
-                    {% else %}
+                {% else %}
                     0
-                {% endif %} ;
+                {% endif %};
     </script>
 {% endblock %}

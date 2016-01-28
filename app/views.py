@@ -59,6 +59,21 @@ app.jinja_env.filters['datetime'] = format_datetime
 
 @app.before_request
 def before_request():
+    delivery = request.cookies.get('delivery')
+    if delivery == "deliveryincafe":
+        g.deliverymethod = u"В кафе"
+        g.global_sale = 0
+    elif delivery == "deliverymyself":
+        g.deliverymethod = u"Самовывоз"
+        g.global_sale = 10
+    elif delivery == "deliveryinhome":
+        g.deliverymethod = u"Доставка на дом"
+        g.global_sale = 0
+    else:
+        g.deliverymethod = u"Доставка на дом"
+        g.global_sale = 0
+
+    g.delivery = delivery
     g.user = current_user
 
 
@@ -95,18 +110,10 @@ def user_loader(user_id):
 def index():
     select_sale = Sale.query.all()
     delivery = request.cookies.get('delivery')
-    if delivery == "deliveryincafe":
-        global_sale = 0
-    elif delivery == "deliverymyself":
-        global_sale = 10
-    elif delivery == "deliveryinhome":
-        global_sale = 0
-    else:
-        global_sale = 0
     if current_user.id is None:
         select_category = Category.query.all()
         all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
-        return render_template("page.html", type=select_category, global_sale=global_sale, sales=select_sale,
+        return render_template("page.html", type=select_category, sales=select_sale,
                                delivery=delivery, items=all_items,
                                title="Vincenzo")
     else:
@@ -117,7 +124,7 @@ def index():
         for likes in likes:
             liked.append(likes.items_id)
 
-        return render_template("page.html", type=select_category, global_sale=global_sale, sales=select_sale,
+        return render_template("page.html", type=select_category, sales=select_sale,
                                items=all_items, likes=liked,
                                title="Vincenzo", delivery=delivery)
 
@@ -462,12 +469,19 @@ def jsontostr(table):
     for item in table:
         temp_row = []
         temp_rows = item['row']
-        sous = temp_rows[1] if temp_rows[1]!=None else u''
+        sous = temp_rows[1] if temp_rows[1] != None else u''
         this_row = temp_rows[0] + u'<br>Соус:' + sous + u'<br>Количество:' + temp_rows[2] + u'<tr>'
         temp_row.append(this_row)
         new_table.append(temp_row)
 
     return json.dumps(new_table, ensure_ascii=False)
+
+
+def checkpayments(form_value, price):
+    if form_value <= price:
+        return True
+    else:
+        return False
 
 
 @app.route('/order', methods=['GET', 'POST'])
@@ -488,57 +502,57 @@ def order():
 
     delivery = request.cookies.get('delivery')
     if delivery == "deliveryincafe":
-        global_sale = 0
         form = form1
     elif delivery == "deliverymyself":
         form = form2
-        global_sale = 10
     elif delivery == "deliveryinhome":
-        global_sale = 0
         form = form3
     else:
         form = form3
-        global_sale = 0
 
     if form.validate_on_submit():
         if current_user.id == None:
             if form.hidden_type.data == "deliveryinhome":
-                try:
-                    mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
-                    message = {
-                        'auto_html': True,
-                        'auto_text': None,
-                        'from_email': 'sir.vincenzo.office@gmail.com',
-                        'from_name': 'Sir Vincenzo ',
-                        'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                        'html': '<div>Заказ с сайта. на дом :' + form.name.data +
-                                '<br> Телефон:' + str(form.phone.data) +
-                                '<br> Регион:' + form.select_region.data +
-                                '<br> Улица:' + form.street.data +
-                                '<br> Дом:' + form.home.data +
-                                '<br> Корпус/Строеие' + form.home_corp.data +
-                                '<br> Подъезд: ' + form.porch.data +
-                                '<br> Домофон' + form.domofon.data +
-                                '<br> Этаж:' + form.floor.data +
-                                '<br> Квартира:' + form.kvartira.data +
-                                '<br>Количество персон(приборов)' + form.person.data +
-                                '<br> Способ оплаты' + form.pey_method.data +
-                                '<br> Сдача с суммы' + form.hiden_sdacha.data +
-                                '<br> Заказ на дату/время' + form.delivery_time.data +
-                                '<br> Дополнительная информация' + form.some_info.data +
-                                '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
-                                '</div>',
-                        'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-                        'to': [{'email': "sir.vincenzo.office@gmail.com",
-                                'name': "serdimoa",
-                                'type': 'to'}]
-                    }
+                if not checkpayments(int(form.select_region.data), int(request.cookies.get('cart_price'))):
+                    flash(u"Сумма заказа в данный район должна быть больше " + str(form.select_region.data)+'руб.', 'info')
+                    return redirect('order')
+                else:
+                    try:
+                        mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                        message = {
+                            'auto_html': True,
+                            'auto_text': None,
+                            'from_email': 'sir.vincenzo.office@gmail.com',
+                            'from_name': 'Sir Vincenzo ',
+                            'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                            'html': '<div>Заказ с сайта. на дом :' + form.name.data +
+                                    '<br> Телефон:' + str(form.phone.data) +
+                                    '<br> Регион:' + form.select_region.data +
+                                    '<br> Улица:' + form.street.data +
+                                    '<br> Дом:' + form.home.data +
+                                    '<br> Корпус/Строеие' + form.home_corp.data +
+                                    '<br> Подъезд: ' + form.porch.data +
+                                    '<br> Домофон' + form.domofon.data +
+                                    '<br> Этаж:' + form.floor.data +
+                                    '<br> Квартира:' + form.kvartira.data +
+                                    '<br>Количество персон(приборов)' + form.person.data +
+                                    '<br> Способ оплаты' + form.pey_method.data +
+                                    '<br> Сдача с суммы' + form.hiden_sdacha.data +
+                                    '<br> Заказ на дату/время' + form.delivery_time.data +
+                                    '<br> Дополнительная информация' + form.some_info.data +
+                                    '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                    '</div>',
+                            'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                            'to': [{'email': "sir.vincenzo.office@gmail.com",
+                                    'name': "serdimoa",
+                                    'type': 'to'}]
+                        }
 
-                    result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
-                    return redirect(url_for('ordercomplete'))
+                        result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+                        return redirect(url_for('ordercomplete'))
 
-                except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
-                    return jsonify(result=2)
+                    except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+                        return jsonify(result=2)
 
             if form.hidden_type.data == "deliveryincafe":
                 try:
@@ -596,70 +610,74 @@ def order():
 
         elif current_user.id != None:
             if form.hidden_type.data == "deliveryinhome":
-                try:
-                    mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
-                    message = {
-                        'auto_html': True,
-                        'auto_text': None,
-                        'from_email': 'sir.vincenzo.office@gmail.com',
-                        'from_name': 'Sir Vincenzo ',
-                        'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                        'html': '<div>Зарегистрированный пользователь.<br>Заказ с сайта. на дом :' + current_user.username +
-                                '<br> Телефон:' + str(current_user.phone) +
-                                '<br> Регион:' + form.select_region.data +
-                                '<br> Улица:' + form.street.data +
-                                '<br> Дом:' + form.home.data +
-                                '<br> Корпус/Строеие' + form.home_corp.data +
-                                '<br> Подъезд: ' + form.porch.data +
-                                '<br> Домофон' + form.domofon.data +
-                                '<br> Этаж:' + form.floor.data +
-                                '<br> Квартира:' + form.kvartira.data +
-                                '<br> Количество персон(приборов)' + form.person.data +
-                                '<br> Способ оплаты' + form.pey_method.data +
-                                '<br> Сдача с суммы' + form.hiden_sdacha.data +
-                                '<br> Заказ на дату/время' + form.delivery_time.data +
-                                '<br> Дополнительная информация' + form.some_info.data +
-                                '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
-                                '</div>',
-                        'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-                        'to': [{'email': "sir.vincenzo.office@gmail.com",
-                                'name': "serdimoa",
-                                'type': 'to'}]
-                    }
-                    user_address = Adress.query.filter_by(user_id=current_user.id).first()
-                    if user_address is None:
-                        address_data = Adress(
-                            user_id=current_user.id,
-                            select_region=form.select_region.data,
-                            street=form.street.data,
-                            home=form.home.data,
-                            home_corp=form.home_corp.data,
-                            porch=form.porch.data,
-                            domofon=form.domofon.data,
-                            floor=form.floor.data,
-                            kvartira=form.kvartira.data
-                        )
-                        db.session.add(address_data)
-                        db.session.commit()
-                    else:
-                        db.session.query(Adress).filter(Adress.user_id == current_user.id).update(
-                            {'select_region': form.select_region.data,
-                             'street': form.street.data,
-                             'home': form.home.data,
-                             'home_corp': form.home_corp.data,
-                             'porch': form.porch.data,
-                             'domofon': form.domofon.data,
-                             'floor': form.floor.data,
-                             'kvartira': form.kvartira.data
-                             })
-                        db.session.commit()
+                if not checkpayments(int(form.select_region.data), int(request.cookies.get('cart_price'))):
+                    flash(u"Сумма заказа в данный район должна быть больше " + str(form.select_region.data)+'руб.', 'info')
+                    return redirect('order')
+                else:
+                    try:
+                        mandrill_client = mandrill.Mandrill('wv39DASQNMJbfCratNJa2w')
+                        message = {
+                            'auto_html': True,
+                            'auto_text': None,
+                            'from_email': 'sir.vincenzo.office@gmail.com',
+                            'from_name': 'Sir Vincenzo ',
+                            'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
+                            'html': '<div>Зарегистрированный пользователь.<br>Заказ с сайта. на дом :' + current_user.username +
+                                    '<br> Телефон:' + str(current_user.phone) +
+                                    '<br> Регион:' + form.select_region.data +
+                                    '<br> Улица:' + form.street.data +
+                                    '<br> Дом:' + form.home.data +
+                                    '<br> Корпус/Строеие' + form.home_corp.data +
+                                    '<br> Подъезд: ' + form.porch.data +
+                                    '<br> Домофон' + form.domofon.data +
+                                    '<br> Этаж:' + form.floor.data +
+                                    '<br> Квартира:' + form.kvartira.data +
+                                    '<br> Количество персон(приборов)' + form.person.data +
+                                    '<br> Способ оплаты' + form.pey_method.data +
+                                    '<br> Сдача с суммы' + form.hiden_sdacha.data +
+                                    '<br> Заказ на дату/время' + form.delivery_time.data +
+                                    '<br> Дополнительная информация' + form.some_info.data +
+                                    '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                    '</div>',
+                            'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
+                            'to': [{'email': "sir.vincenzo.office@gmail.com",
+                                    'name': "serdimoa",
+                                    'type': 'to'}]
+                        }
+                        user_address = Adress.query.filter_by(user_id=current_user.id).first()
+                        if user_address is None:
+                            address_data = Adress(
+                                user_id=current_user.id,
+                                select_region=form.select_region.data,
+                                street=form.street.data,
+                                home=form.home.data,
+                                home_corp=form.home_corp.data,
+                                porch=form.porch.data,
+                                domofon=form.domofon.data,
+                                floor=form.floor.data,
+                                kvartira=form.kvartira.data
+                            )
+                            db.session.add(address_data)
+                            db.session.commit()
+                        else:
+                            db.session.query(Adress).filter(Adress.user_id == current_user.id).update(
+                                {'select_region': form.select_region.data,
+                                 'street': form.street.data,
+                                 'home': form.home.data,
+                                 'home_corp': form.home_corp.data,
+                                 'porch': form.porch.data,
+                                 'domofon': form.domofon.data,
+                                 'floor': form.floor.data,
+                                 'kvartira': form.kvartira.data
+                                 })
+                            db.session.commit()
 
-                    result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
+                        result = mandrill_client.messages.send(message=message, async=False, ip_pool='Main Pool')
 
-                    return redirect(url_for('ordercomplete'))
+                        return redirect(url_for('ordercomplete'))
 
-                except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
-                    return jsonify(result=2)
+                    except mandrill.Error, e:  # Mandrill errors are thrown as exceptions
+                        return jsonify(result=2)
 
             if form.hidden_type.data == "deliveryincafe":
                 try:
@@ -717,14 +735,12 @@ def order():
 
     else:
         if current_user.id is None:
-            deliverymethod = deliverymethod() # todo: показывать вариант достаки разработать функцию
-            settings_it = [str("delete_buy_button"), str(delivery)]
-            return render_template("order.html",deliverymethod=deliverymethod, form=form, title="Vincenzo",
-                                   settings_order=settings_it, global_sale=global_sale)
-        else:
             settings_it = [str("delete_buy_button"), str(delivery)]
             return render_template("order.html", form=form, title="Vincenzo",
-                                   global_sale=global_sale)
+                                   settings_order=settings_it)
+        else:
+            settings_it = [str("delete_buy_button"), str(delivery)]
+            return render_template("order.html", form=form, title="Vincenzo")
 
 
 @app.route('/deliveryinhome', methods=["POST", "GET"])
@@ -758,45 +774,18 @@ def get_one_item(item_id):
 @app.route('/sales', methods=['GET', 'POST'])
 def sales():
     select_sales = Sale.query.all()
-    delivery = request.cookies.get('delivery')
-    if delivery == "deliveryincafe":
-        global_sale = 0
-    elif delivery == "deliverymyself":
-        global_sale = 10
-    elif delivery == "deliveryinhome":
-        global_sale = 0
-    else:
-        global_sale = 0
-    return render_template('sale.html', sales=select_sales, global_sale=global_sale)
+    return render_template('sale.html', sales=select_sales)
 
 
 @app.route('/one_sale/<int:sale_id>', methods=['GET', 'POST'])
 def one_sale(sale_id):
-    delivery = request.cookies.get('delivery')
-    if delivery == "deliveryincafe":
-        global_sale = 0
-    elif delivery == "deliverymyself":
-        global_sale = 10
-    elif delivery == "deliveryinhome":
-        global_sale = 0
-    else:
-        global_sale = 0
     one_sales = db.session.query(Sale).filter_by(id=sale_id).first()
-    return render_template('one_sale.html', sale=one_sales, global_sale=global_sale)
+    return render_template('one_sale.html', sale=one_sales)
 
 
 @app.route('/aboutus', methods=['GET', 'POST'])
 def about_us():
-    delivery = request.cookies.get('delivery')
-    if delivery == "deliveryincafe":
-        global_sale = 0
-    elif delivery == "deliverymyself":
-        global_sale = 10
-    elif delivery == "deliveryinhome":
-        global_sale = 0
-    else:
-        global_sale = 0
-    return render_template("aboutus.html", title="О нас", global_sale=global_sale)
+    return render_template("aboutus.html", title="О нас")
 
 
 @app.route('/panel/item_add', methods=['GET', 'POST'])
@@ -1035,15 +1024,6 @@ def pwreset():
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     form = RegistrationForm()
-    delivery = request.cookies.get('delivery')
-    if delivery == "deliveryincafe":
-        global_sale = 0
-    elif delivery == "deliverymyself":
-        global_sale = 10
-    elif delivery == "deliveryinhome":
-        global_sale = 0
-    else:
-        global_sale = 0
     if form.validate_on_submit():
         user = User(username=form.username.data,
                     email=form.email.data,
@@ -1058,20 +1038,11 @@ def registration():
             return redirect(url_for('index'))
         login_user(registered_user)
         return redirect(url_for('index'))
-    return render_template("registration.html", form=form, global_sale=global_sale)
+    return render_template("registration.html", form=form)
 
 
 @app.route('/site_auch', methods=['GET', 'POST'])
 def site_auch():
-    delivery = request.cookies.get('delivery')
-    if delivery == "deliveryincafe":
-        global_sale = 0
-    elif delivery == "deliverymyself":
-        global_sale = 10
-    elif delivery == "deliveryinhome":
-        global_sale = 0
-    else:
-        global_sale = 0
     form = RegistrationForm(prefix="form")
     form_auch = AuchForm(prefix="form_auch")
     if form.validate_on_submit() and form.is_submitted():
@@ -1097,57 +1068,34 @@ def site_auch():
             return redirect("site_auch")
         login_user(registered_user)
         return redirect(url_for('index'))
-    return render_template("siteauch.html", form=form, form_auch=form_auch,global_sale=global_sale)
+    return render_template("siteauch.html", form=form, form_auch=form_auch)
 
 
 @app.route('/tea', methods=['GET'])
 def tea():
-    delivery = request.cookies.get('delivery')
-    if delivery == "deliveryincafe":
-        global_sale = 0
-    elif delivery == "deliverymyself":
-        global_sale = 10
-    elif delivery == "deliveryinhome":
-        global_sale = 0
-    else:
-        global_sale = 0
-
     select_category = TeaCategory.query.all()
 
-    return render_template("tea.html", tea_category=select_category, global_sale=global_sale,
-                           delivery=delivery, title="Vincenzo")
+    return render_template("tea.html", tea_category=select_category,
+                           title="Vincenzo")
 
 
 @app.route('/tea/<int:category_id>', methods=['GET'])
 def tea_one(category_id):
-    delivery = request.cookies.get('delivery')
-    if delivery == "deliveryincafe":
-        global_sale = 0
-    elif delivery == "deliverymyself":
-        global_sale = 10
-    elif delivery == "deliveryinhome":
-        global_sale = 0
-    else:
-        global_sale = 0
-
     select_category = TeaCategory.query.filter_by(id=category_id).one()
     select_item = db.session.query(Tea).filter_by(tea_category_id=category_id).all()
     return render_template("teaone.html", select_category=select_category, tea_select=select_item,
-                           global_sale=global_sale, delivery=delivery, title="Vincenzo")
+                           title="Vincenzo")
 
 
 @app.route('/ordercomplete', methods=['GET'])
 def ordercomplete():
-    delivery = request.cookies.get('delivery')
-    if delivery == "deliveryincafe":
-        global_sale = 0
-    elif delivery == "deliverymyself":
-        global_sale = 10
-    elif delivery == "deliveryinhome":
-        global_sale = 0
-    else:
-        global_sale = 0
-    return render_template("order_complete.html", title="Vincenzo", global_sale=global_sale)
+    if current_user.id is not None:
+        db.session.query(User).filter(User.id == current_user.id).update(
+            {'first_order': False})
+        db.session.commit()
+    resp = make_response(render_template("order_complete.html", title="Vincenzo"))
+    resp.set_cookie('localLinkClicked', 'true')
+    return resp
 
 
 

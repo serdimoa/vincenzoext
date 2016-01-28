@@ -96,7 +96,6 @@ function delivery_func() {
 }
 
 
-
 if ($(".settings, .sale, .aboutus").length) {
     delivery_func();
 }
@@ -181,8 +180,6 @@ if ($(".settings").length) {
     }
 
 }
-
-
 
 
 function initIfhaveSession() {
@@ -404,6 +401,13 @@ $(".like_no_admin").click(function () {
         document.location = "/site_auch";
     });
 });
+
+$(".backbtn").click(function () {
+    $.cookie('localLinkClicked', true);
+
+    window.history.back();
+});
+
 $('.pw-reset a, #restorePass').click(function () {
     var login = $('#inputPhone');
     if (login.val() != "") {
@@ -808,22 +812,22 @@ $(".logoa").click(function (e) {
     function init() {
         // preload images
         console.log(global_sale);
-        jQuery('#scrollup img').mouseover( function(){
-	    	jQuery( this ).animate({opacity: 0.65},100);
-	    }).mouseout( function(){
-	    	jQuery( this ).animate({opacity: 1},100);
-	    }).click( function(){
-            $('html,body').animate({ scrollTop: 0 }, 'slow');
-	    	return false;
-	    });
+        jQuery('#scrollup img').mouseover(function () {
+            jQuery(this).animate({opacity: 0.65}, 100);
+        }).mouseout(function () {
+            jQuery(this).animate({opacity: 1}, 100);
+        }).click(function () {
+            $('html,body').animate({scrollTop: 0}, 'slow');
+            return false;
+        });
 
-	    jQuery(window).scroll(function(){
-	    	if ( jQuery(document).scrollTop() > 0 ) {
-	    		jQuery('#scrollup').fadeIn('fast');
-	    	} else {
-	    		jQuery('#scrollup').fadeOut('fast');
-	    	}
-	    });
+        jQuery(window).scroll(function () {
+            if (jQuery(document).scrollTop() > 0) {
+                jQuery('#scrollup').fadeIn('fast');
+            } else {
+                jQuery('#scrollup').fadeOut('fast');
+            }
+        });
         if ($('.index_page').length) {
             initIsotope();
             initEvents();

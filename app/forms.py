@@ -14,9 +14,11 @@ import datetime
 weaks = [('0', u'Воскресенье'), ('1', u'Понедельник'), ('2', u'Вторник'), ('3', u'Среда'), ('4', u'Четверг'),
          ('5', u'Пятница'), ('6', u'Суббота')]
 
-delivery_price = [('500', u'По городу'), ('800', u'Пром.зона'), ('800', u'Старый Вартовск (район Энтузиастов)'),
-                  ('1000', u'Старый Вартовск (район "Горбатый")'), ('1200', u'Старый Вартовск (район "ЛПХ"и далее)'),
-                  ('1500', u'Излучинск')]
+delivery_price = [('500', u'По городу - от 500р.'), ('800', u'Пром.зона - от 800р.'),
+                  ('800', u'Старый Вартовск (район Энтузиастов) - от 800р.'),
+                  ('1000', u'Старый Вартовск (район "Горбатый") - от 1000р.'),
+                  ('1200', u'Старый Вартовск (район "ЛПХ"и далее) - от 1200р.'),
+                  ('1500', u'Излучинск- от 1500р.')]
 
 
 class PhoneNumber(PhoneNumberField):
@@ -82,9 +84,12 @@ class TeaForm(Form):
     tea_category_id = SelectField(u"Категория чая", coerce=int)
     tea_name = StringField(u"Наименование*", validators=[validators.InputRequired(u"Поле обязательно к заполнению")])
     tea_about = StringField(u"О чае(кратко)*", validators=[validators.InputRequired(u"Поле обязательно к заполнению")])
-    tea_price_400 = IntegerField(u"Цена 400мл*", validators=[validators.InputRequired(u"Поле обязательно к заполнению")])
-    tea_price_800 = IntegerField(u"Цена 800мл*", validators=[validators.InputRequired(u"Поле обязательно к заполнению")])
-    tea_price_1000 = IntegerField(u"Цена 1000мл*", validators=[validators.InputRequired(u"Поле обязательно к заполнению")])
+    tea_price_400 = IntegerField(u"Цена 400мл*",
+                                 validators=[validators.InputRequired(u"Поле обязательно к заполнению")])
+    tea_price_800 = IntegerField(u"Цена 800мл*",
+                                 validators=[validators.InputRequired(u"Поле обязательно к заполнению")])
+    tea_price_1000 = IntegerField(u"Цена 1000мл*",
+                                  validators=[validators.InputRequired(u"Поле обязательно к заполнению")])
 
 
 class UserEdit(Form):
@@ -133,7 +138,8 @@ b = datetime.timedelta(hours=2, minutes=30)
 # No Auch
 class DeliveryNoAuch(Form):
     name = StringField(u"Ваше имя*", validators=[validators.InputRequired(u"Введите Ваше имя")])
-    phone = PhoneNumber(u"Телефон*", country_code='RU', display_format='e164', validators=[validators.InputRequired(u"Введите Ваш телефон")])
+    phone = PhoneNumber(u"Телефон*", country_code='RU', display_format='e164',
+                        validators=[validators.InputRequired(u"Введите Ваш телефон")])
 
 
 # Samovivoz no auch
@@ -176,7 +182,7 @@ class OrdernoAuchForDeliveryInHome(DeliveryNoAuch):
     kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     delivery_time = StringField(u"Заказ на дату/время")
     person = StringField(u"Количество персон(приборов)")
-    pey_method = RadioField(u"Способ оплаты",coerce=unicode,
+    pey_method = RadioField(u"Способ оплаты", coerce=unicode,
                             choices=[(u"Оплата наличными", u"Оплата наличными"), (u"Оплата картой", u"Оплата картой")],
                             validators=[validators.InputRequired(u"Необходимо выбрать способ оплаты")])
     hiden_sdacha = StringField(u"Cдача с суммы в руб.", )
@@ -214,7 +220,7 @@ class OrderAuchForDeliveryInHome(Form):
     kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     delivery_time = StringField(u"Заказ на дату/время")
     person = StringField(u"Количество персон(приборов)")
-    pey_method = RadioField(u"Способ оплаты*",coerce=unicode,
+    pey_method = RadioField(u"Способ оплаты*", coerce=unicode,
                             choices=[(u"Оплата наличными", u"Оплата наличными"), (u"Оплата картой", u"Оплата картой")],
                             validators=[validators.InputRequired(u"Необходимо выбрать способ оплаты")])
     hiden_sdacha = StringField(u"Cдача с суммы в руб.", )
@@ -236,4 +242,3 @@ class SaleOnTimeForm(Form):
     date_sale_on = SelectMultipleField(u"Дни недели когда активна акция", choices=weaks)
     time_start = TimeField(u"Начало акции(время)")
     time_end = TimeField(u"Конец акции(время)")
-

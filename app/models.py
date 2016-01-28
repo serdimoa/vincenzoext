@@ -9,6 +9,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(120))
     phone = db.Column(PhoneNumberType(country_code='RU', max_length=20), unique=True)
+    first_order = db.Column(db.Boolean, default=True)
 
     def __init__(self, username, email, phone, authenticated, password):
         self.username = username
