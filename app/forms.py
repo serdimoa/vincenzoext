@@ -37,6 +37,8 @@ class PhoneNumber(PhoneNumberField):
     error_msg = u'Вы ввели не коректный телефон'
 
 
+
+
 class Integers(IntegerField):
     def process_formdata(self, valuelist):
         if valuelist:
@@ -78,6 +80,11 @@ class ItemForm(Form):
 class TeaCategoryForm(Form):
     tea_category_name = StringField(u"Наименование")
     img = FileField(u"Изображение")
+
+
+class AdminLoginForm(Form):
+    admin = StringField(u"Ваш логин")
+    password = PasswordField(u"Ваш пароль")
 
 
 class TeaForm(Form):

@@ -23,13 +23,16 @@ from app import app, db, lm, oid
 from forms import LoginForm, CategoryForm, ItemForm, RegistrationForm, UserEdit, SaleAddForm, ChangeUserPassword, \
     AuchForm, SaleOnTimeForm, OrdernoAuchForForDeliveryInCafe, OrdernoAuchForDeliveryInHome, \
     OrdernoAuchForForDeliveryMySelf, TeaCategoryForm, TeaForm, OrderAuchForForDeliveryInCafe, \
-    OrderAuchForForDeliveryMySelf, OrderAuchForDeliveryInHome, FormAddress
+    OrderAuchForForDeliveryMySelf, OrderAuchForDeliveryInHome, FormAddress, AdminLoginForm
 from models import User, Category, Items, Like, AnonymousUser, Sale, Adress, SaleoOnTime, TeaCategory, Tea
 import mandrill
 
 lm.anonymous_user = AnonymousUser
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+
+admin_login = "admin"
+admin_password = "vincenzopassword"
 
 
 @app.template_filter()
@@ -43,6 +46,12 @@ def filter_shuffle(seq):
 
 
 app.jinja_env.filters['shuffle'] = filter_shuffle
+
+
+@app.route('/logoutadmin')
+def logoutadmin():
+    session.pop('logged_in', None)
+    return redirect(url_for('adminlogin'))
 
 
 @app.template_filter()
@@ -105,6 +114,20 @@ def user_loader(user_id):
 #         user = user,
 #         posts = posts)
 #
+
+@app.route('/adminlogin', methods=['GET', 'POST'])
+def adminlogin():
+    form = AdminLoginForm()
+    if form.validate_on_submit():
+        if form.admin.data == admin_login and form.password.data:
+            session['logged_in'] = True
+            return redirect(url_for('items'))
+        else:
+            flash(u"Что-то не так", 'info')
+            return redirect(url_for('adminlogin'))
+
+    return render_template("admin_login.html", form=form)
+
 
 @app.route('/')
 def index():
@@ -194,6 +217,9 @@ def get_tea_category():
     Берем все категории или добавляем новую
     :rtype : json
     """
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     select_category = TeaCategory.query.all()
     return render_template("teacategory.html", category=select_category)
 
@@ -204,12 +230,18 @@ def get_category():
     Берем все категории или добавляем новую
     :rtype : json
     """
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     select_category = Category.query.all()
     return render_template("category.html", category=select_category)
 
 
 @app.route('/panel/sale_time_add', methods=['GET', 'POST'])
 def sale_time_add():
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     form = SaleOnTimeForm()
     if form.validate_on_submit():
         sale_data = SaleoOnTime(sale_name=form.sale_name.data, down_sale=form.down_sale.data,
@@ -237,6 +269,9 @@ def get_sales():
 
 @app.route('/panel/sale_time_edit/<int:sale_id>', methods=['GET', 'POST'])
 def sale_time_edit(sale_id):
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     select_item = SaleoOnTime.query.filter_by(id=sale_id).first()
     form = SaleOnTimeForm(obj=select_item)
     if form.validate_on_submit():
@@ -252,6 +287,9 @@ def sale_time_edit(sale_id):
 
 @app.route('/panel/sale/add', methods=["GET", "POST"])
 def sale_add():
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     form = SaleAddForm()
     if form.validate_on_submit():
         filename = secure_filename(form.img.data.filename)
@@ -284,18 +322,27 @@ def sale_add():
 
 @app.route('/panel/sales_time', methods=["GET"])
 def sale_time():
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     all_sales = db.session.query(SaleoOnTime).all()
     return render_template("sales_time.html", items=all_sales)
 
 
 @app.route('/panel/sales', methods=["GET"])
 def sale():
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     all_sales = db.session.query(Sale).all()
     return render_template("sales.html", items=all_sales)
 
 
 @app.route('/panel/sale_edit/<int:sale_id>', methods=['GET', 'POST'])
 def sale_edit(sale_id):
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     select_item = Sale.query.filter_by(id=sale_id).first()
     img = select_item.img
     form = SaleAddForm(obj=select_item)
@@ -331,6 +378,9 @@ def sale_edit(sale_id):
 
 @app.route('/panel/sales_delete/<int:item_id>', methods=['GET', 'POST'])
 def sale_delete(item_id):
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     item = Sale.query.get(item_id)
     Sale.query.filter_by(id=item_id).delete()
     db.session.commit()
@@ -340,6 +390,9 @@ def sale_delete(item_id):
 
 @app.route('/panel/category/category_add', methods=['GET', 'POST'])
 def category_add():
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     form = CategoryForm()
     if form.validate_on_submit():
         category_data = Category(category_name=form.category_name.data,
@@ -353,6 +406,9 @@ def category_add():
 
 @app.route('/panel/category/tea_category_add', methods=['GET', 'POST'])
 def tea_category_add():
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     form = TeaCategoryForm()
     if form.validate_on_submit():
         filename = secure_filename(form.img.data.filename)
@@ -390,6 +446,9 @@ def delete_category(category_id):
     Удаляем категорию
     :rtype : redirect to category page
     """
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     category = Category.query.get(category_id)
     Category.query.filter_by(id=category_id).delete()
     db.session.commit()
@@ -404,6 +463,9 @@ def update_category(category_id):
     Переименовуем категорию
     :rtype : flash
     """
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     form = CategoryForm(obj=Category.query.filter_by(id=category_id).first())
     if form.validate_on_submit():
         category = Category.query.get(category_id)
@@ -424,6 +486,9 @@ def update_tea_category(category_id):
     Переименовуем категорию
     :rtype : flash
     """
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     select_item = TeaCategory.query.filter_by(id=category_id).first()
     img = select_item.tea_img
 
@@ -455,6 +520,9 @@ def delete_tea_category(category_id):
     Удаляем категорию
     :rtype : redirect to category page
     """
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     category = TeaCategory.query.get(category_id)
     TeaCategory.query.filter_by(id=category_id).delete()
     db.session.commit()
@@ -513,7 +581,7 @@ def order():
     if form.validate_on_submit():
         if current_user.id == None:
             if form.hidden_type.data == "deliveryinhome":
-                if not checkpayments(int(form.select_region.data), int(request.cookies.get('cart_price'))):
+                if not checkpayments(float(form.select_region.data), float(request.cookies.get('cart_price'))):
                     flash(u"Сумма заказа в данный район должна быть больше " + str(form.select_region.data)+'руб.', 'info')
                     return redirect('order')
                 else:
@@ -610,7 +678,7 @@ def order():
 
         elif current_user.id != None:
             if form.hidden_type.data == "deliveryinhome":
-                if not checkpayments(int(form.select_region.data), int(request.cookies.get('cart_price'))):
+                if not checkpayments(float(form.select_region.data), float(request.cookies.get('cart_price'))):
                     flash(u"Сумма заказа в данный район должна быть больше " + str(form.select_region.data)+'руб.', 'info')
                     return redirect('order')
                 else:
@@ -790,6 +858,9 @@ def about_us():
 
 @app.route('/panel/item_add', methods=['GET', 'POST'])
 def item_add():
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     form = ItemForm()
     form.category_id.choices = [(c.id, c.category_name) for c in Category.query.all()]
     if request.method == 'POST':
@@ -818,6 +889,9 @@ def item_add():
 
 @app.route('/panel/tea_item_add', methods=['GET', 'POST'])
 def tea_item_add():
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     form = TeaForm()
     form.tea_category_id.choices = [(c.id, c.tea_category_name) for c in TeaCategory.query.all()]
     if request.method == 'POST':
@@ -840,6 +914,9 @@ def tea_item_add():
 
 @app.route('/panel/tea_item_edit/<int:item_id>', methods=['GET', 'POST'])
 def tea_item_edit(item_id):
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     select_item = Tea.query.filter_by(id=item_id).first()
     form = TeaForm(obj=select_item)
     form.tea_category_id.choices = [(c.id, c.tea_category_name) for c in TeaCategory.query.all()]
@@ -861,6 +938,9 @@ def tea_item_edit(item_id):
 
 @app.route('/panel/item_edit/<int:item_id>', methods=['GET', 'POST'])
 def item_edit(item_id):
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     select_item = Items.query.filter_by(id=item_id).first()
     img = select_item.img
     thumb = select_item.thumbnail
@@ -929,6 +1009,9 @@ def item_edit(item_id):
 
 @app.route('/panel/item_delete/<int:item_id>', methods=['GET', 'POST'])
 def item_delete(item_id):
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     item = Items.query.get(item_id)
     Items.query.filter_by(id=item_id).delete()
     db.session.commit()
@@ -938,12 +1021,18 @@ def item_delete(item_id):
 
 @app.route('/panel/items', methods=['GET', 'POST'])
 def items():
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     all_items = db.session.query(Items, Category).join(Category, Items.category_id == Category.id).all()
     return render_template("items.html", items=all_items)
 
 
 @app.route('/panel/tea_items', methods=['GET', 'POST'])
 def tea_items():
+    if not session.get('logged_in'):
+        return redirect(url_for("adminlogin"))
+
     all_items = db.session.query(Tea, TeaCategory).join(TeaCategory, Tea.tea_category_id == TeaCategory.id).all()
     return render_template("tea_items.html", items=all_items)
 
