@@ -2476,11 +2476,17 @@ div.fancy-select ul.options {
 }
 
 .carousel .item {
-    height: 875px;
+    height: 743px;
 }
 
 .carousel-indicators {
-    //bottom: -35px !important;
+   li{
+       background-color: #00963f;
+   }
+   .active{
+       background-color: #FF5252;
+       width: 20px;
+   }
 }
 
 .carousel-inner > .item > a > img {
@@ -2488,6 +2494,7 @@ div.fancy-select ul.options {
     top: 0;
     left: 0;
     min-width: 100%;
+    height: 100%;
 }
 
 .page-header h1 {
