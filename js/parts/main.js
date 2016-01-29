@@ -855,7 +855,7 @@ $(".logoa").click(function (e) {
             $("#owl-demo").owlCarousel({
                 autoPlay : 3000,
                 stopOnHover : true,
-                navigation:true,
+                navigation:false,
                 paginationSpeed : 1000,
                 goToFirstSpeed : 2000,
                 singleItem : true,
@@ -863,8 +863,15 @@ $(".logoa").click(function (e) {
                 transitionStyle:"fade",
                 navigationText:['Предыдущая', 'Следующая']
             });
-
-
+            var owl = $("#owl-demo").data('owlCarousel');
+            $('.owl-pagination').prepend("<div class='prev-slide fa fa-arrow-left'><span></span></div>");
+            $('.owl-pagination').append("<div class='next-slide fa fa-arrow-right'><span></span></div>");
+            $(".prev-slide").click(function(){
+                owl.prev()
+            });
+            $(".next-slide").click(function () {
+                owl.next();
+            });
             $(".preloader").hide();
 
 

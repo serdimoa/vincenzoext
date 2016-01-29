@@ -2468,16 +2468,12 @@ div.fancy-select ul.options {
     background-size: cover;
 }
 
-
-
-
-
-.carousel-indicators {
-   li{
-       background-color: #00963f;
+.owl-pagination {
+   .owl-page span{
+       background-color: #00963f!important;
    }
-   .active{
-       background-color: #FF5252;
+   .owl-page.active span{
+       background-color: #FF5252!important;
        width: 20px;
    }
 }
@@ -2488,13 +2484,29 @@ div.fancy-select ul.options {
     padding-top: 120px;
 }
 #owl-demo .owl-item img{
-  display: block;
-  width: 100%;
-  height: auto;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+    display: block;
+    width: 100%;
+    height: auto;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
+.owl-theme .owl-controls .next-slide,
+.owl-theme .owl-controls .prev-slide{
+    color: #FFF;
+    display: inline-block;
+    zoom: 1;
+    margin: 5px;
+    padding: 3px 10px;
+    font-size: 12px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 30px;
+    background: #869791;
+    opacity: 1;
+    vertical-align: super;
+}
+
 .carousel-inner > .item > a > img {
     position: absolute;
     top: 0;

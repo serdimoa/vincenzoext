@@ -550,16 +550,17 @@ def delete_tea_category(category_id):
 
 def jsontostr(table):
     table = json.loads(table)
-    new_table = []
+    ids = 1
+    new_table = u"<table border='1'><tr><th>ID</th><th>Название</th><th>Соус</th><th>Количество</th><th>Стоимость</th></tr>"
     for item in table:
-        temp_row = []
         temp_rows = item['row']
         sous = temp_rows[1] if temp_rows[1] != None else u''
-        this_row = temp_rows[0] + u'<br>Соус:' + sous + u'<br>Количество:' + temp_rows[2] + u'<tr>'
-        temp_row.append(this_row)
-        new_table.append(temp_row)
+        this_row = "<tr>"+"<td>"+str(ids)+"</td>"+"<td>"+temp_rows[0] + u'</td><td>' + sous + u'</td><td>' + temp_rows[2] + u'</td>'+ temp_rows[3]+'</tr>'
+        new_table += this_row
+        ids += 1
 
-    return json.dumps(new_table, ensure_ascii=False)
+    new_table += u"</table>"
+    return new_table
 
 
 def checkpayments(form_value, price):
@@ -626,7 +627,7 @@ def order():
                                     '<br> Сдача с суммы' + form.hiden_sdacha.data +
                                     '<br> Заказ на дату/время' + form.delivery_time.data +
                                     '<br> Дополнительная информация' + form.some_info.data +
-                                    '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                    '<br> Заказ:<br>' + jsontostr(form.hidden_table.data) +
                                     '</div>',
                             'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                             'to': [{'email': "sir.vincenzo.office@gmail.com",
@@ -653,7 +654,7 @@ def order():
                                 '<br> Телефон:' + str(form.phone.data) +
                                 '<br> Заказ на дату/время:' + form.delivery_time.data +
                                 '<br> Дополнительная информация:' + form.some_info.data +
-                                '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                '<br> Заказ:<br>' + jsontostr(form.hidden_table.data) +
                                 '</div>',
                         'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                         'to': [{'email': "sir.vincenzo.office@gmail.com",
@@ -680,7 +681,7 @@ def order():
                                 '<br> Телефон ' + str(form.phone.data) +
                                 '<br> Заказ на дату/время' + form.delivery_time.data +
                                 '<br> Дополнительная информация' + form.some_info.data +
-                                '<br> Заказ <br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                '<br> Заказ <br>' + jsontostr(form.hidden_table.data) +
                                 '</div>',
                         'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                         'to': [{'email': "sir.vincenzo.office@gmail.com",
@@ -724,7 +725,7 @@ def order():
                                     '<br> Сдача с суммы' + form.hiden_sdacha.data +
                                     '<br> Заказ на дату/время' + form.delivery_time.data +
                                     '<br> Дополнительная информация' + form.some_info.data +
-                                    '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                    '<br> Заказ:<br>' + jsontostr(form.hidden_table.data) +
                                     '</div>',
                             'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                             'to': [{'email': "sir.vincenzo.office@gmail.com",
@@ -779,10 +780,10 @@ def order():
                                 '<br> Телефон:' + str(current_user.phone) +
                                 '<br> Заказ на дату/время:' + form.delivery_time.data +
                                 '<br> Дополнительная информация:' + form.some_info.data +
-                                '<br> Заказ:<br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                '<br> Заказ:<br>' + jsontostr(form.hidden_table.data) +
                                 '</div>',
                         'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-                        'to': [{'email': "sir.vincenzo.office@gmail.com",
+                        'to': [{'email': "serdimoa@gmail.com",
                                 'name': "serdimoa",
                                 'type': 'to'}]
                     }
@@ -806,7 +807,7 @@ def order():
                                 '<br> Телефон:' + str(current_user.phone) +
                                 '<br> Заказ на дату/время' + form.delivery_time.data +
                                 '<br> Дополнительная информация' + form.some_info.data +
-                                '<br> Заказ <br>' + ''.join(jsontostr(form.hidden_table.data)) +
+                                '<br> Заказ <br>' + jsontostr(form.hidden_table.data) +
                                 '</div>',
                         'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                         'to': [{'email': "sir.vincenzo.office@gmail.com",
