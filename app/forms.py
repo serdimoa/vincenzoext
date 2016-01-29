@@ -101,9 +101,7 @@ class TeaForm(Form):
 
 class UserEdit(Form):
     username = StringField(u"Ваше имя")
-    phone = PhoneNumber(u"Ваш телефон", country_code='RU', display_format='e164',
-                        validators=[validators.Optional(),
-                                    Unique(User, User.phone, message=u"Такой телефон существует")])
+    phone = PhoneNumber(u"Ваш телефон", country_code='RU', display_format='e164')
     hidden_field = HiddenField(default="UserEdit")
 
 

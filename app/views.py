@@ -173,21 +173,24 @@ def settings():
                         flash(u'Неправильный старый пароль', 'errors')
                         return redirect(url_for("settings"))
 
-        if request.method == 'POST' and form.phone.data == item.phone and form_password.hidden_field.data == "UserEdit":
+        if request.method == 'POST' and form.phone.data == item.phone and form.hidden_field.data == "UserEdit":
             db.session.query(Adress).filter(Adress.user_id == current_user.id).update(
                 {'username': form.username.data})
             db.session.commit()
             flash(u'Изменено', 'errors')
             return redirect(url_for("settings"))
-        else:
-            if form.validate_on_submit():
-                if form.is_submitted():
-                    if form_password.hidden_field.data == "UserEdit" and form.phone.data != item.phone:
-                        db.session.query(Adress).filter(Adress.user_id == current_user.id).update(
-                            {'username': form.username.data,
-                             'phone': form.phone.data})
-                        db.session.commit()
-                        flash(u'Изменено', 'errors')
+        if form.validate_on_submit():
+            if form.is_submitted():
+                if form.hidden_field.data == "UserEdit":
+                    if form.phone.data != item.phone:
+                        if User.query.filter_by(phone=form.phone.data).first() is not None:
+                            flash(u'Такой телефон существует', 'errors')
+                        else:
+                            db.session.query(Adress).filter(Adress.user_id == current_user.id).update(
+                                {'username': form.username.data,
+                                 'phone': form.phone.data})
+                            db.session.commit()
+                            flash(u'Изменено', 'errors')
                         return redirect(url_for("settings"))
 
         if form_address.validate_on_submit():
