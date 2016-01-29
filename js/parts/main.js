@@ -852,21 +852,18 @@ $(".logoa").click(function (e) {
             delivery_func();
             classie.remove(grid, 'grid--loading');
 
-            var slider = $('.sliders').anyslider({
-                interval: 10000,
-                showBullets: true,
-                showControls: true
+            $("#owl-demo").owlCarousel({
+                autoPlay : 3000,
+                stopOnHover : true,
+                navigation:true,
+                paginationSpeed : 1000,
+                goToFirstSpeed : 2000,
+                singleItem : true,
+                autoHeight : true,
+                transitionStyle:"fade",
+                navigationText:['Предыдущая', 'Следующая']
             });
-            var anyslider = slider.data('anyslider');
 
-            $(".seq-prev").click(function (e) {
-                anyslider.prev();
-
-            });
-
-            $(".seq-next").click(function (e) {
-                anyslider.next();
-            });
 
             $(".preloader").hide();
 

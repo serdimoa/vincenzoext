@@ -158,53 +158,70 @@ def settings():
         form = UserEdit(obj=User.query.filter_by(id=current_user.id).first(), prefix="form")
         form_password = ChangeUserPassword(prefix="form_password")
         form_address = FormAddress(obj=Adress.query.filter_by(user_id=current_user.id).first(), prefix="form_address")
-        if form_password.validate_on_submit() and form_password.is_submitted():
-            item = User.query.get(current_user.id)
-            if item.password == form_password.old_password.data:
-                item.password = form_password.new_password.data
-                db.session.commit()
-                flash(u'Изменено', 'errors')
-                return redirect(url_for("settings"))
-            else:
-                flash(u'Неправильный старый пароль', 'errors')
-                return redirect(url_for("settings"))
+        item = User.query.get(current_user.id)
 
-        if form.validate_on_submit() and form.is_submitted():
-            item = User.query.get(current_user.id)
-            item.username = form.username.data
-            item.phone = form.phone.data
+        if form_password.validate_on_submit():
+            if form_password.is_submitted():
+                if form_password.hidden_field.data == "ChangeUserPassword":
+                    item = User.query.get(current_user.id)
+                    if item.password == form_password.old_password.data:
+                        item.password = form_password.new_password.data
+                        db.session.commit()
+                        flash(u'Изменено', 'errors')
+                        return redirect(url_for("settings"))
+                    else:
+                        flash(u'Неправильный старый пароль', 'errors')
+                        return redirect(url_for("settings"))
+
+        if request.method == 'POST' and form.phone.data == item.phone and form_password.hidden_field.data == "UserEdit":
+            db.session.query(Adress).filter(Adress.user_id == current_user.id).update(
+                {'username': form.username.data})
             db.session.commit()
             flash(u'Изменено', 'errors')
             return redirect(url_for("settings"))
+        else:
+            if form.validate_on_submit():
+                if form.is_submitted():
+                    if form_password.hidden_field.data == "UserEdit" and form.phone.data != item.phone:
+                        db.session.query(Adress).filter(Adress.user_id == current_user.id).update(
+                            {'username': form.username.data,
+                             'phone': form.phone.data})
+                        db.session.commit()
+                        flash(u'Изменено', 'errors')
+                        return redirect(url_for("settings"))
 
-        if form_address.validate_on_submit() and form_address.is_submitted():
-            user_address = Adress.query.filter_by(user_id=current_user.id).first()
-            if user_address is None:
-                address_data = Adress(
-                    user_id=current_user.id,
-                    select_region=form_address.select_region.data,
-                    street=form_address.street.data,
-                    home=form_address.home.data,
-                    home_corp=form_address.home_corp.data,
-                    porch=form_address.porch.data,
-                    domofon=form_address.domofon.data,
-                    floor=form_address.floor.data,
-                    kvartira=form_address.kvartira.data
-                )
-                db.session.add(address_data)
-                db.session.commit()
-            else:
-                db.session.query(Adress).filter(Adress.user_id == current_user.id).update(
-                    {'select_region': form_address.select_region.data,
-                     'street': form_address.street.data,
-                     'home': form_address.home.data,
-                     'home_corp': form_address.home_corp.data,
-                     'porch': form_address.porch.data,
-                     'domofon': form_address.domofon.data,
-                     'floor': form_address.floor.data,
-                     'kvartira': form_address.kvartira.data
-                     })
-                db.session.commit()
+        if form_address.validate_on_submit():
+            if form_address.is_submitted():
+                if form_address.hidden_field.data == "FormAddress":
+                    user_address = Adress.query.filter_by(user_id=current_user.id).first()
+                    if user_address is None:
+                        address_data = Adress(
+                            user_id=current_user.id,
+                            select_region=form_address.select_region.data,
+                            street=form_address.street.data,
+                            home=form_address.home.data,
+                            home_corp=form_address.home_corp.data,
+                            porch=form_address.porch.data,
+                            domofon=form_address.domofon.data,
+                            floor=form_address.floor.data,
+                            kvartira=form_address.kvartira.data
+                        )
+                        db.session.add(address_data)
+                        db.session.commit()
+                    else:
+                        db.session.query(Adress).filter(Adress.user_id == current_user.id).update(
+                            {'select_region': form_address.select_region.data,
+                             'street': form_address.street.data,
+                             'home': form_address.home.data,
+                             'home_corp': form_address.home_corp.data,
+                             'porch': form_address.porch.data,
+                             'domofon': form_address.domofon.data,
+                             'floor': form_address.floor.data,
+                             'kvartira': form_address.kvartira.data
+                             })
+                        db.session.commit()
+                    flash(u'Изменено', 'errors')
+                    return redirect(url_for("settings"))
 
         return render_template("settings.html", form_address=form_address, form=form, form_password=form_password)
     else:
@@ -582,7 +599,8 @@ def order():
         if current_user.id == None:
             if form.hidden_type.data == "deliveryinhome":
                 if not checkpayments(float(form.select_region.data), float(request.cookies.get('cart_price'))):
-                    flash(u"Сумма заказа в данный район должна быть больше " + str(form.select_region.data)+'руб.', 'info')
+                    flash(u"Сумма заказа в данный район должна быть больше " + str(form.select_region.data) + 'руб.',
+                          'info')
                     return redirect('order')
                 else:
                     try:
@@ -679,7 +697,8 @@ def order():
         elif current_user.id != None:
             if form.hidden_type.data == "deliveryinhome":
                 if not checkpayments(float(form.select_region.data), float(request.cookies.get('cart_price'))):
-                    flash(u"Сумма заказа в данный район должна быть больше " + str(form.select_region.data)+'руб.', 'info')
+                    flash(u"Сумма заказа в данный район должна быть больше " + str(form.select_region.data) + 'руб.',
+                          'info')
                     return redirect('order')
                 else:
                     try:
@@ -802,13 +821,11 @@ def order():
                     return jsonify(result=2)
 
     else:
-        if current_user.id is None:
-            settings_it = [str("delete_buy_button"), str(delivery)]
-            return render_template("order.html", form=form, title="Vincenzo",
-                                   settings_order=settings_it)
-        else:
-            settings_it = [str("delete_buy_button"), str(delivery)]
-            return render_template("order.html", form=form, title="Vincenzo")
+        settings_it = [str("delete_buy_button"), str(delivery)]
+        resp = make_response(render_template("order.html", form=form, title="Vincenzo",
+                                             settings_order=settings_it))
+        resp.set_cookie('localLinkClicked', 'true')
+        return resp
 
 
 @app.route('/deliveryinhome', methods=["POST", "GET"])

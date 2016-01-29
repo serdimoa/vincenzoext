@@ -2468,16 +2468,9 @@ div.fancy-select ul.options {
     background-size: cover;
 }
 
-.carousel {
-    background: none;
-    padding-top: 130px;
-    height: 875px;
 
-}
 
-.carousel .item {
-    height: 743px;
-}
+
 
 .carousel-indicators {
    li{
@@ -2488,7 +2481,20 @@ div.fancy-select ul.options {
        width: 20px;
    }
 }
-
+#owl-demo .owl-item div{
+  padding:5px;
+}
+#owl-demo{
+    padding-top: 120px;
+}
+#owl-demo .owl-item img{
+  display: block;
+  width: 100%;
+  height: auto;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
 .carousel-inner > .item > a > img {
     position: absolute;
     top: 0;

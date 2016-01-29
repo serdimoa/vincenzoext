@@ -104,11 +104,13 @@ class UserEdit(Form):
     phone = PhoneNumber(u"Ваш телефон", country_code='RU', display_format='e164',
                         validators=[validators.Optional(),
                                     Unique(User, User.phone, message=u"Такой телефон существует")])
+    hidden_field = HiddenField(default="UserEdit")
 
 
 class ChangeUserPassword(Form):
     old_password = PasswordField(u"Ваш старый пароль")
     new_password = StringField(u"Ваш новый пароль")
+    hidden_field = HiddenField(default="ChangeUserPassword")
 
 
 class RegistrationForm(Form):
@@ -175,6 +177,7 @@ class FormAddress(Form):
     domofon = StringField(u"Домофон")
     floor = StringField(u"Этаж")
     kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
+    hidden_field = HiddenField(default="FormAddress")
 
 
 # Dostavka domoy no auch
@@ -189,7 +192,7 @@ class OrdernoAuchForDeliveryInHome(DeliveryNoAuch):
     kvartira = StringField(u"Квартира*", validators=[validators.InputRequired(u"Это поле обязательно для заполнения")])
     delivery_time = StringField(u"Заказ на дату/время")
     person = StringField(u"Количество персон(приборов)")
-    pey_method = RadioField(u"Способ оплаты", coerce=unicode,
+    pey_method = RadioField(u"Способ оплаты*", coerce=unicode,
                             choices=[(u"Оплата наличными", u"Оплата наличными"), (u"Оплата картой", u"Оплата картой")],
                             validators=[validators.InputRequired(u"Необходимо выбрать способ оплаты")])
     hiden_sdacha = StringField(u"Cдача с суммы в руб.", )
