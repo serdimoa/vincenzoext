@@ -55,6 +55,16 @@ def firstorder():
         return ''
 
 
+def selectdeliveretext(delselect):
+    varies = {'500': u'По городу - от 500р.','799': u'Пром.зона - от 800р.',
+              '800': u'Старый Вартовск {район Энтузиастов} - от 800р.',
+              '1000': u'Старый Вартовск {район "Горбатый"} - от 1000р.',
+              '1200': u'Старый Вартовск {район "ЛПХ"и далее} - от 1200р.',
+              '1500': u'Излучинск - от 1500р.'}
+    tests = varies[delselect]
+    return varies[delselect]
+
+
 @app.route('/logoutadmin')
 def logoutadmin():
     session.pop('logged_in', None)
@@ -565,7 +575,8 @@ def jsontostr(table):
     for item in table:
         temp_rows = item['row']
         sous = temp_rows[1] if temp_rows[1] != None else u''
-        this_row = "<tr>"+"<td>"+str(ids)+"</td>"+"<td>"+temp_rows[0] + u'</td><td>' + sous + u'</td><td>' + temp_rows[2] + u'</td>'+ temp_rows[3]+'</tr>'
+        this_row = "<tr>" + "<td>" + str(ids) + "</td>" + "<td>" + temp_rows[0] + u'</td><td>' + sous + u'</td><td>' + \
+                   temp_rows[2] + u'</td>' + temp_rows[3] + '</tr>'
         new_table += this_row
         ids += 1
 
@@ -622,10 +633,10 @@ def order():
                             'from_email': 'sir.vincenzo.office@gmail.com',
                             'from_name': 'Sir Vincenzo ',
                             'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                            'html': '<div><strong>Заказ с сайта:</strong> на дом '+
+                            'html': '<div><strong>Заказ с сайта:</strong> на дом ' +
                                     '<br><strong> Имя:</strong>' + form.name.data +
                                     '<br><strong> Телефон:</strong>' + str(form.phone.data) +
-                                    '<br><strong> Регион:</strong>' + form.select_region.data +
+                                    '<br><strong> Регион:</strong>' + selectdeliveretext(form.select_region.data) +
                                     '<br><strong> Улица:</strong>' + form.street.data +
                                     '<br><strong> Дом:</strong>' + form.home.data +
                                     '<br><strong> Корпус/Строеие:</strong>' + form.home_corp.data +
@@ -639,7 +650,7 @@ def order():
                                     '<br><strong> Заказ на дату/время:</strong>' + form.delivery_time.data +
                                     '<br><strong> Дополнительная информация:</strong>' + form.some_info.data +
                                     '<br><strong> Заказ:</strong><br>' + jsontostr(form.hidden_table.data) +
-                                    '<br><strong>Общая сумма заказа:</strong><br><h3>' + form.hidden_full_cost.data +'Рублей</h3>'+
+                                    '<br><strong>Общая сумма заказа:</strong><br><h3>' + form.hidden_full_cost.data + 'Рублей</h3>' +
                                     '</div>',
                             'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
                             'to': [{'email': "sir.vincenzo.office@gmail.com",
@@ -663,12 +674,12 @@ def order():
                         'from_name': 'Sir Vincenzo ',
                         'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
                         'html': '<div><strong>Заказ с сайта</strong>:в кафе' +
-                                '<br><strong>Имя:</strong>'+form.name.data +
+                                '<br><strong>Имя:</strong>' + form.name.data +
                                 '<br> <strong>Телефон:</strong>' + str(form.phone.data) +
                                 '<br> <strong>Заказ на дату/время:</strong>' + form.delivery_time.data +
                                 '<br> <strong>Дополнительная информация:</strong>' + form.some_info.data +
                                 '<br> <strong>Заказ:</strong><br>' + jsontostr(form.hidden_table.data) +
-                                '<br><strong>Общая сумма заказа:</strong><br><h3>' + form.hidden_full_cost.data +'Рублей</h3>'+
+                                '<br><strong>Общая сумма заказа:</strong><br><h3>' + form.hidden_full_cost.data + 'Рублей</h3>' +
                                 '<br> <strong>Дополнительная информация о заказе:</strong> ' + form.hidden_allaboutorder.data +
 
                                 '</div>',
@@ -695,12 +706,13 @@ def order():
                         'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
                         'html': '<div><strong>Заказ с сайта. в самовывоз :</strong>' + form.name.data +
                                 firstorder() +
-                                '<br><strong>Дата время заказа:</strong>'+datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")+
+                                '<br><strong>Дата время заказа:</strong>' + datetime.datetime.now().strftime(
+                            "%Y-%m-%d %H:%M:%S") +
                                 '<br> <strong>Телефон:</strong>' + str(form.phone.data) +
                                 '<br> <strong>Заказ на дату/время:</strong>' + form.delivery_time.data +
                                 '<br> <strong>Дополнительная информация:</strong>' + form.some_info.data +
                                 '<br> <strong>Заказ:</strong> <br>' + jsontostr(form.hidden_table.data) +
-                                '<br><strong>Общая сумма заказа:</strong><br><h3>' + form.hidden_full_cost.data +'Рублей</h3>'+
+                                '<br><strong>Общая сумма заказа:</strong><br><h3>' + form.hidden_full_cost.data + 'Рублей</h3>' +
                                 '<br> <strong>Дополнительная информация о заказе:</strong> ' + form.hidden_allaboutorder.data +
                                 '</div>',
                         'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
@@ -730,13 +742,14 @@ def order():
                             'from_email': 'sir.vincenzo.office@gmail.com',
                             'from_name': 'Sir Vincenzo ',
                             'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                            'html': '<div><strong>Зарегистрированный пользователь.</strong>'+
+                            'html': '<div><strong>Зарегистрированный пользователь.</strong>' +
                                     firstorder() +
-                                    '<br><strong>Дата время заказа:</strong>'+datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")+
+                                    '<br><strong>Дата время заказа:</strong>' + datetime.datetime.now().strftime(
+                                "%Y-%m-%d %H:%M:%S") +
                                     '<br><strong>Заказ с сайта:</strong> на дом ' +
                                     '<br><strong>Имя пользователя:</strong>' + current_user.username +
                                     '<br><strong>Телефон:</strong>' + str(current_user.phone) +
-                                    '<br><strong>Регион:</strong>' + form.select_region.data +
+                                    '<br><strong>Регион:</strong>' + selectdeliveretext(form.select_region.data) +
                                     '<br><strong>Улица:</strong>' + form.street.data +
                                     '<br><strong>Дом:</strong>' + form.home.data +
                                     '<br><strong>Корпус/Строеие</strong>:' + form.home_corp.data +
@@ -750,7 +763,7 @@ def order():
                                     '<br><strong>Заказ на дату/время:</strong>' + form.delivery_time.data +
                                     '<br><strong>Дополнительная информация:</strong>' + form.some_info.data +
                                     '<br><strong>Заказ:</strong><br>' + jsontostr(form.hidden_table.data) +
-                                    '<br><strong>Общая сумма заказа:</strong><br><h3>' + form.hidden_full_cost.data +'Рублей</h3>'+
+                                    '<br><strong>Общая сумма заказа:</strong><br><h3>' + form.hidden_full_cost.data + 'Рублей</h3>' +
                                     '<br> <strong>Дополнительная информация о заказе:</strong> ' + form.hidden_allaboutorder.data +
                                     '</div>',
                             'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
@@ -802,19 +815,20 @@ def order():
                         'from_email': 'sir.vincenzo.office@gmail.com',
                         'from_name': 'Sir Vincenzo ',
                         'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
-                        'html': '<div><strong>Зарегистрированный пользователь.</strong>'+current_user.username +
+                        'html': '<div><strong>Зарегистрированный пользователь.</strong>' + current_user.username +
                                 firstorder() +
-                                '<br><strong>Дата время заказа:</strong>'+datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")+
+                                '<br><strong>Дата время заказа:</strong>' + datetime.datetime.now().strftime(
+                            "%Y-%m-%d %H:%M:%S") +
                                 '<br><strong>Заказ с сайта: </strong>:в кафе' +
                                 '<br><strong>Телефон:</strong>' + str(current_user.phone) +
                                 '<br>Заказ на дату/время:</strong>' + form.delivery_time.data +
                                 '<br><strong>Дополнительная информация:</strong>' + form.some_info.data +
                                 '<br><strong>Заказ:</strong><br>' + jsontostr(form.hidden_table.data) +
-                                '<br><strong>Общая сумма заказа:</strong><br><h3>' + form.hidden_full_cost.data +'Рублей</h3>'+
+                                '<br><strong>Общая сумма заказа:</strong><br><h3>' + form.hidden_full_cost.data + 'Рублей</h3>' +
                                 '<br> <strong>Дополнительная информация о заказе:</strong> ' + form.hidden_allaboutorder.data +
                                 '</div>',
                         'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
-                        'to': [{'email': "serdimoa@gmail.com",
+                        'to': [{'email': "sir.vincenzo.office@gmail.com",
                                 'name': "serdimoa",
                                 'type': 'to'}]
                     }
@@ -839,7 +853,7 @@ def order():
                                 '<br> Заказ на дату/время' + form.delivery_time.data +
                                 '<br> Дополнительная информация' + form.some_info.data +
                                 '<br> Заказ <br>' + jsontostr(form.hidden_table.data) +
-                                '<br><strong>Общая сумма заказа:</strong><br><h3>' + form.hidden_full_cost.data +'Рублей</h3>'+
+                                '<br><strong>Общая сумма заказа:</strong><br><h3>' + form.hidden_full_cost.data + 'Рублей</h3>' +
                                 '<br> <strong>Дополнительная информация о заказе:</strong> ' + form.hidden_allaboutorder.data +
                                 '</div>',
                         'subject': 'Ваш Заказ с сайта Sir Vincenzo ',
