@@ -447,7 +447,8 @@ function calculateSumm() {
     $.cookie("cart", JSON.stringify(dataFromTable()));
     $.cookie("cart_price", summ);
     $("#hidden_table").val(JSON.stringify(dataFromTable()));
-
+    $("#hidden_full_cost").val(summ);
+    $("#hidden_allaboutorder").val($(".allaboutorder").html());
     localStorage.setItem("cart", JSON.stringify(dataFromTable()));
     localStorage.setItem("cart_price", summ);
     return summ;

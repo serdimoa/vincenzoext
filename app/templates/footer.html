@@ -20,7 +20,7 @@
             <hr>
             <div class="col-sm-6">
                 <h3>Дополнительная информация о заказе:</h3>
-
+                <div class="allaboutorder">
                 <p>Выбранный вариант доставки: <strong>{{ g.deliverymethod }}</strong></p>
                 {% if current_user.is_authenticated %}
                     {% if current_user.first_order %}
@@ -30,6 +30,7 @@
                         <p>Скидка на самовывоз:<strong>-10%</strong></p>
                     {% endif %}
                 {% endif %}
+                </div>
             </div>
             <div class="col-md-6 text-right">
 

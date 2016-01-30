@@ -147,6 +147,8 @@ class DeliveryNoAuch(Form):
     name = StringField(u"Ваше имя*", validators=[validators.InputRequired(u"Введите Ваше имя")])
     phone = PhoneNumber(u"Телефон*", country_code='RU', display_format='e164',
                         validators=[validators.InputRequired(u"Введите Ваш телефон")])
+    hidden_full_cost = HiddenField()
+    hidden_allaboutorder = HiddenField()
 
 
 # Samovivoz no auch
@@ -197,6 +199,7 @@ class OrdernoAuchForDeliveryInHome(DeliveryNoAuch):
     some_info = TextAreaField(u"Дополнительная информация")
     hidden_type = HiddenField(default="deliveryinhome")
     hidden_table = HiddenField()
+    hidden_allaboutorder = HiddenField()
 
 
 class OrderAuchForForDeliveryMySelf(Form):
@@ -205,6 +208,9 @@ class OrderAuchForForDeliveryMySelf(Form):
     some_info = TextAreaField(u"Дополнительная информация")
     hidden_type = HiddenField(default="deliverymyself")
     hidden_table = HiddenField()
+    hidden_full_cost = HiddenField()
+    hidden_allaboutorder = HiddenField()
+
 
 
 # in Cafe no auchsdsd
@@ -213,6 +219,8 @@ class OrderAuchForForDeliveryInCafe(Form):
     some_info = TextAreaField(u"Дополнительная информация")
     hidden_type = HiddenField(default="deliveryincafe")
     hidden_table = HiddenField()
+    hidden_full_cost = HiddenField()
+    hidden_allaboutorder = HiddenField()
 
 
 # Dostavka domoy no auch
@@ -235,6 +243,9 @@ class OrderAuchForDeliveryInHome(Form):
     some_info = TextAreaField(u"Дополнительная информация")
     hidden_type = HiddenField(default="deliveryinhome")
     hidden_table = HiddenField()
+    hidden_full_cost = HiddenField()
+    hidden_allaboutorder = HiddenField()
+
 
 
 class CategoryForm(Form):
