@@ -1,7 +1,7 @@
 /**
  * Created by serdimoa on 02.11.15.
  */
-
+var global_inTime=0;
 if ($('.index_page').length) {
     var cart = window.document.querySelector('.cart');
 
@@ -435,7 +435,7 @@ function calculateSumm() {
     $(".checkOut input[type=number]").each(function () {
         summ += parseInt($(this).val() * $(this).attr("data-price"));
     });
-    summ = summ - summ * global_sale / 100;
+    summ = summ - summ * global_sale / 100 - summ * global_inTime / 100;
 
     if ($('.userIsAuch .full_price').length) {
         $('.full_price').text(summ);
@@ -811,6 +811,11 @@ $(".logoa").click(function (e) {
 
 
     function init() {
+        if ($.cookie("delivery") == "deliveryincafe"){
+            in_date();
+        }
+
+
         // preload images
         console.log(global_sale);
         jQuery('#scrollup img').mouseover(function () {

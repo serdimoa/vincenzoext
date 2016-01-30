@@ -56,7 +56,7 @@ def firstorder():
 
 
 def selectdeliveretext(delselect):
-    varies = {'500': u'По городу - от 500р.','799': u'Пром.зона - от 800р.',
+    varies = {'500': u'По городу - от 500р.', '799': u'Пром.зона - от 800р.',
               '800': u'Старый Вартовск {район Энтузиастов} - от 800р.',
               '1000': u'Старый Вартовск {район "Горбатый"} - от 1000р.',
               '1200': u'Старый Вартовск {район "ЛПХ"и далее} - от 1200р.',
@@ -635,6 +635,9 @@ def order():
                             'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
                             'html': '<div><strong>Заказ с сайта:</strong> на дом ' +
                                     '<br><strong> Имя:</strong>' + form.name.data +
+                                    '<br><strong>Дата время заказа:</strong>' + datetime.datetime.now().strftime(
+                                "%Y-%m-%d %H:%M:%S") +
+                                    '<br><strong> Промокод:</strong>' + form.promo.data +
                                     '<br><strong> Телефон:</strong>' + str(form.phone.data) +
                                     '<br><strong> Регион:</strong>' + selectdeliveretext(form.select_region.data) +
                                     '<br><strong> Улица:</strong>' + form.street.data +
@@ -675,6 +678,9 @@ def order():
                         'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
                         'html': '<div><strong>Заказ с сайта</strong>:в кафе' +
                                 '<br><strong>Имя:</strong>' + form.name.data +
+                                '<br><strong>Дата время заказа:</strong>' + datetime.datetime.now().strftime(
+                            "%Y-%m-%d %H:%M:%S") +
+                                '<br><strong> Промокод:</strong>' + form.promo.data +
                                 '<br> <strong>Телефон:</strong>' + str(form.phone.data) +
                                 '<br> <strong>Заказ на дату/время:</strong>' + form.delivery_time.data +
                                 '<br> <strong>Дополнительная информация:</strong>' + form.some_info.data +
@@ -708,6 +714,7 @@ def order():
                                 firstorder() +
                                 '<br><strong>Дата время заказа:</strong>' + datetime.datetime.now().strftime(
                             "%Y-%m-%d %H:%M:%S") +
+                                '<br><strong> Промокод:</strong>' + form.promo.data +
                                 '<br> <strong>Телефон:</strong>' + str(form.phone.data) +
                                 '<br> <strong>Заказ на дату/время:</strong>' + form.delivery_time.data +
                                 '<br> <strong>Дополнительная информация:</strong>' + form.some_info.data +
@@ -748,6 +755,7 @@ def order():
                                 "%Y-%m-%d %H:%M:%S") +
                                     '<br><strong>Заказ с сайта:</strong> на дом ' +
                                     '<br><strong>Имя пользователя:</strong>' + current_user.username +
+                                    '<br><strong> Промокод:</strong>' + form.promo.data +
                                     '<br><strong>Телефон:</strong>' + str(current_user.phone) +
                                     '<br><strong>Регион:</strong>' + selectdeliveretext(form.select_region.data) +
                                     '<br><strong>Улица:</strong>' + form.street.data +
@@ -820,6 +828,7 @@ def order():
                                 '<br><strong>Дата время заказа:</strong>' + datetime.datetime.now().strftime(
                             "%Y-%m-%d %H:%M:%S") +
                                 '<br><strong>Заказ с сайта: </strong>:в кафе' +
+                                '<br><strong> Промокод:</strong>' + form.promo.data +
                                 '<br><strong>Телефон:</strong>' + str(current_user.phone) +
                                 '<br>Заказ на дату/время:</strong>' + form.delivery_time.data +
                                 '<br><strong>Дополнительная информация:</strong>' + form.some_info.data +
@@ -849,6 +858,9 @@ def order():
                         'from_name': 'Sir Vincenzo ',
                         'headers': {'Reply-To': 'sir.vincenzo.office@gmail.com'},
                         'html': '<div>Зарегистрированный пользователь.<br>Заказ с сайта. самовывоз :' + current_user.username +
+                                '<br><strong>Дата время заказа:</strong>' + datetime.datetime.now().strftime(
+                            "%Y-%m-%d %H:%M:%S") +
+                                '<br><strong> Промокод:</strong>' + form.promo.data +
                                 '<br> Телефон:' + str(current_user.phone) +
                                 '<br> Заказ на дату/время' + form.delivery_time.data +
                                 '<br> Дополнительная информация' + form.some_info.data +

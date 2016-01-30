@@ -24,3 +24,4 @@
 //= parts/iosOverlay.js
 //= parts/blazy.js
 //= parts/main.js
+//= parts/plugin.datetime.js
