@@ -61,7 +61,7 @@ function sous_select(name) {
     dataTable.row.add([
         "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
         "<select id='" + ids + "' class='basic' ><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
-        "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+        "<input type='number'  value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
         "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
         "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
     ]).draw(false);
@@ -192,7 +192,7 @@ function initIfhaveSession() {
                     dataTable.row.add([
                         entry.row[0],
                         "",
-                        "<input type='number' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                        "<input type='number' data-category='"+entry.row[5]+"' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
                         "<span class='cena'>" + entry.row[3] + " <i class='fa fa-rub'></i></span>",
                         "<a href='#0' id='" + entry.row[4] + "' class='delete'><i class='fa fa-times'></i></a>"
                     ]).draw(false);
@@ -208,7 +208,7 @@ function initIfhaveSession() {
                     dataTable.row.add([
                         entry.row[0],
                         "<select id='" + ids + "' class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
-                        "<input  type='number' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                        "<input  type='number' data-category='"+entry.row[5]+"' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
                         "<span class='cena'>" + entry.row[3] + " <i class='fa fa-rub'></i></span>",
                         "<a href='#0' id='" + entry.row[4] + "' class='delete'><i class='fa fa-times'></i></a>"
                     ]).draw(false);
@@ -269,7 +269,8 @@ function dataFromTable() {
                 $(tr).find('td:eq(1)').find('.fancified option:selected').val(),
                 $(tr).find('td:eq(2)').find("input").val(),
                 $(tr).find('td:eq(3)').text(),
-                $(tr).find('td:eq(4)').find('a').attr('id')
+                $(tr).find('td:eq(4)').find('a').attr('id'),
+                $(tr).find('td:eq(2)').find('input').attr('data-category')
             ]
         }
     });
@@ -432,11 +433,43 @@ $('.pw-reset a, #restorePass').click(function () {
 });
 function calculateSumm() {
     summ = 0;
+    var checks = 0;
     $(".checkOut input[type=number]").each(function () {
         summ += parseInt($(this).val() * $(this).attr("data-price"));
     });
     summ = summ - summ * global_sale / 100 - summ * global_inTime / 100;
+    // Akciya 4-6-8
+    $(".checkOut input[type=number]").each(function () {
+            if($(this).data("category")=="Пицца"){
+              checks += parseInt($(this).val());
+            }
 
+    });
+    if(checks>=4 && checks<6){
+        summ = summ-summ*5/100;
+        $('#beri').remove();
+        $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-5%</strong></p>");
+
+    }
+    else if(checks>=6 && checks<=8){
+        summ = summ-summ*7/100;
+        $('#beri').remove();
+        $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-7%</strong></p>");
+
+    }
+    else if(checks>=8){
+        summ = summ-summ*10/100;
+        $('#beri').remove();
+        $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-10%</strong></p>");
+
+    }
+    else{
+        $('#beri').remove();
+    }
+
+
+
+    // end Akciya
     if ($('.userIsAuch .full_price').length) {
         $('.full_price').text(summ);
     }
@@ -516,6 +549,7 @@ $(".cantbuy").click(function () {
 
 $(".one--buy").click(function () {
     var data_items = jQuery.parseJSON($(this).attr("data-items"));
+    console.log(data_items);
     if (data_items['sous'] == true) { // todo: set name
         cache_for_datatable = data_items;
 
@@ -526,7 +560,7 @@ $(".one--buy").click(function () {
         dataTable.row.add([
             "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
             " ",
-            "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+            "<input data-category='"+data_items['item_category']+"' type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
             "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
             "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
         ]).draw(false);
@@ -962,7 +996,7 @@ $(".logoa").click(function (e) {
             dataTable.row.add([
                 "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
                 " ",
-                "<input type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                "<input type='number' data-category='"+data_items['item_category']+"' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
                 "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
                 "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
             ]).draw(false);
