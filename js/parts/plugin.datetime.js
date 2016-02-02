@@ -15,7 +15,6 @@ function in_date() {
         minHours = 12,
         maxHours = 15,
         inMinutes = 30;
-    console.log('in_date');
     if (date_in.getDay() >= min_Day && date_in.getDay() <= max_Day) {
         console.log('in_date 1');
 
@@ -24,14 +23,14 @@ function in_date() {
 
             if (date_in.getHours() == maxHours) {
                 if (date_in.getMinutes() <= inMinutes) {
-                    $(".allaboutorder").append("<p style='color:#FF5252;'>Акция.Обед в Vincenzo:<strong>-10%</strong></p>");
-                    global_inTime = 10;
+                    $(".allaboutorder").append("<p style='color:#FF5252;'>Акция.Обед в Vincenzo:<strong>-15%</strong></p>");
+                    global_inTime = 15;
 
                 }
             }
             else if(date_in.getHours()<maxHours){
-                $(".allaboutorder").append("<p style='color:#FF5252;'>Акция.Обед в Vincenzo:<strong>-10%</strong></p>");
-                global_inTime = 10;
+                $(".allaboutorder").append("<p style='color:#FF5252;'>Акция.Обед в Vincenzo:<strong>-15%</strong></p>");
+                global_inTime = 15;
 
             }
         }
