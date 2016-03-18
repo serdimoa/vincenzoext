@@ -594,7 +594,7 @@ jQuery(document).ready(function () {
 }); //ready
 
 $('#orderNow').click(function (event) {
-    if (calculateSumm() < 500) {
+    if (calculateSumm() < 500 && $.cookie("delivery") != "deliveryincafe") {
         swal({
             title: "Ой!",
             text: "Для доставки минимальная сумма заказа составляет 500 рублей",
