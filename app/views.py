@@ -31,8 +31,8 @@ lm.anonymous_user = AnonymousUser
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-admin_login = "admin"
-admin_password = "vincenzopassword"
+admin_login = "vincenzoadmin"
+admin_password = "mGZ58n<3%m{y{iW"
 
 
 @app.template_filter()
