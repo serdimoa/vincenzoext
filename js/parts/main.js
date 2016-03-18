@@ -593,7 +593,6 @@ jQuery(document).ready(function () {
 }); //ready
 
 $('#orderNow').click(function (event) {
-    console.log($.cookie("delivery"));
     if (calculateSumm() < 500 && $.cookie("delivery") != "deliveryincafe") {
         swal({
             title: "Ой!",
