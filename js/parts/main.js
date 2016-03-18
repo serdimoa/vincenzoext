@@ -590,10 +590,10 @@ jQuery(document).ready(function () {
         $('.full span').text(calculateSumm());
 
     });
-
 }); //ready
 
 $('#orderNow').click(function (event) {
+    console.log($.cookie("delivery"));
     if (calculateSumm() < 500 && $.cookie("delivery") != "deliveryincafe") {
         swal({
             title: "Ой!",
