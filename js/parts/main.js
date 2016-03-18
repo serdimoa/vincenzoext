@@ -852,7 +852,6 @@ $(".logoa").click(function (e) {
 
 
         // preload images
-        console.log(global_sale);
         jQuery('#scrollup img').mouseover(function () {
             jQuery(this).animate({opacity: 0.65}, 100);
         }).mouseout(function () {
