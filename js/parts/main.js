@@ -892,7 +892,7 @@ $(".logoa").click(function (e) {
             classie.remove(grid, 'grid--loading');
 
             $("#owl-demo").owlCarousel({
-                autoPlay : 3000,
+                autoPlay : 7000,
                 stopOnHover : true,
                 navigation:false,
                 paginationSpeed : 1000,
