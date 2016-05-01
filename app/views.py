@@ -690,7 +690,7 @@ def order():
                                  jsontostr(form.hidden_table.data), form.hidden_full_cost.data,
                                  form.hidden_allaboutorder.data)
 
-                msg.attach(MIMEText(message, 'html'))
+                msg.attach(MIMEText(message.encode('utf-8'), 'html'))
                 server = smtplib.SMTP('smtp.gmail.com', 587)
                 server.starttls()
                 server.login(fromaddr, mypass)
@@ -716,7 +716,7 @@ def order():
                                      form.some_info.data,
                                      jsontostr(form.hidden_table.data), form.hidden_full_cost.data,
                                      form.hidden_allaboutorder.data)
-                msg.attach(MIMEText(message, 'html'))
+                msg.attach(MIMEText(message.encode('utf-8'), 'html'))
                 server = smtplib.SMTP('smtp.gmail.com', 587)
                 server.starttls()
                 server.login(fromaddr, mypass)
@@ -797,7 +797,7 @@ def order():
                              })
                         db.session.commit()
 
-                    msg.attach(MIMEText(message, 'html'))
+                    msg.attach(MIMEText(message.encode('utf-8'), 'html'))
                     server = smtplib.SMTP('smtp.gmail.com', 587)
                     server.starttls()
                     server.login(fromaddr, mypass)
@@ -825,7 +825,7 @@ def order():
                                                  str(current_user.phone), form.delivery_time.data, form.some_info.data,
                                                  jsontostr(form.hidden_table.data), form.hidden_full_cost.data,
                                                  form.hidden_allaboutorder.data)
-                msg.attach(MIMEText(message, 'html'))
+                msg.attach(MIMEText(message.encode('utf-8'), 'html'))
                 server = smtplib.SMTP('smtp.gmail.com', 587)
                 server.starttls()
                 server.login(fromaddr, mypass)
@@ -852,7 +852,7 @@ def order():
                                              jsontostr(form.hidden_table.data), form.hidden_full_cost.data,
                                              form.hidden_allaboutorder.data)
 
-                msg.attach(MIMEText(message, 'html'))
+                msg.attach(MIMEText(message.encode('utf-8'), 'html'))
                 server = smtplib.SMTP('smtp.gmail.com', 587)
                 server.starttls()
                 server.login(fromaddr, mypass)
