@@ -40,13 +40,6 @@ fromaddr = "serdimoa@gmail.com"
 toaddr = "sir.vincenzo.office@gmail.com"
 mypass = "Ferateam1"
 
-msg = MIMEMultipart()
-msg['From'] = fromaddr
-msg['To'] = toaddr
-msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
-
-
-@app.template_filter()
 def filter_shuffle(seq):
     try:
         result = list(seq)
@@ -636,6 +629,11 @@ def order():
                           'info')
                     return redirect('order')
                 else:
+		    msg = MIMEMultipart()
+                    msg['From'] = fromaddr
+                    msg['To'] = toaddr
+                    msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
+
                     message = """
                     <div><strong>Заказ с сайта:</strong> на дом
                     <br><strong> Имя:</strong> {}
@@ -671,9 +669,15 @@ def order():
                 text = msg.as_string()
                 server.sendmail(fromaddr, toaddr, text)
                 server.quit()
+		text =""
                 return redirect(url_for('ordercomplete'))
 
             if form.hidden_type.data == "deliveryincafe":
+		msg = MIMEMultipart()
+		msg['From'] = fromaddr
+		msg['To'] = toaddr
+		msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
+
                 message = """
                 <div><strong>Заказ с сайта</strong>:в кафе
                 <br><strong>Имя:</strong> {}
@@ -697,10 +701,16 @@ def order():
                 text = msg.as_string()
                 server.sendmail(fromaddr, toaddr, text)
                 server.quit()
+		text = ""
                 return redirect(url_for('ordercomplete'))
 
             if form.hidden_type.data == "deliverymyself":
-                message = """
+                msg = MIMEMultipart()
+		msg['From'] = fromaddr
+		msg['To'] = toaddr
+		msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
+
+		message = """
                     <div><strong>Заказ с сайта. в самовывоз :</strong> {}
                             <br><strong>Дата время заказа:</strong> {}
                             <br><strong> Промокод:</strong> {}
@@ -723,6 +733,7 @@ def order():
                 text = msg.as_string()
                 server.sendmail(fromaddr, toaddr, text)
                 server.quit()
+		text=""
                 return redirect(url_for('ordercomplete'))
 
         elif current_user.id != None:
@@ -732,6 +743,11 @@ def order():
                           'info')
                     return redirect('order')
                 else:
+		    msg = MIMEMultipart()
+                    msg['From'] = fromaddr
+                    msg['To'] = toaddr
+	            msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
+
                     message = """
                             <div><strong>Зарегистрированный пользователь.</strong>{}
                                      {}
@@ -804,10 +820,15 @@ def order():
                     text = msg.as_string()
                     server.sendmail(fromaddr, toaddr, text)
                     server.quit()
-
+		    text=""
                     return redirect(url_for('ordercomplete'))
 
             if form.hidden_type.data == "deliveryincafe":
+		msg = MIMEMultipart()
+                msg['From'] = fromaddr
+                msg['To'] = toaddr
+                msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
+
                 message = """
                         <div><strong>Зарегистрированный пользователь.</strong> {}
                                 {}
@@ -832,10 +853,16 @@ def order():
                 text = msg.as_string()
                 server.sendmail(fromaddr, toaddr, text)
                 server.quit()
+		text = ""
                 return redirect(url_for('ordercomplete'))
 
             if form.hidden_type.data == "deliverymyself":
-                message = """
+                msg = MIMEMultipart()
+		msg['From'] = fromaddr
+		msg['To'] = toaddr
+		msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
+
+		message = """
                    <div>Зарегистрированный пользователь.<br>Заказ с сайта. самовывоз :' {}
                             {}
                             <br><strong>Дата время заказа:</strong>{}
@@ -859,6 +886,7 @@ def order():
                 text = msg.as_string()
                 server.sendmail(fromaddr, toaddr, text)
                 server.quit()
+		text = ""
                 return redirect(url_for('ordercomplete'))
 
     else:
