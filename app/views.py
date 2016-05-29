@@ -40,6 +40,7 @@ fromaddr = "serdimoa@gmail.com"
 toaddr = "sir.vincenzo.office@gmail.com"
 mypass = "Ferateam1"
 
+
 def filter_shuffle(seq):
     try:
         result = list(seq)
@@ -629,7 +630,7 @@ def order():
                           'info')
                     return redirect('order')
                 else:
-		    msg = MIMEMultipart()
+                    msg = MIMEMultipart()
                     msg['From'] = fromaddr
                     msg['To'] = toaddr
                     msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
@@ -669,14 +670,14 @@ def order():
                 text = msg.as_string()
                 server.sendmail(fromaddr, toaddr, text)
                 server.quit()
-		text =""
+                text = ""
                 return redirect(url_for('ordercomplete'))
 
             if form.hidden_type.data == "deliveryincafe":
-		msg = MIMEMultipart()
-		msg['From'] = fromaddr
-		msg['To'] = toaddr
-		msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
+                msg = MIMEMultipart()
+                msg['From'] = fromaddr
+                msg['To'] = toaddr
+                msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
 
                 message = """
                 <div><strong>Заказ с сайта</strong>:в кафе
@@ -701,16 +702,16 @@ def order():
                 text = msg.as_string()
                 server.sendmail(fromaddr, toaddr, text)
                 server.quit()
-		text = ""
+                text = ""
                 return redirect(url_for('ordercomplete'))
 
             if form.hidden_type.data == "deliverymyself":
                 msg = MIMEMultipart()
-		msg['From'] = fromaddr
-		msg['To'] = toaddr
-		msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
+                msg['From'] = fromaddr
+                msg['To'] = toaddr
+                msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
 
-		message = """
+                message = """
                     <div><strong>Заказ с сайта. в самовывоз :</strong> {}
                             <br><strong>Дата время заказа:</strong> {}
                             <br><strong> Промокод:</strong> {}
@@ -733,7 +734,7 @@ def order():
                 text = msg.as_string()
                 server.sendmail(fromaddr, toaddr, text)
                 server.quit()
-		text=""
+                text = ""
                 return redirect(url_for('ordercomplete'))
 
         elif current_user.id != None:
@@ -743,10 +744,10 @@ def order():
                           'info')
                     return redirect('order')
                 else:
-		    msg = MIMEMultipart()
+                    msg = MIMEMultipart()
                     msg['From'] = fromaddr
                     msg['To'] = toaddr
-	            msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
+                    msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
 
                     message = """
                             <div><strong>Зарегистрированный пользователь.</strong>{}
@@ -820,11 +821,11 @@ def order():
                     text = msg.as_string()
                     server.sendmail(fromaddr, toaddr, text)
                     server.quit()
-		    text=""
+                    text = ""
                     return redirect(url_for('ordercomplete'))
 
             if form.hidden_type.data == "deliveryincafe":
-		msg = MIMEMultipart()
+                msg = MIMEMultipart()
                 msg['From'] = fromaddr
                 msg['To'] = toaddr
                 msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
@@ -853,16 +854,16 @@ def order():
                 text = msg.as_string()
                 server.sendmail(fromaddr, toaddr, text)
                 server.quit()
-		text = ""
+                text = ""
                 return redirect(url_for('ordercomplete'))
 
             if form.hidden_type.data == "deliverymyself":
                 msg = MIMEMultipart()
-		msg['From'] = fromaddr
-		msg['To'] = toaddr
-		msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
+                msg['From'] = fromaddr
+                msg['To'] = toaddr
+                msg['Subject'] = "Ваш Заказ с сайта Sir Vincenzo "
 
-		message = """
+                message = """
                    <div>Зарегистрированный пользователь.<br>Заказ с сайта. самовывоз :' {}
                             {}
                             <br><strong>Дата время заказа:</strong>{}
@@ -886,7 +887,7 @@ def order():
                 text = msg.as_string()
                 server.sendmail(fromaddr, toaddr, text)
                 server.quit()
-		text = ""
+                text = ""
                 return redirect(url_for('ordercomplete'))
 
     else:
@@ -1168,7 +1169,7 @@ def pwreset():
     is_user = User.query.filter_by(phone=login).first()
     if is_user is None:
         return jsonify(result=0)
-
+    msg = MIMEMultipart()
     new_password = ''.join([random.choice(string.ascii_letters + string.digits) for n in xrange(8)])
     message = """<p>Ваш новый пароль для сайта vincenzo-pizza.com: {}</p> """.format(new_password)
     user = User.query.get(is_user.id)

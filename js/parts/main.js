@@ -893,7 +893,7 @@ $(".logoa").click(function (e) {
 
             $("#owl-demo").owlCarousel({
                 autoPlay : 7300,
-                stopOnHover : true,
+                stopOnHover : false,
                 navigation:false,
                 paginationSpeed : 1000,
                 goToFirstSpeed : 2000,
