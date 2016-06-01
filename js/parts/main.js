@@ -446,19 +446,19 @@ function calculateSumm() {
             }
 
     });
-    if(checks>=4 && checks<6){
+    if(checks==4){
         summ = summ-summ*5/100;
         $('#beri').remove();
         $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-5%</strong></p>");
 
     }
-    else if(checks>=6 && checks<8){
+    else if(checks==6){
         summ = summ-summ*7/100;
         $('#beri').remove();
         $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-7%</strong></p>");
 
     }
-    else if(checks>=8){
+    else if(checks==8){
         summ = summ-summ*10/100;
         $('#beri').remove();
         $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-10%</strong></p>");
