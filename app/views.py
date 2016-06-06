@@ -141,7 +141,7 @@ def user_loader(user_id):
 def adminlogin():
     form = AdminLoginForm()
     if form.validate_on_submit():
-        if form.admin.data == admin_login and form.password.data:
+        if form.admin.data == admin_login and form.password.data==admin_password:
             session['logged_in'] = True
             return redirect(url_for('items'))
         else:
