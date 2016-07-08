@@ -153,6 +153,7 @@
             {% endif %}
             ">
                         <div class="slider">
+                            <a class="simple-ajax-popup" href="/get_one_item1/{{ item[0].id }}">
                             <div data-id-item="{{ item[0].id }}" class="slider__item">
                                 {% if item[0].thumbnail %}
                                     <img class="b-lazy"
@@ -164,6 +165,7 @@
 
                                 {% endif %}
                             </div>
+                            </a>
                         </div>
                         <div class="meta">
                             <span class="meta__title">{{ item[0].item_name }}</span>
@@ -220,32 +222,32 @@
             <!-- /grid-->
         </div>
     </div>
-    <div class="popUp">
-        <div class="row">
-            <div class="col-md-10 col-sm-12 div_one_img"><img src="" id="one_img" class="img-responsive" alt="">
-            </div>
-            <div class="col-md-2 col-sm-12  aboutProduct">
-                <div class="">
-                    <h2 id="one_name"></h2>
-
-                    <h3>Состав:</h3>
-                    <ul id="one_array">
-                    </ul>
-                    <p><strong>Вес/Объем:</strong><span id="one_weight"></span>
-                    </p>
-
-                    <p id="one_price" class="price"><i class="fa fa-rub"></i></p>
-                    <button class="action action--button action--buy one--buy" data-items="" value><i
-                            class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <button style="width: 100%" class="action action--button action--like cantbuy" data-items="" value>
-                        <i
-                                class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>
-                    <a href="#0" class="closebtn"><span class="og-close"></span></a>
-
-                </div>
-            </div>
-        </div>
-    </div>
+{#    <div class="popUp">#}
+{#        <div class="row">#}
+{#            <div class="col-md-10 col-sm-12 div_one_img"><img src="" id="one_img" class="img-responsive" alt="">#}
+{#            </div>#}
+{#            <div class="col-md-2 col-sm-12  aboutProduct">#}
+{#                <div class="">#}
+{#                    <h2 id="one_name"></h2>#}
+{##}
+{#                    <h3>Состав:</h3>#}
+{#                    <ul id="one_array">#}
+{#                    </ul>#}
+{#                    <p><strong>Вес/Объем:</strong><span id="one_weight"></span>#}
+{#                    </p>#}
+{##}
+{#                    <p id="one_price" class="price"><i class="fa fa-rub"></i></p>#}
+{#                    <button class="action action--button action--buy one--buy" data-items="" value><i#}
+{#                            class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>#}
+{#                    <button style="width: 100%" class="action action--button action--like cantbuy" data-items="" value>#}
+{#                        <i#}
+{#                                class="fa fa-shopping-cart"></i><span class="text-hidden">Add to cart</span></button>#}
+{#                    <a href="#0" class="closebtn"><span class="og-close"></span></a>#}
+{##}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
 {% endblock %} {% block footer %}
     {% include "footer.html" %}{% endblock %}

@@ -1841,19 +1841,26 @@ hr {
 
 .popUp {
     height: 100%;
-    width: 100%;
+    width: 50%;
+    overflow-y: auto;
+    overflow-x: hidden;
     z-index: 999;
-    position: fixed;
+    position: relative;
     background: #fff;
     top: 100%;
+    margin:0 auto;
     opacity: 0;
     display: none;
     -webkit-transition: opacity .3s, -webkit-transform .7s;
     transition: opacity .3s, transform .7s;
     -webkit-transform: translate3d(0, -70px, 0);
     transform: translate3d(0, -70px, 0);
-    #one_img {
+    .div_one_img {
         width: 100%;
+        height: 600px;
+    }
+    #one_img{
+        width:100%;
     }
 }
 
@@ -1870,12 +1877,14 @@ hr {
 }
 
 .aboutProduct {
+    background: #fff;
     color: #333;
+    padding-left: 2.5em;
     padding-right: 2.5em;
+    padding-bottom: 2.5em;
     h2 {
         font-size: 2vw;
         font-family: NP;
-        margin-top: 40px;
     }
     ul {
         padding: 0;
