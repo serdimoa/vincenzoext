@@ -18,7 +18,7 @@
                     </p>
                     <p id="one_price" class="price">{{ item[0].price }}<i class="fa fa-rub"></i></p>
                     {% if item[0].cafe_only!=True or delivery=="deliveryincafe" %}
-                        <button id="onebuy" class="action action--button action--buy one--buy" data-items="{{ buyactioncontent }}" value="{{ item[0].id }}">
+                        <button id="onebuy" class="action action--button action--buy one--buy" onclick="onebuy({{ buyactioncontent }})" data-items="{{ buyactioncontent }}" value="{{ item[0].id }}">
                             <i class="fa fa-shopping-cart"></i>
                             <span class="text-hidden">Add to cart</span>
                         </button>

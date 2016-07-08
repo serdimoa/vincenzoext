@@ -554,6 +554,38 @@ $(".cantbuy").click(function () {
     })
 });
 
+function onebuy(strings){
+
+    var data_items = strings;
+    console.log(data_items);
+    if (data_items['sous'] == true) { // todo: set name
+        cache_for_datatable = data_items;
+
+        $("#select_sous").nifty("show")
+
+
+    } else {
+        dataTable.row.add([
+            "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
+            " ",
+            "<input data-category='" + data_items['item_category'] + "' type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+            "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
+            "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
+        ]).draw(false);
+        $(".checkOut input[type=number]").on("change", function (e) {
+            $('.full span').text(calculateSumm());
+
+        });
+        $('.full span').text(calculateSumm());
+        iosOverlay({
+            text: "Добавлено!",
+            duration: 2e3,
+            icon: "static/img/check.png"
+        });
+    }
+    cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
+}
+
 $(".one--buy").click(function () {
     var data_items = jQuery.parseJSON($(this).attr("data-items"));
     console.log(data_items);
@@ -615,79 +647,7 @@ $('#orderNow').click(function (event) {
 
     }
 });
-/*
- $('.slider__item').click(function (event) {
- $('html').toggleClass('overflowbody');
- $("#one_img").removeAttr("src");
- $(".preloader").show();
- $('.popUp').addClass('isUp');
 
- $.ajax({
- type: 'POST',
- // Provide correct Content-Type, so that Flask will know how to process it.
- contentType: 'application/json',
- // Encode your data as JSON.
- // This is the type of data you're expecting back from the server.
- dataType: 'json',
- url: '/get_one_item/' + $(this).attr("data-id-item"),
- success: function (e) {
- $("#one_img").attr({
- "src": 'static/upload/' + e.result.imgs
- });
- var item_result = {
- item_id: e.result.item_id,
- item_name: e.result.name,
- item_price: e.result.price,
- item_component: e.result.components,
- item_weight: e.result.weight,
- item_category: e.result.category,
- sous: e.result.sous
- };
-
-
- $(".aboutProduct .action--buy").attr({
- "value": e.result.id,
- "data-items": JSON.stringify(item_result)
- });
-
- arrays_one = (e.result.components).split(",");
- if (arrays_one[0] == "") {
- $(".aboutProduct h3").hide();
- }
- else {
- $(".aboutProduct h3").show();
- }
- $("#one_array").empty();
- $.each(arrays_one, function (i) {
- var li = $('<li/>')
- .text(arrays_one[i])
- .appendTo($("#one_array"));
- });
- $("#one_price").html(e.result.price + '<i class="fa fa-rub"></i>');
- $("#one_weight").text(e.result.weight);
- $("#one_name").text(e.result.name);
- if ($.cookie("delivery") == "deliveryincafe" || e.result.cafe_only != true) {
- $(".aboutProduct .action--buy").show();
- $(".aboutProduct .cantbuy").hide();
- } else {
- $(".aboutProduct .action--buy").hide();
- $(".aboutProduct .cantbuy").show();
-
- }
- setTimeout(function () {
- $(".preloader").hide()
- }, 500);
-
- //for (var item_resp in e.response) {
- //
- //}
-
- }
- });
-
-
- });
- */
 var magnificPopup = null;
 
 $('.simple-ajax-popup').magnificPopup({

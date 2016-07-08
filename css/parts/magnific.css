@@ -134,7 +134,7 @@ button::-moz-focus-inner {
   padding: 0 0 18px 10px;
   color: #FFF;
   font-style: normal;
-  font-size: 28px;
+  font-size: 50px;
   font-family: Arial, Baskerville, monospace; }
   .mfp-close:hover,
   .mfp-close:focus {
@@ -327,9 +327,9 @@ img.mfp-img {
   .mfp-img-mobile .mfp-close {
     top: 0;
     right: 0;
-    width: 35px;
-    height: 35px;
-    line-height: 35px;
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
     background: rgba(0, 0, 0, 0.6);
     position: fixed;
     text-align: center;
