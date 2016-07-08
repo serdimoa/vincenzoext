@@ -433,12 +433,18 @@ $('.pw-reset a, #restorePass').click(function () {
 });
 function calculateSumm() {
     summ = 0;
+    var pizza = 0;
     var checks = 0;
     $(".checkOut input[type=number]").each(function () {
-        summ += parseInt($(this).val() * $(this).attr("data-price"));
+        if($(this).data("category")=="Пицца") {
+            pizza += parseInt($(this).val() * $(this).attr("data-price"));
+            console.log(pizza);
+        } else {
+            summ += parseInt($(this).val() * $(this).attr("data-price"));
+        }
+
     });
 
-    summ = summ - summ * global_sale / 100 - summ * global_inTime / 100;
     // Akciya 4-6-8
     $(".checkOut input[type=number]").each(function () {
             if($(this).data("category")=="Пицца"){
@@ -447,19 +453,19 @@ function calculateSumm() {
 
     });
     if(checks==4){
-        summ = summ-summ*5/100;
+         pizza = pizza-pizza*5/100;
         $('#beri').remove();
         $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-5%</strong></p>");
 
     }
     else if(checks==6){
-        summ = summ-summ*7/100;
+        pizza = pizza-pizza*7/100;
         $('#beri').remove();
         $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-7%</strong></p>");
 
     }
     else if(checks==8){
-        summ = summ-summ*10/100;
+         pizza = pizza-pizza*10/100;
         $('#beri').remove();
         $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-10%</strong></p>");
 
@@ -467,6 +473,8 @@ function calculateSumm() {
     else{
         $('#beri').remove();
     }
+    summ = summ + pizza;
+    summ = summ - summ * global_sale / 100 - summ * global_inTime / 100;
 
 
 
