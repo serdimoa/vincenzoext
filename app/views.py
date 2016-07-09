@@ -141,7 +141,7 @@ def user_loader(user_id):
 def adminlogin():
     form = AdminLoginForm()
     if form.validate_on_submit():
-        if form.admin.data == admin_login and form.password.data==admin_password:
+        if form.admin.data == admin_login and form.password.data == admin_password:
             session['logged_in'] = True
             return redirect(url_for('items'))
         else:
@@ -904,6 +904,40 @@ def post_deliveryinhome():
         flash(u"Заказ оформлен deliveryinhome", 'success')
         return redirect(url_for('order'))
     return redirect(url_for('order'))
+
+
+@app.route('/get_one_item1/<int:item_id>', methods=['GET', 'POST'])
+def get_one_item1(item_id):
+    delivery = request.cookies.get('delivery')
+    select_item = db.session.query(Items, Category).filter_by(id=item_id). \
+        join(Category, Items.category_id == Category.id).first()
+    # select_item = Items.query.
+    # return jsonify(result=dict(item_id=select_item[0].id,
+    #                            name=select_item[0].item_name,
+    #                            imgs=select_item[0].img,
+    #                            components=select_item[0].item_component,
+    #                            weight=select_item[0].weight,
+    #                            price=select_item[0].price,
+    #                            cafe_only=select_item[0].cafe_only,
+    #                            category=select_item[1].category_name,
+    #                            sous=select_item[1].sous
+    #                            )
+    #
+    #                )
+    buyactioncontent = '{'+'"item_id":"{0}","item_name":"{1}","item_price":"{2}","item_component":"{3}","item_weight":"{4}","item_category":"{5}","sous":"{6}"'.format(
+        select_item[0].id,
+        select_item[0].item_name,
+        select_item[0].price,
+        select_item[0].item_component,
+        select_item[0].weight,
+        select_item[1].category_name,
+        select_item[1].sous
+    )+'}'
+    return render_template('popUp.html',
+                           item=select_item,
+                           buyactioncontent=buyactioncontent,
+                           delivery=delivery
+                           )
 
 
 @app.route('/get_one_item/<int:item_id>', methods=['GET', 'POST'])

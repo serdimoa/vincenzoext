@@ -1,7 +1,7 @@
 /**
  * Created by serdimoa on 02.11.15.
  */
-var global_inTime=0;
+var global_inTime = 0;
 if ($('.index_page').length) {
     var cart = window.document.querySelector('.cart');
 
@@ -192,7 +192,7 @@ function initIfhaveSession() {
                     dataTable.row.add([
                         entry.row[0],
                         "",
-                        "<input type='number' data-category='"+entry.row[5]+"' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                        "<input type='number' data-category='" + entry.row[5] + "' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
                         "<span class='cena'>" + entry.row[3] + " <i class='fa fa-rub'></i></span>",
                         "<a href='#0' id='" + entry.row[4] + "' class='delete'><i class='fa fa-times'></i></a>"
                     ]).draw(false);
@@ -208,7 +208,7 @@ function initIfhaveSession() {
                     dataTable.row.add([
                         entry.row[0],
                         "<select id='" + ids + "' class='basic'><option value=''>Выберите соус</option><option>Аррабиата</option><option>Сливочный</option><option>Песто</option><option>Грибной</option><option>Бешамель</option>",
-                        "<input  type='number' data-category='"+entry.row[5]+"' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                        "<input  type='number' data-category='" + entry.row[5] + "' value='" + entry.row[2] + "' data-price='" + entry.row[3] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
                         "<span class='cena'>" + entry.row[3] + " <i class='fa fa-rub'></i></span>",
                         "<a href='#0' id='" + entry.row[4] + "' class='delete'><i class='fa fa-times'></i></a>"
                     ]).draw(false);
@@ -433,41 +433,48 @@ $('.pw-reset a, #restorePass').click(function () {
 });
 function calculateSumm() {
     summ = 0;
+    var pizza = 0;
     var checks = 0;
     $(".checkOut input[type=number]").each(function () {
-        summ += parseInt($(this).val() * $(this).attr("data-price"));
+        if ($(this).data("category") == "Пицца") {
+            pizza += parseInt($(this).val() * $(this).attr("data-price"));
+            console.log(pizza);
+        } else {
+            summ += parseInt($(this).val() * $(this).attr("data-price"));
+        }
+
     });
 
-    summ = summ - summ * global_sale / 100 - summ * global_inTime / 100;
     // Akciya 4-6-8
     $(".checkOut input[type=number]").each(function () {
-            if($(this).data("category")=="Пицца"){
-              checks += parseInt($(this).val());
-            }
+        if ($(this).data("category") == "Пицца") {
+            checks += parseInt($(this).val());
+        }
 
     });
-    if(checks==4){
-        summ = summ-summ*5/100;
+    if (checks == 4) {
+        pizza = pizza - pizza * 5 / 100;
         $('#beri').remove();
         $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-5%</strong></p>");
 
     }
-    else if(checks==6){
-        summ = summ-summ*7/100;
+    else if (checks == 6) {
+        pizza = pizza - pizza * 7 / 100;
         $('#beri').remove();
         $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-7%</strong></p>");
 
     }
-    else if(checks==8){
-        summ = summ-summ*10/100;
+    else if (checks == 8) {
+        pizza = pizza - pizza * 10 / 100;
         $('#beri').remove();
         $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-10%</strong></p>");
 
     }
-    else{
+    else {
         $('#beri').remove();
     }
-
+    summ = summ + pizza;
+    summ = summ - summ * global_sale / 100 - summ * global_inTime / 100;
 
 
     // end Akciya
@@ -532,8 +539,7 @@ function removeA(arr) {
 
 $(document).keyup(function (e) {
     if (e.keyCode == 27) { // escape key maps to keycode `27`
-        $('.popUp').removeClass('isUp');
-        $('html').toggleClass('overflowbody');
+       closePopup();
     }
 });
 
@@ -548,6 +554,38 @@ $(".cantbuy").click(function () {
     })
 });
 
+function onebuy(strings){
+
+    var data_items = strings;
+    console.log(data_items);
+    if (data_items['sous'] == true) { // todo: set name
+        cache_for_datatable = data_items;
+
+        $("#select_sous").nifty("show")
+
+
+    } else {
+        dataTable.row.add([
+            "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
+            " ",
+            "<input data-category='" + data_items['item_category'] + "' type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+            "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
+            "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
+        ]).draw(false);
+        $(".checkOut input[type=number]").on("change", function (e) {
+            $('.full span').text(calculateSumm());
+
+        });
+        $('.full span').text(calculateSumm());
+        iosOverlay({
+            text: "Добавлено!",
+            duration: 2e3,
+            icon: "static/img/check.png"
+        });
+    }
+    cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
+}
+
 $(".one--buy").click(function () {
     var data_items = jQuery.parseJSON($(this).attr("data-items"));
     console.log(data_items);
@@ -561,7 +599,7 @@ $(".one--buy").click(function () {
         dataTable.row.add([
             "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
             " ",
-            "<input data-category='"+data_items['item_category']+"' type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+            "<input data-category='" + data_items['item_category'] + "' type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
             "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
             "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
         ]).draw(false);
@@ -610,83 +648,37 @@ $('#orderNow').click(function (event) {
     }
 });
 
-$('.slider__item').click(function (event) {
-    $('html').toggleClass('overflowbody');
-    $("#one_img").removeAttr("src");
-    $(".preloader").show();
-    $('.popUp').addClass('isUp');
+var magnificPopup = null;
 
-    $.ajax({
-        type: 'POST',
-        // Provide correct Content-Type, so that Flask will know how to process it.
-        contentType: 'application/json',
-        // Encode your data as JSON.
-        // This is the type of data you're expecting back from the server.
-        dataType: 'json',
-        url: '/get_one_item/' + $(this).attr("data-id-item"),
-        success: function (e) {
-            $("#one_img").attr({
-                "src": 'static/upload/' + e.result.imgs
-            });
-            var item_result = {
-                item_id: e.result.item_id,
-                item_name: e.result.name,
-                item_price: e.result.price,
-                item_component: e.result.components,
-                item_weight: e.result.weight,
-                item_category: e.result.category,
-                sous: e.result.sous
-            };
-
-
-            $(".aboutProduct .action--buy").attr({
-                "value": e.result.id,
-                "data-items": JSON.stringify(item_result)
-            });
-
-            arrays_one = (e.result.components).split(",");
-            if (arrays_one[0] == "") {
-                $(".aboutProduct h3").hide();
-            }
-            else {
-                $(".aboutProduct h3").show();
-            }
-            $("#one_array").empty();
-            $.each(arrays_one, function (i) {
-                var li = $('<li/>')
-                    .text(arrays_one[i])
-                    .appendTo($("#one_array"));
-            });
-            $("#one_price").html(e.result.price + '<i class="fa fa-rub"></i>');
-            $("#one_weight").text(e.result.weight);
-            $("#one_name").text(e.result.name);
-            if ($.cookie("delivery") == "deliveryincafe" || e.result.cafe_only != true) {
-                $(".aboutProduct .action--buy").show();
-                $(".aboutProduct .cantbuy").hide();
-            } else {
-                $(".aboutProduct .action--buy").hide();
-                $(".aboutProduct .cantbuy").show();
-
-            }
-            setTimeout(function () {
-                $(".preloader").hide()
-            }, 500);
-
-            //for (var item_resp in e.response) {
-            //
-            //}
-
+$('.simple-ajax-popup').magnificPopup({
+    type: 'ajax',
+    preloader: true,
+    enableEscapeKey: true,
+    showCloseBtn: true,
+    closeBtnInside: false,
+    midClick:true,
+    callbacks: {
+        open: function () {
+            History.Adapter.bind(window, 'statechange', closePopup);
+            History.pushState({url: document.location.href}, document.title, "?large");
+            $(window).on('resize', closePopup);
+            magnificPopup = this;
+        },
+        close: function () {
+            $(window).unbind('statechange', closePopup)
+                .off('resize', closePopup);
+            var State = History.getState();
+            History.replaceState(null, document.title, State.data["url"]);
+            magnificPopup = null;
         }
-    });
-
-
-});
-$('.closebtn').click(function (event) {
-    $('.popUp').removeClass('isUp');
-    $('html').toggleClass('overflowbody');
-
+    }
 
 });
+function closePopup () {
+    if (magnificPopup != null)
+        magnificPopup.close();
+}
+
 
 
 $('.cart, .showCart, .userIsAuch h2,.borderLeft h2').click(function (event) {
@@ -845,7 +837,7 @@ $(".logoa").click(function (e) {
 
 
     function init() {
-        if ($.cookie("delivery") == "deliveryincafe"){
+        if ($.cookie("delivery") == "deliveryincafe") {
             in_date();
         }
 
@@ -892,20 +884,20 @@ $(".logoa").click(function (e) {
             classie.remove(grid, 'grid--loading');
 
             $("#owl-demo").owlCarousel({
-                autoPlay : 7300,
-                stopOnHover : false,
-                navigation:false,
-                paginationSpeed : 1000,
-                goToFirstSpeed : 2000,
-                singleItem : true,
-                autoHeight : true,
-                transitionStyle:"fade",
-                navigationText:['Предыдущая', 'Следующая']
+                autoPlay: 7300,
+                stopOnHover: false,
+                navigation: false,
+                paginationSpeed: 1000,
+                goToFirstSpeed: 2000,
+                singleItem: true,
+                autoHeight: true,
+                transitionStyle: "fade",
+                navigationText: ['Предыдущая', 'Следующая']
             });
             var owl = $("#owl-demo").data('owlCarousel');
             $('.owl-pagination').prepend("<div class='prev-slide fa fa-arrow-left'><span></span></div>");
             $('.owl-pagination').append("<div class='next-slide fa fa-arrow-right'><span></span></div>");
-            $(".prev-slide").click(function(){
+            $(".prev-slide").click(function () {
                 owl.prev()
             });
             $(".next-slide").click(function () {
@@ -995,7 +987,7 @@ $(".logoa").click(function (e) {
             dataTable.row.add([
                 "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
                 " ",
-                "<input type='number' data-category='"+data_items['item_category']+"' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                "<input type='number' data-category='" + data_items['item_category'] + "' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
                 "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
                 "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
             ]).draw(false);

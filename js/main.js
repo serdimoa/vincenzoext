@@ -22,6 +22,7 @@
 //= ../bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js
 
 //= parts/iosOverlay.js
+//= parts/magnific.js
 //= parts/blazy.js
 //= parts/main.js
 //= parts/plugin.datetime.js
