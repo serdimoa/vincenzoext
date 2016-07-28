@@ -1,6 +1,8 @@
 <div class="popUp isUp">
         <div class="row">
-            <div class="col-md-12 col-sm-12 div_one_img"><img src="{{ url_for('static', filename='upload/'+item[0].img) }}" id="one_img" class="img-responsive" alt="">
+            <div class="col-md-12 col-sm-12 {% if item[0].isportret %}
+            div_one_img
+            {% endif %} "><img src="{{ url_for('static', filename='upload/'+item[0].img) }}" id="one_img" class="img-responsive" alt="">
             </div>
             <div class="col-md-12 col-sm-12  aboutProduct">
                 <div class="">
@@ -9,7 +11,7 @@
                         <h3>Состав:</h3>
                         <ul id="one_array">
                             {% for component in item[0].item_component.split(',') %}
-                                    <li>{{ component }}</li>
+                                    <li>● {{ component.strip() }}</li>
                             {% endfor %}
 
                         </ul>

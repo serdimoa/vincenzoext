@@ -74,6 +74,7 @@ class ItemForm(Form):
     price = IntegerField(u"Цена")
     cafe_only = BooleanField(u"Только в кафе?")
     img = FileField(u"Изображение")
+    isportret = BooleanField(u"Портретный вид фото?")
     thumbnail = FileField(u"Миниатюра")
 
 

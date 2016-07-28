@@ -23,6 +23,7 @@
 
 //= parts/iosOverlay.js
 //= parts/magnific.js
+//= parts/pongstagr.am.min.js
 //= parts/blazy.js
 //= parts/main.js
 //= parts/plugin.datetime.js

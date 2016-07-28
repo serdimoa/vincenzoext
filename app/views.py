@@ -1076,6 +1076,7 @@ def item_edit(item_id):
             item.category_id = form.category_id.data
             item.weight = form.weight.data
             item.price = form.price.data
+            item.isportret = form.isportret.data
             item.cafe_only = form.cafe_only.data
             item.img = form.item_name.data + filename
             item.thumbnail = form.item_name.data + "thumbnail" + thumbnail
@@ -1089,6 +1090,7 @@ def item_edit(item_id):
             item.item_component = form.item_component.data
             item.category_id = form.category_id.data
             item.weight = form.weight.data
+            item.isportret = form.isportret.data
             item.price = form.price.data
             item.cafe_only = form.cafe_only.data
             item.img = form.item_name.data + filename
@@ -1102,6 +1104,7 @@ def item_edit(item_id):
             item.item_component = form.item_component.data
             item.category_id = form.category_id.data
             item.weight = form.weight.data
+            item.isportret = form.isportret.data
             item.price = form.price.data
             item.cafe_only = form.cafe_only.data
             item.img = img
@@ -1114,6 +1117,7 @@ def item_edit(item_id):
             item.item_name = form.item_name.data
             item.item_component = form.item_component.data
             item.category_id = form.category_id.data
+            item.isportret = form.isportret.data
             item.weight = form.weight.data
             item.price = form.price.data
             item.cafe_only = form.cafe_only.data

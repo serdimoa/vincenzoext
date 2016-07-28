@@ -15,13 +15,82 @@ if (settingsr) {
     }
 }
 if ($("#instafeed").length) {
-    var feed = new Instafeed({
-        get: 'user',
-        limit: 9,
-        userId: '563190999',
-        accessToken: '323833101.1677ed0.fcc5482509e845148f0636e980328400'
+    $('#instafeed').instagramLite({
+        accessToken: '323833101.1c72df2.d7c8fa28268944c8b899f245178450a4',
+        urls: true,
+        success: function () {
+            console.log('The request was successful!');
+        },
+        error: function (errorCode, errorMessage) {
+            console.log('There was an error with the request');
+        }
     });
-    feed.run();
+
+}
+function activeBuy(bool) {
+    if (bool == 0) {
+        $(".items-buy").click(function (e) {
+            e.preventDefault();
+            swal({
+                title: "<h3 class='swal'>Режим работы доставки</h3><br>" +
+                "Понедельник 10:00 – 01:00" + "<br>" +
+                "Вторник 10:00 – 01:00" + "<br>" +
+                "Среда 10:00 – 01:00" + "<br>" +
+                "Вторник 10:00 – 01:00" + "<br>" +
+                "Четверг 10:00 – 01:00" + "<br>" +
+                "Пятница 10:00 – 02:00" + "<br>" +
+                "Суббота 11:00 – 02:00" + "<br>" +
+                "Воскресенье 11:00 – 01:00" + "<br>",
+                confirmButtonColor: "#4CAF50",
+                text: "",
+                type: "info",
+                html: true,
+                showConfirmButton: true,
+                confirmButtonText: "Хорошо, зайду позже!",
+                closeOnConfirm: false
+            })
+        });
+    }
+}
+function activeCart(bool) {
+    if (bool == 0) {
+        swal({
+            title: "<h3 class='swal'>Режим работы доставки</h3><br>" +
+            "Понедельник 10:00 – 01:00" + "<br>" +
+            "Вторник 10:00 – 01:00" + "<br>" +
+            "Среда 10:00 – 01:00" + "<br>" +
+            "Вторник 10:00 – 01:00" + "<br>" +
+            "Четверг 10:00 – 01:00" + "<br>" +
+            "Пятница 10:00 – 02:00" + "<br>" +
+            "Суббота 11:00 – 02:00" + "<br>" +
+            "Воскресенье 11:00 – 01:00" + "<br>",
+            confirmButtonColor: "#4CAF50",
+            text: "",
+            type: "info",
+            html: true,
+            showConfirmButton: true,
+            confirmButtonText: "Хорошо, зайду позже!",
+            closeOnConfirm: false
+        })
+    }
+}
+
+function get_act(start, end) {
+    var date = new Date();
+
+// час в текущей временной зоне
+    var getHours = date.getHours();
+    var date2 = new Date();
+    date2.setDate(date2.getDate() + 1);
+    date2.setHours(end, 0, 0);
+    var nextDhours = date2.getHours();
+
+    if (getHours >= start && nextDhours <= end) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 var delivery = sessionStorage.getItem('delivery');
@@ -160,10 +229,10 @@ if ($(".settings").length) {
         $('.addrList li').remove();
         if (items.length > 0) {
             for (var i = 0; i < items.length; i++) {
-                $('ul.addrList').append('<li class= "list-group-item" data-toggle="modal" data-target="#editModal">' + items[i] + '<span class="fa fa-close"></span</li>');
+                $('ul.addrList').append('<li class= "list-group-item" data-toggle="modal" data-target="#editModal">' + items[i] + '<span class="fa fa-close"></span></li>');
             }
         }
-    };
+    }
 
     function storeToLocal(key, items) {
         var allAddress = JSON.stringify(items);
@@ -539,7 +608,7 @@ function removeA(arr) {
 
 $(document).keyup(function (e) {
     if (e.keyCode == 27) { // escape key maps to keycode `27`
-       closePopup();
+        closePopup();
     }
 });
 
@@ -554,36 +623,62 @@ $(".cantbuy").click(function () {
     })
 });
 
-function onebuy(strings){
-
-    var data_items = strings;
-    console.log(data_items);
-    if (data_items['sous'] == true) { // todo: set name
-        cache_for_datatable = data_items;
-
-        $("#select_sous").nifty("show")
-
-
-    } else {
-        dataTable.row.add([
-            "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
-            " ",
-            "<input data-category='" + data_items['item_category'] + "' type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
-            "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
-            "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
-        ]).draw(false);
-        $(".checkOut input[type=number]").on("change", function (e) {
-            $('.full span').text(calculateSumm());
-
-        });
-        $('.full span').text(calculateSumm());
-        iosOverlay({
-            text: "Добавлено!",
-            duration: 2e3,
-            icon: "static/img/check.png"
-        });
+function onebuy(strings) {
+    var now = new Date();
+    var act;
+    switch (now.getDay()) {
+        case 0:
+            act = get_act(11, 1);
+            break;
+        case 1:
+            act = get_act(10, 1);
+            break;
+        case 2:
+            act = get_act(10, 1);
+            break;
+        case 3:
+            act = get_act(10, 1);
+            break;
+        case 4:
+            act = get_act(20, 1);
+            break;
+        case 5:
+            act = get_act(10, 2);
+            break;
+        case 6:
+            act = get_act(11, 2);
+            break;
+        default:
+            act = 0;
     }
-    cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
+    if (act == 0) {
+        activeBuy(act);
+    } else {
+        var data_items = strings;
+        if (data_items['sous'] == true) { // todo: set name
+            cache_for_datatable = data_items;
+            $("#select_sous").nifty("show")
+        } else {
+            dataTable.row.add([
+                "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
+                " ",
+                "<input data-category='" + data_items['item_category'] + "' type='number' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
+                "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
+            ]).draw(false);
+            $(".checkOut input[type=number]").on("change", function (e) {
+                $('.full span').text(calculateSumm());
+
+            });
+            $('.full span').text(calculateSumm());
+            iosOverlay({
+                text: "Добавлено!",
+                duration: 2e3,
+                icon: "static/img/check.png"
+            });
+        }
+        cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
+    }
 }
 
 $(".one--buy").click(function () {
@@ -630,21 +725,28 @@ jQuery(document).ready(function () {
     });
 }); //ready
 
-$('#orderNow').click(function (event) {
-    if ((calculateSumm() < 500) && ($.cookie("delivery") != "deliveryincafe")) {
-        swal({
-            title: "Ой!",
-            text: "Для доставки минимальная сумма заказа составляет 500 рублей",
-            type: "error",
-            html: true,
-            showConfirmButton: true,
-            confirmButtonText: "Я понял"
-        })
-    }
-    else {
-        $.cookie("localLinkClicked", true);
-        window.location.href = "/order";
 
+var oks;
+
+
+$('#orderNow').click(function (event) {
+
+    if (oks) {
+        if ((calculateSumm() < 500) && ($.cookie("delivery") != "deliveryincafe")) {
+            swal({
+                title: "Ой!",
+                text: "Для доставки минимальная сумма заказа составляет 500 рублей",
+                type: "error",
+                html: true,
+                showConfirmButton: true,
+                confirmButtonText: "Я понял"
+            })
+        }
+        else {
+            $.cookie("localLinkClicked", true);
+            window.location.href = "/order";
+
+        }
     }
 });
 
@@ -656,7 +758,7 @@ $('.simple-ajax-popup').magnificPopup({
     enableEscapeKey: true,
     showCloseBtn: true,
     closeBtnInside: false,
-    midClick:true,
+    midClick: true,
     callbacks: {
         open: function () {
             History.Adapter.bind(window, 'statechange', closePopup);
@@ -674,29 +776,58 @@ $('.simple-ajax-popup').magnificPopup({
     }
 
 });
-function closePopup () {
+function closePopup() {
     if (magnificPopup != null)
         magnificPopup.close();
 }
 
 
-
 $('.cart, .showCart, .userIsAuch h2,.borderLeft h2').click(function (event) {
-
-    if (calculateSumm() == 0) {
-        iosOverlay({
-            text: "Корзина пуста",
-            duration: 2e3,
-            icon: "/static/img/cross.png"
-        });
-    } else {
-
-        $('.full span').text(calculateSumm());
-        $('html').toggleClass('overflowbody');
-
-        $('.checkOut').addClass('isUp');
+    var now = new Date();
+    var act;
+    switch (now.getDay()) {
+        case 0:
+            act = get_act(11, 1);
+            break;
+        case 1:
+            act = get_act(10, 1);
+            break;
+        case 2:
+            act = get_act(10, 1);
+            break;
+        case 3:
+            act = get_act(10, 1);
+            break;
+        case 4:
+            act = get_act(20, 1);
+            break;
+        case 5:
+            act = get_act(10, 2);
+            break;
+        case 6:
+            act = get_act(11, 2);
+            break;
+        default:
+            act = 0;
     }
-    ;
+    if (act == 0) {
+        activeCart(act)
+    } else {
+        if (calculateSumm() == 0) {
+            iosOverlay({
+                text: "Корзина пуста",
+                duration: 2e3,
+                icon: "/static/img/cross.png"
+            });
+        } else {
+
+            $('.full span').text(calculateSumm());
+            $('html').toggleClass('overflowbody');
+
+            $('.checkOut').addClass('isUp');
+        }
+    }
+
 });
 
 $('.closezakazbtn').click(function (event) {
@@ -976,39 +1107,70 @@ $(".logoa").click(function (e) {
 
 
     function addToCart() {
-        var data_items = jQuery.parseJSON($(this).attr("data-items"));
-        if (data_items['sous'] == "True") {
-            cache_for_datatable = data_items;
-
-            $("#select_sous").nifty("show")
-
-
+        var now = new Date();
+        var act;
+        switch (now.getDay()) {
+            case 0:
+                act = get_act(11, 1);
+                break;
+            case 1:
+                act = get_act(10, 1);
+                break;
+            case 2:
+                act = get_act(10, 1);
+                break;
+            case 3:
+                act = get_act(10, 1);
+                break;
+            case 4:
+                act = get_act(20, 1);
+                break;
+            case 5:
+                act = get_act(10, 2);
+                break;
+            case 6:
+                act = get_act(11, 2);
+                break;
+            default:
+                act = 0;
+        }
+        if (act == 0) {
+            activeBuy(act)
         } else {
-            dataTable.row.add([
-                "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
-                " ",
-                "<input type='number' data-category='" + data_items['item_category'] + "' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
-                "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
-                "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
-            ]).draw(false);
-            $(".checkOut input[type=number]").on("change", function (e) {
+            var data_items = jQuery.parseJSON($(this).attr("data-items"));
+            if (data_items['sous'] == "True") {
+                cache_for_datatable = data_items;
+
+                $("#select_sous").nifty("show")
+
+
+            } else {
+                dataTable.row.add([
+                    "<h3>" + data_items['item_name'] + "</h3><small>" + data_items['item_component'] + "</small>",
+                    " ",
+                    "<input type='number' data-category='" + data_items['item_category'] + "' value='1' data-price='" + data_items['item_price'] + "' min='1' max='999' class='form-control' aria-label='Text input with multiple buttons'>",
+                    "<span class='cena'>" + data_items['item_price'] + " <i class='fa fa-rub'></i></span>",
+                    "<a href='#0' id='" + data_items['item_id'] + "' class='delete'><i class='fa fa-times'></i></a>"
+                ]).draw(false);
+                $(".checkOut input[type=number]").on("change", function (e) {
+                    $('.full span').text(calculateSumm());
+
+                });
                 $('.full span').text(calculateSumm());
+                iosOverlay({
+                    text: "Добавлено!",
+                    duration: 2e3,
+                    icon: "static/img/check.png"
+                });
+                classie.add(cart, 'cart--animate');
+                setTimeout(function () {
+                    cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
+                }, 200);
+                onEndAnimation(cartItems, function () {
+                    classie.remove(cart, 'cart--animate');
+                });
 
-            });
-            $('.full span').text(calculateSumm());
-            iosOverlay({
-                text: "Добавлено!",
-                duration: 2e3,
-                icon: "static/img/check.png"
-            });
-            classie.add(cart, 'cart--animate');
-            setTimeout(function () {
-                cartItems.innerHTML = Number(cartItems.innerHTML) + 1;
-            }, 200);
-            onEndAnimation(cartItems, function () {
-                classie.remove(cart, 'cart--animate');
-            });
-
+            }
         }
 
 
@@ -1020,7 +1182,9 @@ $(".logoa").click(function (e) {
         }
     }
 
+
     init();
+
 
 })(window);
 

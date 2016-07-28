@@ -81,11 +81,13 @@ class Items(db.Model):
     img = db.Column(db.String(50))
     thumbnail = db.Column(db.String(255))
     cafe_only = db.Column(db.Boolean)
+    isportret = db.Column(db.Boolean)
 
     def __unicode__(self):
         return self.item_name
 
-    def __init__(self, item_name, item_component, category_id, weight, price, img, thumbnail, cafe_only):
+    def __init__(self, isportret, item_name, item_component, category_id, weight, price, img, thumbnail, cafe_only):
+        self.isportret = isportret
         self.item_name = item_name
         self.item_component = item_component
         self.category_id = category_id
