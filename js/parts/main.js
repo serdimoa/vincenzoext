@@ -29,8 +29,6 @@ if ($("#instafeed").length) {
 }
 function activeBuy(bool) {
     if (bool == 0) {
-        $(".items-buy").click(function (e) {
-            e.preventDefault();
             swal({
                 title: "<h3 class='swal'>Режим работы доставки</h3><br>" +
                 "Понедельник 10:00 – 01:00" + "<br>" +
@@ -49,7 +47,6 @@ function activeBuy(bool) {
                 confirmButtonText: "Хорошо, зайду позже!",
                 closeOnConfirm: false
             })
-        });
     }
 }
 function activeCart(bool) {
@@ -1135,7 +1132,7 @@ $(".logoa").click(function (e) {
                 act = 0;
         }
         if (act == 0) {
-            activeBuy(act)
+            activeBuy(act);
         } else {
             var data_items = jQuery.parseJSON($(this).attr("data-items"));
             if (data_items['sous'] == "True") {
