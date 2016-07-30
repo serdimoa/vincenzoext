@@ -640,7 +640,7 @@ function onebuy(strings) {
             act = get_act(10, 1);
             break;
         case 4:
-            act = get_act(20, 1);
+            act = get_act(10, 1);
             break;
         case 5:
             act = get_act(10, 2);
@@ -799,7 +799,7 @@ $('.cart, .showCart, .userIsAuch h2,.borderLeft h2').click(function (event) {
             act = get_act(10, 1);
             break;
         case 4:
-            act = get_act(20, 1);
+            act = get_act(10, 1);
             break;
         case 5:
             act = get_act(10, 2);
@@ -1123,7 +1123,7 @@ $(".logoa").click(function (e) {
                 act = get_act(10, 1);
                 break;
             case 4:
-                act = get_act(20, 1);
+                act = get_act(10, 1);
                 break;
             case 5:
                 act = get_act(10, 2);
@@ -1181,7 +1181,6 @@ $(".logoa").click(function (e) {
             flkties[i].resize();
         }
     }
-
 
     init();
 
