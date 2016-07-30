@@ -16,7 +16,7 @@ if (settingsr) {
 }
 if ($("#instafeed").length) {
     $('#instafeed').instagramLite({
-        accessToken: '323833101.1c72df2.d7c8fa28268944c8b899f245178450a4',
+        accessToken: '',
         urls: true,
         success: function () {
             console.log('The request was successful!');
