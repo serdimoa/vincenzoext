@@ -652,7 +652,7 @@ function onebuy(strings) {
             act = 0;
     }
     if (act == 0) {
-        activeBuy(act);
+        activeCart(act);
     } else {
         var data_items = strings;
         if (data_items['sous'] == true) { // todo: set name
