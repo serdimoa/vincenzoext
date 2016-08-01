@@ -6,3 +6,4 @@ search.db
 /bower_components
 /.idea
 app.db
+/app/static/upload
