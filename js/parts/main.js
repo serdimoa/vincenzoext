@@ -16,7 +16,7 @@ if (settingsr) {
 }
 if ($("#instafeed").length) {
     $('#instafeed').instagramLite({
-        accessToken: '323833101.1c72df2.d7c8fa28268944c8b899f245178450a4',
+        accessToken: '563190999.5f16351.e17d86039fc14275bc2fa72f448a7ce6',
         urls: true,
         success: function () {
             console.log('The request was successful!');
@@ -29,8 +29,6 @@ if ($("#instafeed").length) {
 }
 function activeBuy(bool) {
     if (bool == 0) {
-        $(".items-buy").click(function (e) {
-            e.preventDefault();
             swal({
                 title: "<h3 class='swal'>Режим работы доставки</h3><br>" +
                 "Понедельник 10:00 – 01:00" + "<br>" +
@@ -49,7 +47,6 @@ function activeBuy(bool) {
                 confirmButtonText: "Хорошо, зайду позже!",
                 closeOnConfirm: false
             })
-        });
     }
 }
 function activeCart(bool) {
@@ -640,7 +637,7 @@ function onebuy(strings) {
             act = get_act(10, 1);
             break;
         case 4:
-            act = get_act(20, 1);
+            act = get_act(10, 1);
             break;
         case 5:
             act = get_act(10, 2);
@@ -652,7 +649,7 @@ function onebuy(strings) {
             act = 0;
     }
     if (act == 0) {
-        activeBuy(act);
+        activeCart(act);
     } else {
         var data_items = strings;
         if (data_items['sous'] == true) { // todo: set name
@@ -797,7 +794,7 @@ $('.cart, .showCart, .userIsAuch h2,.borderLeft h2').click(function (event) {
             act = get_act(10, 1);
             break;
         case 4:
-            act = get_act(20, 1);
+            act = get_act(10, 1);
             break;
         case 5:
             act = get_act(10, 2);
@@ -1121,7 +1118,7 @@ $(".logoa").click(function (e) {
                 act = get_act(10, 1);
                 break;
             case 4:
-                act = get_act(20, 1);
+                act = get_act(10, 1);
                 break;
             case 5:
                 act = get_act(10, 2);
@@ -1133,7 +1130,7 @@ $(".logoa").click(function (e) {
                 act = 0;
         }
         if (act == 0) {
-            activeBuy(act)
+            activeBuy(act);
         } else {
             var data_items = jQuery.parseJSON($(this).attr("data-items"));
             if (data_items['sous'] == "True") {
@@ -1179,7 +1176,6 @@ $(".logoa").click(function (e) {
             flkties[i].resize();
         }
     }
-
 
     init();
 
