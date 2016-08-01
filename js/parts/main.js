@@ -726,12 +726,10 @@ jQuery(document).ready(function () {
 }); //ready
 
 
-var oks;
 
 
-$('#orderNow').click(function (event) {
+$('#orderNow').on("click touchstart",function (event) {
 
-    if (oks) {
         if ((calculateSumm() < 500) && ($.cookie("delivery") != "deliveryincafe")) {
             swal({
                 title: "Ой!",
@@ -747,7 +745,7 @@ $('#orderNow').click(function (event) {
             window.location.href = "/order";
 
         }
-    }
+
 });
 
 var magnificPopup = null;
