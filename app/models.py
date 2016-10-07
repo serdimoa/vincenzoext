@@ -57,12 +57,14 @@ class Category(db.Model):
     alias = db.Column(db.String(50))
     sous = db.Column(db.Boolean, default=False)
     cafe = db.Column(db.Boolean, default=True)
+    sort = db.Column(db.Integer)
 
-    def __init__(self, category_name, alias, sous, cafe):
+    def __init__(self, category_name, alias, sous, cafe,sort):
         self.category_name = category_name
         self.alias = alias
         self.sous = sous
         self.cafe = cafe
+        self.sort = sort
 
     def __repr__(self):
         return '<Category %r>' % self.category_name

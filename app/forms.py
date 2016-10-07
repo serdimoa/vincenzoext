@@ -258,6 +258,7 @@ class CategoryForm(Form):
     alias = StringField("")
     sous = BooleanField(u"Покаывать соусы в корзине или нет")
     cafe = BooleanField(u"Покаывать кнопку купить или нет")
+    sort = IntegerField(u"Сортировка")
 
 
 class SaleOnTimeForm(Form):
