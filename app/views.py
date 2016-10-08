@@ -515,6 +515,7 @@ def update_category(category_id):
         category.alias = form.alias.data
         category.sous = form.sous.data
         category.cafe = form.cafe.data
+        category.sort = form.sort.data
         db.session.commit()
         flash(u"Категория " + category.category_name + u" Изменена", "info")
         return redirect(url_for("get_category"))

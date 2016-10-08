@@ -119,7 +119,7 @@
                 {% endif %}
                 <button id="fulls" class="action filter__item filter__item--selected" data-filter="*">Все</button>
 
-                <br> {% for field in type %}
+                <br> {% for field in type|sort(attribute='sort') %}
                 <button class="action filter__item" data-filter=".{{ field.alias }}"><i
                         class="icon icon--{{ field.alias }}"></i><span
                         class="action__text">{{ field.category_name }}</span></button>
