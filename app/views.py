@@ -994,8 +994,8 @@ def item_add():
             price=form.price.data,
             cafe_only=form.cafe_only.data,
             img=form.item_name.data + filename,
-            thumbnail=form.item_name.data + "thumbnail" + thumbnail
-
+            thumbnail=form.item_name.data + "thumbnail" + thumbnail,
+            isportret=form.isportret.data
         )
         db.session.add(item_data)
         db.session.commit()
