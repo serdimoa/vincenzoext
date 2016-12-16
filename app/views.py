@@ -438,7 +438,7 @@ def category_add():
     form = CategoryForm()
     if form.validate_on_submit():
         category_data = Category(category_name=form.category_name.data,
-                                 alias=form.alias.data, sous=form.sous.data, cafe=form.cafe.data)
+                                 alias=form.alias.data, sous=form.sous.data, cafe=form.cafe.data,sort=form.sort.data)
         db.session.add(category_data)
         db.session.commit()
         flash(u'Категория добавлена', "success")
