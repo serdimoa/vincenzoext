@@ -512,33 +512,33 @@ function calculateSumm() {
     });
 
     // Akciya 4-6-8
-    $(".checkOut input[type=number]").each(function () {
-        if ($(this).data("category") == "Пицца") {
-            checks += parseInt($(this).val());
-        }
+    // $(".checkOut input[type=number]").each(function () {
+    //     if ($(this).data("category") == "Пицца") {
+    //         checks += parseInt($(this).val());
+    //     }
 
-    });
-    if (checks == 4) {
-        pizza = pizza - pizza * 5 / 100;
-        $('#beri').remove();
-        $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-5%</strong></p>");
+    // });
+    // if (checks == 4) {
+    //     pizza = pizza - pizza * 5 / 100;
+    //     $('#beri').remove();
+    //     $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-5%</strong></p>");
 
-    }
-    else if (checks == 6) {
-        pizza = pizza - pizza * 7 / 100;
-        $('#beri').remove();
-        $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-7%</strong></p>");
+    // }
+    // else if (checks == 6) {
+    //     pizza = pizza - pizza * 7 / 100;
+    //     $('#beri').remove();
+    //     $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-7%</strong></p>");
 
-    }
-    else if (checks == 8) {
-        pizza = pizza - pizza * 10 / 100;
-        $('#beri').remove();
-        $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-10%</strong></p>");
+    // }
+    // else if (checks == 8) {
+    //     pizza = pizza - pizza * 10 / 100;
+    //     $('#beri').remove();
+    //     $(".allaboutorder").append("<p id='beri' style='color:#FF5252;'>Акция.Бери четко:<strong>-10%</strong></p>");
 
-    }
-    else {
-        $('#beri').remove();
-    }
+    // }
+    // else {
+    //     $('#beri').remove();
+    // }
     summ = summ + pizza;
     summ = summ - summ * global_sale / 100 - summ * global_inTime / 100;
 

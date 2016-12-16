@@ -13,7 +13,8 @@ var gulp = require('gulp'),
     imagemin = require('gulp-imagemin'),
     pngquant = require('imagemin-pngquant'),
     rigger = require('gulp-rigger'),
-    rimraf = require('rimraf');
+    rimraf = require('rimraf'),
+    gutil = require('gulp-util');
 
 
 var path = {
@@ -110,7 +111,7 @@ gulp.task('build', [
     'js_admin:build',
     'style:build',
     'style_admin:build',
-    'image:build',
+    // 'image:build',
     'plugins:build',
     'fonts:build'
 ]);
@@ -131,9 +132,9 @@ gulp.task('watch', function(){
         gulp.start('js_admin:build');
     });
 
-    watch([path.watch.img], function(event, cb) {
-       gulp.start('image:build');
-    });
+    // watch([path.watch.img], function(event, cb) {
+    //   gulp.start('image:build');
+    // });
     watch([path.watch.fonts], function(event, cb) {
         gulp.start('fonts:build');
     });
@@ -143,6 +144,12 @@ gulp.task('watch', function(){
 
 gulp.task('clean', function (cb) {
     rimraf(path.clean, cb);
+});
+
+gulp.task('debug', function() {  
+  var debug = true;
+  gutil.log( gutil.colors.green('RUNNING IN DEBUG MODE') );
+  gulp.start('js:build');
 });
 
 gulp.task('default', ['build', 'watch']);

@@ -20,7 +20,7 @@ function in_date() {
 
         if (date_in.getHours() >= minHours && date_in.getHours() <= maxHours) {
             console.log('in_date 2');
-
+            /*
             if (date_in.getHours() == maxHours) {
                 if (date_in.getMinutes() <= inMinutes) {
                     $(".allaboutorder").append("<p style='color:#FF5252;'>Акция.Обед в Vincenzo:<strong>-15%</strong></p>");
@@ -33,6 +33,7 @@ function in_date() {
                 global_inTime = 15;
 
             }
+            */
         }
     }
 
